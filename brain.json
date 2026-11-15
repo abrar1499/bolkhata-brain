@@ -1,5 +1,5 @@
 {
- "version": 12,
+ "version": 13,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -76,6 +76,7 @@
   "can you write what i speak": "{\"calls\":[],\"reply\":\"Yes, I can save what you say as ledger entries.\"}",
   "aur sunao kya chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek hai! Main aap ka hisaab kitaab sambhalne mein madad kar sakta hoon.\"}",
   "what are you doing": "{\"calls\":[],\"reply\":\"I'm here to help with your ledger: entries, totals, reports and balances.\"}",
-  "@ ko # chhant ent d": "[{\"type\":\"sale\",\"person\":\"@0\",\"item\":\"Chhant ent\",\"qty\":\"#0\"}]"
+  "@ ko # chhant ent d": "[{\"type\":\"sale\",\"person\":\"@0\",\"item\":\"Chhant ent\",\"qty\":\"#0\"}]",
+  "ek kam karo": "{\"calls\":[],\"reply\":\"Kaunsi cheez ek kam karni hai? Quantity ya amount batayein.\"}"
  }
 }
