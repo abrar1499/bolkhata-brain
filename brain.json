@@ -1,5 +1,5 @@
 {
- "version": 10,
+ "version": 11,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -74,6 +74,7 @@
   "what kain aai help yu": "{\"calls\":[],\"reply\":\"I can add entries, show expenses, totals, balances, reports, and PDFs from your ledger.\"}",
   "i am good thank you": "{\"calls\":[],\"reply\":\"Glad to hear you are good, thank you!\"}",
   "can you write what i speak": "{\"calls\":[],\"reply\":\"Yes, I can save what you say as ledger entries.\"}",
-  "aur sunao kya chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek hai! Main aap ka hisaab kitaab sambhalne mein madad kar sakta hoon.\"}"
+  "aur sunao kya chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek hai! Main aap ka hisaab kitaab sambhalne mein madad kar sakta hoon.\"}",
+  "what are you doing": "{\"calls\":[],\"reply\":\"I'm here to help with your ledger: entries, totals, reports and balances.\"}"
  }
 }
