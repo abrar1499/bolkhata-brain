@@ -1,5 +1,5 @@
 {
- "version": 15,
+ "version": 16,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -81,6 +81,7 @@
   "defa ho": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi hisaab ki zaroorat ho, main yahin hoon.\"}",
   "os main se main se # kia suit liya": "[{\"type\":\"expense\",\"category\":\"Shopping\",\"item\":\"Suit\",\"amount\":\"#0\"}]",
   "school k lay #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"School\",\"note\":\"School\"}]",
-  "kase ho": "{\"calls\":[],\"reply\":\"Small talk: answer briefly, no tools needed.\\n\\nMain theek hoon, shukriya. Aap kaise hain?\"}"
+  "kase ho": "{\"calls\":[],\"reply\":\"Small talk: answer briefly, no tools needed.\\n\\nMain theek hoon, shukriya. Aap kaise hain?\"}",
+  "acha ja raha hai": "{\"calls\":[],\"reply\":\"Acha sunkar khushi hui, aur kisi entry ya hisaab mein madad chahiye to batayein.\"}"
  }
 }
