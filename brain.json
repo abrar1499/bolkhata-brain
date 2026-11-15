@@ -1,5 +1,5 @@
 {
- "version": 7,
+ "version": 8,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -71,6 +71,7 @@
   "mujhe": "{\"calls\":[],\"reply\":\"Aap kya karna chahte hain? Awaz theek se samajh nahi aayi, dobara bataiye.\"}",
   "@ ko # diya": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
   "what aar yu duing": "{\"calls\":[],\"reply\":\"I'm doing well, ready to help with your ledger and expenses.\"}",
-  "what kain aai help yu": "{\"calls\":[],\"reply\":\"I can add entries, show expenses, totals, balances, reports, and PDFs from your ledger.\"}"
+  "what kain aai help yu": "{\"calls\":[],\"reply\":\"I can add entries, show expenses, totals, balances, reports, and PDFs from your ledger.\"}",
+  "i am good thank you": "{\"calls\":[],\"reply\":\"Glad to hear you are good, thank you!\"}"
  }
 }
