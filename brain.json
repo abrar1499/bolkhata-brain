@@ -1,5 +1,5 @@
 {
- "version": 13,
+ "version": 14,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -77,6 +77,9 @@
   "aur sunao kya chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek hai! Main aap ka hisaab kitaab sambhalne mein madad kar sakta hoon.\"}",
   "what are you doing": "{\"calls\":[],\"reply\":\"I'm here to help with your ledger: entries, totals, reports and balances.\"}",
   "@ ko # chhant ent d": "[{\"type\":\"sale\",\"person\":\"@0\",\"item\":\"Chhant ent\",\"qty\":\"#0\"}]",
-  "ek kam karo": "{\"calls\":[],\"reply\":\"Kaunsi cheez ek kam karni hai? Quantity ya amount batayein.\"}"
+  "ek kam karo": "{\"calls\":[],\"reply\":\"Kaunsi cheez ek kam karni hai? Quantity ya amount batayein.\"}",
+  "defa ho": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi hisaab ki zaroorat ho, main yahin hoon.\"}",
+  "os main se main se # kia suit liya": "[{\"type\":\"expense\",\"category\":\"Shopping\",\"item\":\"Suit\",\"amount\":\"#0\"}]",
+  "school k lay #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"School\",\"note\":\"School\"}]"
  }
 }
