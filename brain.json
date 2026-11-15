@@ -1,5 +1,5 @@
 {
- "version": 14,
+ "version": 15,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -80,6 +80,7 @@
   "ek kam karo": "{\"calls\":[],\"reply\":\"Kaunsi cheez ek kam karni hai? Quantity ya amount batayein.\"}",
   "defa ho": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi hisaab ki zaroorat ho, main yahin hoon.\"}",
   "os main se main se # kia suit liya": "[{\"type\":\"expense\",\"category\":\"Shopping\",\"item\":\"Suit\",\"amount\":\"#0\"}]",
-  "school k lay #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"School\",\"note\":\"School\"}]"
+  "school k lay #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"School\",\"note\":\"School\"}]",
+  "kase ho": "{\"calls\":[],\"reply\":\"Small talk: answer briefly, no tools needed.\\n\\nMain theek hoon, shukriya. Aap kaise hain?\"}"
  }
 }
