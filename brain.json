@@ -1,5 +1,5 @@
 {
- "version": 34,
+ "version": 35,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -93,6 +93,7 @@
   "mobile cover liya": "{\"calls\":[],\"reply\":\"Mobile cover kitne ka tha? Amount batayein to main save kar doon.\"}",
   "#": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Shopping\",\"item\":\"Mobile cover\"}]",
   "charger liya": "{\"calls\":[],\"reply\":\"Charger kitne ka tha? Amount batayein to main save kar doon.\"}",
-  "# ka": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Charger\",\"category\":\"Shopping\"}]"
+  "# ka": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Charger\",\"category\":\"Shopping\"}]",
+  "pal gaya": "{\"calls\":[],\"reply\":\"Theek hai. Kuch aur save karna ho to batayein.\"}"
  }
 }
