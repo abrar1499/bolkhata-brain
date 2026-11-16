@@ -1,5 +1,5 @@
 {
- "version": 27,
+ "version": 28,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -85,7 +85,7 @@
   "acha ja raha hai": "{\"calls\":[],\"reply\":\"Acha sunkar khushi hui, aur kisi entry ya hisaab mein madad chahiye to batayein.\"}",
   "men b thek hun": "{\"calls\":[],\"reply\":\"Acha hai, khush raho! Kya main aaj kuch record karun?\"}",
   "ar ghar me sab thek hai": "{\"calls\":[],\"reply\":\"Mujhe ghar ka haal maloom nahi, main sirf ledger app mein madad kar sakta hoon.\"}",
-  "mere pas # ruoees thay jis me se mene # @ ko diye # ki chez li ar # k always liye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#1\"}]",
+  "mere pas # ruoees thay jis me se mene # @ ko diye # ki chez li ar # k always liye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#1\"},{\"type\":\"expense\",\"category\":\"Shopping\",\"item\":\"Chez\",\"amount\":\"#2\"}]",
   "ab sahi hai # cash @ ko # # ki chez # always pads cash in hand # sar chez # sar": "[{\"type\":\"income\",\"amount\":\"#0\",\"item\":\"Cash\"},{\"type\":\"lent\",\"amount\":\"#1\",\"person\":\"@0\"},{\"type\":\"expense\",\"amount\":\"#2\",\"item\":\"Chez\",\"category\":\"Other\"},{\"type\":\"expense\",\"amount\":\"#3\",\"item\":\"Always pads\",\"category\":\"Personal care\"}]",
   "@ ne # diya # @ ko diya # ki chez li # ki cream li": "[{\"type\":\"received_back\",\"person\":\"@0\",\"amount\":\"#0\"},{\"type\":\"lent\",\"person\":\"@1\",\"amount\":\"#1\"},{\"type\":\"expense\",\"item\":\"Chez\",\"amount\":\"#2\",\"category\":\"Other\"},{\"type\":\"expense\",\"item\":\"Cream\",\"amount\":\"#3\",\"category\":\"Personal care\"}]"
  }
