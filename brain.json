@@ -1,5 +1,5 @@
 {
- "version": 94,
+ "version": 95,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -148,7 +148,8 @@
   "maine bola itna jyada kharcha hota hai": "{\"calls\":[],\"reply\":\"Samajh sakta hun. Kahan zyada kharcha hua, category wise dekhun?\"}",
   "sorry ford ki yaar": "{\"calls\":[],\"reply\":\"Kya aap Food category ka total dekhna chahte hain, ya kuch aur?\"}",
   "meri samajh nahin a rahi tumhen": "{\"calls\":[],\"reply\":\"Maaf kijiye, main ne ghalat samjha. Aap batayein, kya karna hai?\"}",
-  "okay good no i am sleeping ok thank you so much": "{\"calls\":[],\"reply\":\"Good night, sleep well!\"}"
+  "okay good no i am sleeping ok thank you so much": "{\"calls\":[],\"reply\":\"Good night, sleep well!\"}",
+  "okay suno": "{\"calls\":[],\"reply\":\"Ji, boliye, main sun raha hoon.\"}"
  },
  "ai": true
 }
