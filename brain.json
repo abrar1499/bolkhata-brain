@@ -1,5 +1,5 @@
 {
- "version": 48,
+ "version": 49,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -107,6 +107,7 @@
   "mausam kaisa hai aaj": "{\"calls\":[],\"reply\":\"Mujhe live mausam maloom nahi, kisi weather app par dekh lein.\"}",
   "ka mausam hai": "{\"calls\":[],\"reply\":\"Mujhe live mausam maloom nahi, kisi weather app par dekh lein.\"}",
   "achcha mausam hai aaj": "{\"calls\":[],\"reply\":\"Achcha mausam hai, shukriya! Ap ka din khush guzre.\"}",
-  "do aur do kitna hota hai": "{\"calls\":[],\"reply\":\"Do aur do chaar hote hain.\"}"
+  "do aur do kitna hota hai": "{\"calls\":[],\"reply\":\"Do aur do chaar hote hain.\"}",
+  "tod do kitna hota hai": "{\"calls\":[],\"reply\":\"Agar aap \\\"do aur do\\\" poochna chahte hain, to jawab chaar hai.\"}"
  }
 }
