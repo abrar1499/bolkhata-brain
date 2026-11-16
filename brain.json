@@ -1,5 +1,5 @@
 {
- "version": 101,
+ "version": 102,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -155,7 +155,8 @@
   "that is really cool": "{\"calls\":[],\"reply\":\"Thanks, glad it helps! Send me any entry or question whenever you're ready.\"}",
   "i said can you be my assistant as in my bricks company": "{\"calls\":[],\"reply\":\"Yes, I can track your bricks company's sales, costs and expenses.\"}",
   "yes yes there are many workers": "{\"calls\":[],\"reply\":\"Please tell me the workers' names, and I'll add them to the Bricks Maker account.\"}",
-  "mare kol pase koi nhi": "{\"calls\":[],\"reply\":\"Main sun raha hoon, pareshan na hon. Cash ka hisaab dekhna chahein?\"}"
+  "mare kol pase koi nhi": "{\"calls\":[],\"reply\":\"Main sun raha hoon, pareshan na hon. Cash ka hisaab dekhna chahein?\"}",
+  "acha ik bat batao": "{\"calls\":[],\"reply\":\"Ji, poochiye. Aap kya jaanna chahte hain?\"}"
  },
  "ai": true
 }
