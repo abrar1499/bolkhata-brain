@@ -1,5 +1,5 @@
 {
- "version": 107,
+ "version": 108,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -160,7 +160,8 @@
   "g dekha daye": "{\"calls\":[{\"name\":\"show\",\"input\":{\"view\":\"list\",\"types\":[\"expense\"]}}],\"reply\":\"Ji, abhi app mein bache ke kharche ka koi entry nahi hai.\"}",
   "# qari ke fee": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"Qari fee\"}]",
   "sex karna hai": "{\"calls\":[],\"reply\":\"Is app mein yeh madad nahi; sehat ka masla ho to doctor se milein.\"}",
-  "idhr hi kuch hisab karna hai": "{\"calls\":[],\"reply\":\"Ji, batayein: kya entry karni hai, ya kya hisab dekhna hai?\"}"
+  "idhr hi kuch hisab karna hai": "{\"calls\":[],\"reply\":\"Ji, batayein: kya entry karni hai, ya kya hisab dekhna hai?\"}",
+  "hw r u": "{\"calls\":[],\"reply\":\"I'm doing well, thanks for asking. How are you?\"}"
  },
  "ai": true
 }
