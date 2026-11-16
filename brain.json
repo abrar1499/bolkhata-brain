@@ -1,5 +1,5 @@
 {
- "version": 104,
+ "version": 105,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -158,7 +158,8 @@
   "mare kol pase koi nhi": "{\"calls\":[],\"reply\":\"Main sun raha hoon, pareshan na hon. Cash ka hisaab dekhna chahein?\"}",
   "acha ik bat batao": "{\"calls\":[],\"reply\":\"Ji, poochiye. Aap kya jaanna chahte hain?\"}",
   "g dekha daye": "{\"calls\":[{\"name\":\"show\",\"input\":{\"view\":\"list\",\"types\":[\"expense\"]}}],\"reply\":\"Ji, abhi app mein bache ke kharche ka koi entry nahi hai.\"}",
-  "# qari ke fee": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"Qari fee\"}]"
+  "# qari ke fee": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"Qari fee\"}]",
+  "sex karna hai": "{\"calls\":[],\"reply\":\"Is app mein yeh madad nahi; sehat ka masla ho to doctor se milein.\"}"
  },
  "ai": true
 }
