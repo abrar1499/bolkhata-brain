@@ -1,5 +1,5 @@
 {
- "version": 129,
+ "version": 130,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -176,7 +176,8 @@
   "@ ko # @ ko # @ ko # @ ko # @ ko # diye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"},{\"type\":\"lent\",\"person\":\"@1\",\"amount\":\"#1\"},{\"type\":\"lent\",\"person\":\"@2\",\"amount\":\"#1\"},{\"type\":\"lent\",\"person\":\"@3\",\"amount\":\"#3\"},{\"type\":\"lent\",\"person\":\"@4\",\"amount\":\"#4\"}]",
   "mujhe koi acha mashwra do": "{\"calls\":[],\"reply\":\"Apni kharch ka roz hisaab likhein, aur har mahine ki bachat ke liye pehle se kuch raqam alag rakhein. Bari raqam ki adaigi se pehle apni zaroorat aur bajat dekh lein. Qarz dene se pehle wapsi ki tareekh tay kar lein, taake ta'alluqat bhi acchi rahein.\"}",
   "kya krty ho tum": "{\"calls\":[],\"reply\":\"Main aapke ledger aur kharch ka hisaab rakhta hoon: entries, totals, balances aur reports. Kya karna hai?\"}",
-  "din bohat acha ja raha hai": "{\"calls\":[],\"reply\":\"Shukar hai, din acha guzar raha hai! Aap ka dehan kaisa raha?\"}"
+  "din bohat acha ja raha hai": "{\"calls\":[],\"reply\":\"Shukar hai, din acha guzar raha hai! Aap ka dehan kaisa raha?\"}",
+  "ye to bohat achi bat hai": "{\"calls\":[],\"reply\":\"Shukriya! Apne kharche ka hisaab rakhte rahein, aap ko farq nazar aayega.\"}"
  },
  "ai": true
 }
