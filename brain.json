@@ -1,5 +1,5 @@
 {
- "version": 125,
+ "version": 126,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -173,7 +173,8 @@
   "mujhe mango chahye": "{\"calls\":[],\"reply\":\"Aap mango kharidna chahte hain, ya mango ki entries dekhni hain? Batayein.\"}",
   "khardna hau": "{\"calls\":[],\"reply\":\"Theek hai, mango kitni miqdar aur kitne paise mein kharidna hai?\"}",
   "chalo rehndy do esko": "{\"calls\":[],\"reply\":\"Theek hai, mango ki entry rehne deti hoon. Kuch aur chahiye to batayein.\"}",
-  "@ ko # @ ko # @ ko # @ ko # @ ko # diye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"},{\"type\":\"lent\",\"person\":\"@1\",\"amount\":\"#1\"},{\"type\":\"lent\",\"person\":\"@2\",\"amount\":\"#1\"},{\"type\":\"lent\",\"person\":\"@3\",\"amount\":\"#3\"},{\"type\":\"lent\",\"person\":\"@4\",\"amount\":\"#4\"}]"
+  "@ ko # @ ko # @ ko # @ ko # @ ko # diye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"},{\"type\":\"lent\",\"person\":\"@1\",\"amount\":\"#1\"},{\"type\":\"lent\",\"person\":\"@2\",\"amount\":\"#1\"},{\"type\":\"lent\",\"person\":\"@3\",\"amount\":\"#3\"},{\"type\":\"lent\",\"person\":\"@4\",\"amount\":\"#4\"}]",
+  "mujhe koi acha mashwra do": "{\"calls\":[],\"reply\":\"Apni kharch ka roz hisaab likhein, aur har mahine ki bachat ke liye pehle se kuch raqam alag rakhein. Bari raqam ki adaigi se pehle apni zaroorat aur bajat dekh lein. Qarz dene se pehle wapsi ki tareekh tay kar lein, taake ta'alluqat bhi acchi rahein.\"}"
  },
  "ai": true
 }
