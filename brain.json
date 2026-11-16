@@ -1,5 +1,5 @@
 {
- "version": 91,
+ "version": 92,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -145,7 +145,8 @@
   "mujhe bohat acha lag raha hai": "{\"calls\":[],\"reply\":\"Shukriya! Main khushi se aapki madad karta hoon, kuch bhi likhein.\"}",
   "aj suba # riyal ka dudh": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Dudh\",\"note\":\"Subah\"}]",
   "main milkar theek hun": "{\"calls\":[],\"reply\":\"Accha hai! Kya aap koi entry save karna ya hisaab dekhna chahte hain?\"}",
-  "maine bola itna jyada kharcha hota hai": "{\"calls\":[],\"reply\":\"Samajh sakta hun. Kahan zyada kharcha hua, category wise dekhun?\"}"
+  "maine bola itna jyada kharcha hota hai": "{\"calls\":[],\"reply\":\"Samajh sakta hun. Kahan zyada kharcha hua, category wise dekhun?\"}",
+  "sorry ford ki yaar": "{\"calls\":[],\"reply\":\"Kya aap Food category ka total dekhna chahte hain, ya kuch aur?\"}"
  },
  "ai": true
 }
