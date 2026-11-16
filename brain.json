@@ -1,5 +1,5 @@
 {
- "version": 118,
+ "version": 119,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -167,7 +167,8 @@
   "ap kis tarah madad karo gay": "{\"calls\":[],\"reply\":\"Main aapke kharche, udhaar, karobar aur hisaab-kitab mein madad kar sakta hoon: entries save karna, totals aur reports dikhana, aur PDF banana.\"}",
   "men udas hun": "{\"calls\":[],\"reply\":\"Mujhe afsos hai ki aap udaas hain. Main aapke liye kuch bhi kar sakta hoon, aur aap chahein to baat kar sakte hain.\"}",
   "sab kesa chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai, aap bataiye, aaj kaisa din raha? Hisaab-kitaab mein bhi madad kar sakta hoon.\"}",
-  "kya madad kr sakty ho": "{\"calls\":[],\"reply\":\"Kharch, udhaar, bikri, balance aur report ka hisaab rakh sakta hoon.\"}"
+  "kya madad kr sakty ho": "{\"calls\":[],\"reply\":\"Kharch, udhaar, bikri, balance aur report ka hisaab rakh sakta hoon.\"}",
+  "ar sab acha hai": "{\"calls\":[],\"reply\":\"Shukriya! Kuch aur chahiye to batayein.\"}"
  },
  "ai": true
 }
