@@ -1,5 +1,5 @@
 {
- "version": 114,
+ "version": 115,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -163,7 +163,8 @@
   "hw r u": "{\"calls\":[],\"reply\":\"I'm doing well, thanks for asking. How are you?\"}",
   "ky chl ra hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai, aap batayein, kya madad karoon?\"}",
   "nhi ap meri koi madad ni kr sakty": "{\"calls\":[],\"reply\":\"Aisa mat kahiye, main hisaab mein aapki madad zaroor kar sakta hoon.\"}",
-  "men bilkul b thek ni": "{\"calls\":[],\"reply\":\"Mujhe afsos hai ke aap theek nahin hain. Kya aap kuch batana chahenge, ya main kisi tarah madad kar sakta hoon?\"}"
+  "men bilkul b thek ni": "{\"calls\":[],\"reply\":\"Mujhe afsos hai ke aap theek nahin hain. Kya aap kuch batana chahenge, ya main kisi tarah madad kar sakta hoon?\"}",
+  "ap kis tarah madad karo gay": "{\"calls\":[],\"reply\":\"Main aapke kharche, udhaar, karobar aur hisaab-kitab mein madad kar sakta hoon: entries save karna, totals aur reports dikhana, aur PDF banana.\"}"
  },
  "ai": true
 }
