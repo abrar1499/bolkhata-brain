@@ -1,5 +1,5 @@
 {
- "version": 36,
+ "version": 37,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -95,6 +95,7 @@
   "charger liya": "{\"calls\":[],\"reply\":\"Charger kitne ka tha? Amount batayein to main save kar doon.\"}",
   "# ka": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Charger\",\"category\":\"Shopping\"}]",
   "pal gaya": "{\"calls\":[],\"reply\":\"Theek hai. Kuch aur save karna ho to batayein.\"}",
-  "hello kya haal hai": "{\"calls\":[],\"reply\":\"Hello! Main theek hun, aap batayein kya save karna hai?\"}"
+  "hello kya haal hai": "{\"calls\":[],\"reply\":\"Hello! Main theek hun, aap batayein kya save karna hai?\"}",
+  "kuchh nahin sev karna bus aap ka hal chal puchna hai": "{\"calls\":[],\"reply\":\"Main theek hun, shukriya! Kuch save nahi karna, bas aapka haal-chaal poochna tha.\"}"
  }
 }
