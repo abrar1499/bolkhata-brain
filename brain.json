@@ -1,5 +1,5 @@
 {
- "version": 86,
+ "version": 87,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -143,5 +143,5 @@
   "kya kr rahay ho": "{\"calls\":[],\"reply\":\"Main aapke hisaab kitaab mein madad kar raha hoon, aap batayein kya darkaar hai?\"}",
   "ji bola karo jab men acha bolu": "{\"calls\":[],\"reply\":\"Theek hai, jab aap \\\"acha\\\" kahenge to main \\\"ji\\\" kahunga.\"}"
  },
- "ai": false
+ "ai": true
 }
