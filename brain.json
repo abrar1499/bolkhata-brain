@@ -1,5 +1,5 @@
 {
- "version": 57,
+ "version": 58,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -116,6 +116,7 @@
   "mujhe islamabad jana hai": "{\"calls\":[],\"reply\":\"Islamabad ka safar mubarak ho! Kya main is safar ka kharcha darj karoon?\"}",
   "lovers islamabad kitna banta hai safar": "{\"calls\":[{\"name\":\"show\",\"input\":{\"words\":[\"safar\"],\"view\":\"total\"}}],\"reply\":\"\"}",
   "what hell are you doing": "{\"calls\":[],\"reply\":\"I'm here to record expenses and answer ledger questions. What do you need?\"}",
-  "dil betab hai": "{\"calls\":[],\"reply\":\"Dil ko sukoon dein. Kya main kuch hisaab mein darj karun?\"}"
+  "dil betab hai": "{\"calls\":[],\"reply\":\"Dil ko sukoon dein. Kya main kuch hisaab mein darj karun?\"}",
+  "o mere dil ka": "{\"calls\":[],\"reply\":\"Gaana yaad aa gaya? Kya main kuch hisaab mein darj karun?\"}"
  }
 }
