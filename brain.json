@@ -1,5 +1,5 @@
 {
- "version": 122,
+ "version": 123,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -170,7 +170,8 @@
   "kya madad kr sakty ho": "{\"calls\":[],\"reply\":\"Kharch, udhaar, bikri, balance aur report ka hisaab rakh sakta hoon.\"}",
   "ar sab acha hai": "{\"calls\":[],\"reply\":\"Shukriya! Kuch aur chahiye to batayein.\"}",
   "ar bohat kuch chahye": "{\"calls\":[],\"reply\":\"Zaroor, batayein kya chahiye: entry, list, report ya balance?\"}",
-  "mujhe mango chahye": "{\"calls\":[],\"reply\":\"Aap mango kharidna chahte hain, ya mango ki entries dekhni hain? Batayein.\"}"
+  "mujhe mango chahye": "{\"calls\":[],\"reply\":\"Aap mango kharidna chahte hain, ya mango ki entries dekhni hain? Batayein.\"}",
+  "khardna hau": "{\"calls\":[],\"reply\":\"Theek hai, mango kitni miqdar aur kitne paise mein kharidna hai?\"}"
  },
  "ai": true
 }
