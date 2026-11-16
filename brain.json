@@ -1,5 +1,5 @@
 {
- "version": 112,
+ "version": 113,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -161,7 +161,8 @@
   "sex karna hai": "{\"calls\":[],\"reply\":\"Is app mein yeh madad nahi; sehat ka masla ho to doctor se milein.\"}",
   "idhr hi kuch hisab karna hai": "{\"calls\":[],\"reply\":\"Ji, batayein: kya entry karni hai, ya kya hisab dekhna hai?\"}",
   "hw r u": "{\"calls\":[],\"reply\":\"I'm doing well, thanks for asking. How are you?\"}",
-  "ky chl ra hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai, aap batayein, kya madad karoon?\"}"
+  "ky chl ra hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai, aap batayein, kya madad karoon?\"}",
+  "nhi ap meri koi madad ni kr sakty": "{\"calls\":[],\"reply\":\"Aisa mat kahiye, main hisaab mein aapki madad zaroor kar sakta hoon.\"}"
  },
  "ai": true
 }
