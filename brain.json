@@ -1,5 +1,5 @@
 {
- "version": 65,
+ "version": 66,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -124,6 +124,7 @@
   "achcha theek hai khyal rakhunga": "{\"calls\":[],\"reply\":\"Theek hai, khayal rakhiye ga, aap ki baat acchi lagi.\"}",
   "klam arbi klam arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, awaz samajh nahi aayi. Kya aap dobara bata sakte hain?\"}",
   "ana klam soi arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Dobara bolein ya likh dein.\"}",
-  "ant aish mshkl": "{\"calls\":[],\"reply\":\"Main aapki madad ke liye hoon. Kis entry ya hisaab mein kaam hai?\"}"
+  "ant aish mshkl": "{\"calls\":[],\"reply\":\"Main aapki madad ke liye hoon. Kis entry ya hisaab mein kaam hai?\"}",
+  "ant lazm klam arbi": "{\"calls\":[],\"reply\":\"Main Roman Urdu ya English mein baat kar sakta hoon, Arabic mein nahi.\"}"
  }
 }
