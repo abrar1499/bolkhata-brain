@@ -1,5 +1,5 @@
 {
- "version": 138,
+ "version": 139,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -183,7 +183,8 @@
   "yar": "{\"calls\":[],\"reply\":\"Yar, kya haal hai? Sab theek?\"}",
   "han yat": "{\"calls\":[],\"reply\":\"Theek hai, sab acha hai! Kuch kaam ho to batayein.\"}",
   "kam to bht hain": "{\"calls\":[],\"reply\":\"Kaam to bohot hai, lekin aap ek ek kaam karte jayein, main madad karunga!\"}",
-  "kuch b madad kr do": "{\"calls\":[],\"reply\":\"Main aap ki madad kar sakta hoon: kharcha likhna, logon ka hisaab, reports aur list dekhna. Bas batayein kya karna hai.\"}"
+  "kuch b madad kr do": "{\"calls\":[],\"reply\":\"Main aap ki madad kar sakta hoon: kharcha likhna, logon ka hisaab, reports aur list dekhna. Bas batayein kya karna hai.\"}",
+  "hskdks": "{\"calls\":[],\"reply\":\"Maaf kijiye, yeh samajh nahi aaya. Kya aap entry, total ya report dekhna chahte hain?\"}"
  },
  "ai": true
 }
