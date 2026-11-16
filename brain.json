@@ -1,5 +1,5 @@
 {
- "version": 64,
+ "version": 65,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -123,6 +123,7 @@
   "mera dost mujhse naraz hai": "{\"calls\":[],\"reply\":\"Yeh sun kar afsos hua. Dosti mein baat cheet se sab theek ho jata hai.\"}",
   "achcha theek hai khyal rakhunga": "{\"calls\":[],\"reply\":\"Theek hai, khayal rakhiye ga, aap ki baat acchi lagi.\"}",
   "klam arbi klam arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, awaz samajh nahi aayi. Kya aap dobara bata sakte hain?\"}",
-  "ana klam soi arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Dobara bolein ya likh dein.\"}"
+  "ana klam soi arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Dobara bolein ya likh dein.\"}",
+  "ant aish mshkl": "{\"calls\":[],\"reply\":\"Main aapki madad ke liye hoon. Kis entry ya hisaab mein kaam hai?\"}"
  }
 }
