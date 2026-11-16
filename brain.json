@@ -1,5 +1,5 @@
 {
- "version": 75,
+ "version": 76,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -81,7 +81,7 @@
   "defa ho": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi hisaab ki zaroorat ho, main yahin hoon.\"}",
   "os main se main se # kia suit liya": "[{\"type\":\"expense\",\"category\":\"Shopping\",\"item\":\"Suit\",\"amount\":\"#0\"}]",
   "school k lay #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"School\",\"note\":\"School\"}]",
-  "kase ho": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya. Aap kaise hain?\"}",
+  "kase ho": "{\"calls\":[],\"reply\":\"Small talk: answer briefly, no tools needed.\\n\\nMain theek hoon, shukriya. Aap kaise hain?\"}",
   "acha ja raha hai": "{\"calls\":[],\"reply\":\"Acha sunkar khushi hui, aur kisi entry ya hisaab mein madad chahiye to batayein.\"}",
   "men b thek hun": "{\"calls\":[],\"reply\":\"Acha hai, khush raho! Kya main aaj kuch record karun?\"}",
   "ar ghar me sab thek hai": "{\"calls\":[],\"reply\":\"Mujhe ghar ka haal maloom nahi, main sirf ledger app mein madad kar sakta hoon.\"}",
@@ -134,6 +134,7 @@
   "antish mshkla spikr be": "{\"calls\":[],\"reply\":\"Awaz saaf nahi aayi, mushkil dobara likhein ya phir se bolein.\"}",
   "mein kon si lingoij bol rha hon": "{\"calls\":[],\"reply\":\"Aap Urdu zaban bol rahe hain.\"}",
   "aur to lkh hi nzr arhi hai ap ko": "{\"calls\":[],\"reply\":\"Ji haan, likha hua saaf nazar aa raha hai.\"}",
-  "lkha a rha hai": "{\"calls\":[],\"reply\":\"Ji haan, aapka message saaf likha hua nazar aa raha hai.\"}"
+  "lkha a rha hai": "{\"calls\":[],\"reply\":\"Ji haan, aapka message saaf likha hua nazar aa raha hai.\"}",
+  "kya kar rahi ho": "{\"calls\":[],\"reply\":\"Main aap ke ledger aur hisaab mein madad kar rahi hoon, aap ka kaam batayein.\"}"
  }
 }
