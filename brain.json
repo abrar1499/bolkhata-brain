@@ -1,5 +1,5 @@
 {
- "version": 30,
+ "version": 31,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -89,6 +89,7 @@
   "ab sahi hai # cash @ ko # # ki chez # always pads cash in hand # sar chez # sar": "[{\"type\":\"income\",\"amount\":\"#0\",\"item\":\"Cash\"},{\"type\":\"lent\",\"amount\":\"#1\",\"person\":\"@0\"},{\"type\":\"expense\",\"amount\":\"#2\",\"item\":\"Chez\",\"category\":\"Other\"},{\"type\":\"expense\",\"amount\":\"#3\",\"item\":\"Always pads\",\"category\":\"Personal care\"}]",
   "@ ne # diya # @ ko diya # ki chez li # ki cream li": "[{\"type\":\"received_back\",\"person\":\"@0\",\"amount\":\"#0\"},{\"type\":\"lent\",\"person\":\"@1\",\"amount\":\"#1\"},{\"type\":\"expense\",\"item\":\"Chez\",\"amount\":\"#2\",\"category\":\"Other\"},{\"type\":\"expense\",\"item\":\"Cream\",\"amount\":\"#3\",\"category\":\"Personal care\"}]",
   "kya kr rahy ho": "{\"calls\":[],\"reply\":\"Main aapke ledger mein kaam kar raha hoon, bataiye kya madad chahiye.\"}",
-  "kitna kam krty ho": "{\"calls\":[],\"reply\":\"Main aapke ledger ka kaam karta hoon, bataiye kya hisaab rakhna hai.\"}"
+  "kitna kam krty ho": "{\"calls\":[],\"reply\":\"Main aapke ledger ka kaam karta hoon, bataiye kya hisaab rakhna hai.\"}",
+  "mobile cover liya": "{\"calls\":[],\"reply\":\"Mobile cover kitne ka tha? Amount batayein to main save kar doon.\"}"
  }
 }
