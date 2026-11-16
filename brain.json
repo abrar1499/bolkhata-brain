@@ -1,5 +1,5 @@
 {
- "version": 72,
+ "version": 73,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -131,6 +131,7 @@
   "bliz jastlmi": "{\"calls\":[],\"reply\":\"Sure, what would you like to know? I can show expenses, balances, or a report.\"}",
   "iarb": "{\"calls\":[],\"reply\":\"Ameen. Kya main kisi entry ya hisaab mein madad kar sakta hoon?\"}",
   "andish mshkla": "{\"calls\":[],\"reply\":\"Koi baat nahi, aap khul kar batayein, kya mushkil hai?\"}",
-  "antish mshkla spikr be": "{\"calls\":[],\"reply\":\"Awaz saaf nahi aayi, mushkil dobara likhein ya phir se bolein.\"}"
+  "antish mshkla spikr be": "{\"calls\":[],\"reply\":\"Awaz saaf nahi aayi, mushkil dobara likhein ya phir se bolein.\"}",
+  "mein kon si lingoij bol rha hon": "{\"calls\":[],\"reply\":\"Aap Urdu zaban bol rahe hain.\"}"
  }
 }
