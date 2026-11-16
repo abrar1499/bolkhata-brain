@@ -1,5 +1,5 @@
 {
- "version": 67,
+ "version": 68,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -126,6 +126,7 @@
   "ana klam soi arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Dobara bolein ya likh dein.\"}",
   "ant aish mshkl": "{\"calls\":[],\"reply\":\"Main aapki madad ke liye hoon. Kis entry ya hisaab mein kaam hai?\"}",
   "ant lazm klam arbi": "{\"calls\":[],\"reply\":\"Main Roman Urdu ya English mein baat kar sakta hoon, Arabic mein nahi.\"}",
-  "io kan io sbik anjlsh": "{\"calls\":[],\"reply\":\"Yes, I can speak English. How can I help with your entries?\"}"
+  "io kan io sbik anjlsh": "{\"calls\":[],\"reply\":\"Yes, I can speak English. How can I help with your entries?\"}",
+  "wat ar io doinj": "{\"calls\":[],\"reply\":\"I'm here and ready to help with your ledger entries, expenses, or balances.\"}"
  }
 }
