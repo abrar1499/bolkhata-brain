@@ -1,5 +1,5 @@
 {
- "version": 53,
+ "version": 54,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -112,6 +112,7 @@
   "good good se jawab hai": "{\"calls\":[],\"reply\":\"Theek hai! Kuch aur hisaab ya sawal ho to batayein.\"}",
   "massage massage": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Kya aap koi entry ya hisaab batana chahte hain?\"}",
   "hello ab samajh a rahi hai meri": "{\"calls\":[],\"reply\":\"Ji haan, ab main aap ki baat samajh sakta hoon. Bataiye, kya entry karni hai?\"}",
-  "kitna hota hai": "{\"calls\":[],\"reply\":\"Kis cheez ka total chahiye? Kharcha, amdani ya kisi shakhs ka hisaab batayein.\"}"
+  "kitna hota hai": "{\"calls\":[],\"reply\":\"Kis cheez ka total chahiye? Kharcha, amdani ya kisi shakhs ka hisaab batayein.\"}",
+  "mujhe islamabad jana hai": "{\"calls\":[],\"reply\":\"Islamabad ka safar mubarak ho! Kya main is safar ka kharcha darj karoon?\"}"
  }
 }
