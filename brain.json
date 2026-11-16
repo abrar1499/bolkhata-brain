@@ -1,5 +1,5 @@
 {
- "version": 85,
+ "version": 86,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -142,5 +142,6 @@
   "nhi hai zaroort mujhe kase ke be": "{\"calls\":[],\"reply\":\"Theek hai, koi baat nahi. Jab bhi zaroorat ho, main yahin hoon.\"}",
   "kya kr rahay ho": "{\"calls\":[],\"reply\":\"Main aapke hisaab kitaab mein madad kar raha hoon, aap batayein kya darkaar hai?\"}",
   "ji bola karo jab men acha bolu": "{\"calls\":[],\"reply\":\"Theek hai, jab aap \\\"acha\\\" kahenge to main \\\"ji\\\" kahunga.\"}"
- }
+ },
+ "ai": false
 }
