@@ -1,5 +1,5 @@
 {
- "version": 74,
+ "version": 75,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -133,6 +133,7 @@
   "andish mshkla": "{\"calls\":[],\"reply\":\"Koi baat nahi, aap khul kar batayein, kya mushkil hai?\"}",
   "antish mshkla spikr be": "{\"calls\":[],\"reply\":\"Awaz saaf nahi aayi, mushkil dobara likhein ya phir se bolein.\"}",
   "mein kon si lingoij bol rha hon": "{\"calls\":[],\"reply\":\"Aap Urdu zaban bol rahe hain.\"}",
-  "aur to lkh hi nzr arhi hai ap ko": "{\"calls\":[],\"reply\":\"Ji haan, likha hua saaf nazar aa raha hai.\"}"
+  "aur to lkh hi nzr arhi hai ap ko": "{\"calls\":[],\"reply\":\"Ji haan, likha hua saaf nazar aa raha hai.\"}",
+  "lkha a rha hai": "{\"calls\":[],\"reply\":\"Ji haan, aapka message saaf likha hua nazar aa raha hai.\"}"
  }
 }
