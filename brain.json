@@ -1,5 +1,5 @@
 {
- "version": 51,
+ "version": 52,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -110,6 +110,7 @@
   "do aur do kitna hota hai": "{\"calls\":[],\"reply\":\"Do aur do chaar hote hain.\"}",
   "tod do kitna hota hai": "{\"calls\":[],\"reply\":\"Agar aap \\\"do aur do\\\" poochna chahte hain, to jawab chaar hai.\"}",
   "good good se jawab hai": "{\"calls\":[],\"reply\":\"Theek hai! Kuch aur hisaab ya sawal ho to batayein.\"}",
-  "massage massage": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Kya aap koi entry ya hisaab batana chahte hain?\"}"
+  "massage massage": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Kya aap koi entry ya hisaab batana chahte hain?\"}",
+  "hello ab samajh a rahi hai meri": "{\"calls\":[],\"reply\":\"Ji haan, ab main aap ki baat samajh sakta hoon. Bataiye, kya entry karni hai?\"}"
  }
 }
