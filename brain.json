@@ -1,5 +1,5 @@
 {
- "version": 78,
+ "version": 79,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -137,6 +137,7 @@
   "lkha a rha hai": "{\"calls\":[],\"reply\":\"Ji haan, aapka message saaf likha hua nazar aa raha hai.\"}",
   "kya kar rahi ho": "{\"calls\":[],\"reply\":\"Main aap ke ledger aur hisaab mein madad kar rahi hoon, aap ka kaam batayein.\"}",
   "delet karo sab kuch": "{\"calls\":[],\"reply\":\"Sab entries delete karni hain? Confirm karne ke liye \\\"haan\\\" likhein.\"}",
-  "chat delet karo": "{\"calls\":[],\"reply\":\"Main chat delete nahi kar sakta; entries delete karni hon to batayein.\"}"
+  "chat delet karo": "{\"calls\":[],\"reply\":\"Main chat delete nahi kar sakta; entries delete karni hon to batayein.\"}",
+  "na ho yah": "{\"calls\":[],\"reply\":\"Theek hai, koi masla nahi. Jab zaroorat ho, bata dein.\"}"
  }
 }
