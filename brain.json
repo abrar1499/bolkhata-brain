@@ -1,5 +1,5 @@
 {
- "version": 50,
+ "version": 51,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -109,6 +109,7 @@
   "achcha mausam hai aaj": "{\"calls\":[],\"reply\":\"Achcha mausam hai, shukriya! Ap ka din khush guzre.\"}",
   "do aur do kitna hota hai": "{\"calls\":[],\"reply\":\"Do aur do chaar hote hain.\"}",
   "tod do kitna hota hai": "{\"calls\":[],\"reply\":\"Agar aap \\\"do aur do\\\" poochna chahte hain, to jawab chaar hai.\"}",
-  "good good se jawab hai": "{\"calls\":[],\"reply\":\"Theek hai! Kuch aur hisaab ya sawal ho to batayein.\"}"
+  "good good se jawab hai": "{\"calls\":[],\"reply\":\"Theek hai! Kuch aur hisaab ya sawal ho to batayein.\"}",
+  "massage massage": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Kya aap koi entry ya hisaab batana chahte hain?\"}"
  }
 }
