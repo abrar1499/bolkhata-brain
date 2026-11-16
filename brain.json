@@ -1,5 +1,5 @@
 {
- "version": 136,
+ "version": 137,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -181,7 +181,8 @@
   "meri assistant ho": "{\"calls\":[],\"reply\":\"Main aap ki ledger assistant hun, aap ka hisaab rakhne mein madad karne ke liye.\"}",
   "din bohat acha ja raha hai": "{\"calls\":[],\"reply\":\"Yeh sun kar khushi hui! Allah kare din aur acha guzray.\"}",
   "yar": "{\"calls\":[],\"reply\":\"Yar, kya haal hai? Sab theek?\"}",
-  "han yat": "{\"calls\":[],\"reply\":\"Theek hai, sab acha hai! Kuch kaam ho to batayein.\"}"
+  "han yat": "{\"calls\":[],\"reply\":\"Theek hai, sab acha hai! Kuch kaam ho to batayein.\"}",
+  "kam to bht hain": "{\"calls\":[],\"reply\":\"Kaam to bohot hai, lekin aap ek ek kaam karte jayein, main madad karunga!\"}"
  },
  "ai": true
 }
