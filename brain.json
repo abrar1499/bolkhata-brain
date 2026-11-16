@@ -1,5 +1,5 @@
 {
- "version": 137,
+ "version": 138,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -182,7 +182,8 @@
   "din bohat acha ja raha hai": "{\"calls\":[],\"reply\":\"Yeh sun kar khushi hui! Allah kare din aur acha guzray.\"}",
   "yar": "{\"calls\":[],\"reply\":\"Yar, kya haal hai? Sab theek?\"}",
   "han yat": "{\"calls\":[],\"reply\":\"Theek hai, sab acha hai! Kuch kaam ho to batayein.\"}",
-  "kam to bht hain": "{\"calls\":[],\"reply\":\"Kaam to bohot hai, lekin aap ek ek kaam karte jayein, main madad karunga!\"}"
+  "kam to bht hain": "{\"calls\":[],\"reply\":\"Kaam to bohot hai, lekin aap ek ek kaam karte jayein, main madad karunga!\"}",
+  "kuch b madad kr do": "{\"calls\":[],\"reply\":\"Main aap ki madad kar sakta hoon: kharcha likhna, logon ka hisaab, reports aur list dekhna. Bas batayein kya karna hai.\"}"
  },
  "ai": true
 }
