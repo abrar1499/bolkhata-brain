@@ -1,5 +1,5 @@
 {
- "version": 98,
+ "version": 99,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -152,7 +152,8 @@
   "okay suno": "{\"calls\":[],\"reply\":\"Ji, boliye, main sun raha hoon.\"}",
   "i think this have could be helpful for my expense management": "{\"calls\":[],\"reply\":\"Glad to help. Let me know whenever you want to add or check entries.\"}",
   "you are doing well": "{\"calls\":[],\"reply\":\"Thank you, I'm glad it's helping with your expenses!\"}",
-  "that is really cool": "{\"calls\":[],\"reply\":\"Thanks, glad it helps! Send me any entry or question whenever you're ready.\"}"
+  "that is really cool": "{\"calls\":[],\"reply\":\"Thanks, glad it helps! Send me any entry or question whenever you're ready.\"}",
+  "i said can you be my assistant as in my bricks company": "{\"calls\":[],\"reply\":\"Yes, I can track your bricks company's sales, costs and expenses.\"}"
  },
  "ai": true
 }
