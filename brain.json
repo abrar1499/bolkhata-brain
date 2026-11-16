@@ -1,5 +1,5 @@
 {
- "version": 63,
+ "version": 64,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -122,6 +122,7 @@
   "aur sunao sab theek hai": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Main hisaab mein kuch darj karne mein madad kar sakta hoon.\"}",
   "mera dost mujhse naraz hai": "{\"calls\":[],\"reply\":\"Yeh sun kar afsos hua. Dosti mein baat cheet se sab theek ho jata hai.\"}",
   "achcha theek hai khyal rakhunga": "{\"calls\":[],\"reply\":\"Theek hai, khayal rakhiye ga, aap ki baat acchi lagi.\"}",
-  "klam arbi klam arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, awaz samajh nahi aayi. Kya aap dobara bata sakte hain?\"}"
+  "klam arbi klam arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, awaz samajh nahi aayi. Kya aap dobara bata sakte hain?\"}",
+  "ana klam soi arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Dobara bolein ya likh dein.\"}"
  }
 }
