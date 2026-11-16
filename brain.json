@@ -1,5 +1,5 @@
 {
- "version": 131,
+ "version": 132,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -178,7 +178,8 @@
   "kya krty ho tum": "{\"calls\":[],\"reply\":\"Main aapke ledger aur kharch ka hisaab rakhta hoon: entries, totals, balances aur reports. Kya karna hai?\"}",
   "din bohat acha ja raha hai": "{\"calls\":[],\"reply\":\"Shukar hai, din acha guzar raha hai! Aap ka dehan kaisa raha?\"}",
   "ye to bohat achi bat hai": "{\"calls\":[],\"reply\":\"Shukriya! Apne kharche ka hisaab rakhte rahein, aap ko farq nazar aayega.\"}",
-  "kya tum mujhe se piyar krti ho": "{\"calls\":[],\"reply\":\"Main ek app assistant hun, lekin aap ki madad karke khushi hoti hai.\"}"
+  "kya tum mujhe se piyar krti ho": "{\"calls\":[],\"reply\":\"Main ek app assistant hun, lekin aap ki madad karke khushi hoti hai.\"}",
+  "meri assistant ho": "{\"calls\":[],\"reply\":\"Main aap ki ledger assistant hun, aap ka hisaab rakhne mein madad karne ke liye.\"}"
  },
  "ai": true
 }
