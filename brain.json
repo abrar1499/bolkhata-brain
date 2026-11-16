@@ -1,5 +1,5 @@
 {
- "version": 73,
+ "version": 74,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -132,6 +132,7 @@
   "iarb": "{\"calls\":[],\"reply\":\"Ameen. Kya main kisi entry ya hisaab mein madad kar sakta hoon?\"}",
   "andish mshkla": "{\"calls\":[],\"reply\":\"Koi baat nahi, aap khul kar batayein, kya mushkil hai?\"}",
   "antish mshkla spikr be": "{\"calls\":[],\"reply\":\"Awaz saaf nahi aayi, mushkil dobara likhein ya phir se bolein.\"}",
-  "mein kon si lingoij bol rha hon": "{\"calls\":[],\"reply\":\"Aap Urdu zaban bol rahe hain.\"}"
+  "mein kon si lingoij bol rha hon": "{\"calls\":[],\"reply\":\"Aap Urdu zaban bol rahe hain.\"}",
+  "aur to lkh hi nzr arhi hai ap ko": "{\"calls\":[],\"reply\":\"Ji haan, likha hua saaf nazar aa raha hai.\"}"
  }
 }
