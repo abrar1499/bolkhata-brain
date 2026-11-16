@@ -1,5 +1,5 @@
 {
- "version": 44,
+ "version": 45,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -103,6 +103,7 @@
   "waqar saudia": "{\"calls\":[],\"reply\":\"Did you mean a Saudia ticket for Waqar? Please tell me the amount.\"}",
   "abhi tak facebook mein kaun kaun se entry padi hai": "{\"calls\":[{\"name\":\"show\",\"input\":{\"view\":\"list\",\"words\":[\"Facebook\"]}}],\"reply\":\"Facebook ki koi entry nahi mili abhi tak.\"}",
   "sab kuchh achcha hai": "{\"calls\":[],\"reply\":\"Shukriya, sab kuch achcha sunkar khushi hui! Kuch save ya dekhna ho to batayein.\"}",
-  "aaj mausam kaisa hai": "{\"calls\":[],\"reply\":\"Mujhe live mausam maloom nahi, kisi weather app par dekh lein.\"}"
+  "aaj mausam kaisa hai": "{\"calls\":[],\"reply\":\"Mujhe live mausam maloom nahi, kisi weather app par dekh lein.\"}",
+  "mausam kaisa hai aaj": "{\"calls\":[],\"reply\":\"Mujhe live mausam maloom nahi, kisi weather app par dekh lein.\"}"
  }
 }
