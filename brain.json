@@ -1,5 +1,5 @@
 {
- "version": 66,
+ "version": 67,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -125,6 +125,7 @@
   "klam arbi klam arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, awaz samajh nahi aayi. Kya aap dobara bata sakte hain?\"}",
   "ana klam soi arbi": "{\"calls\":[],\"reply\":\"Maaf kijiye, samajh nahi aaya. Dobara bolein ya likh dein.\"}",
   "ant aish mshkl": "{\"calls\":[],\"reply\":\"Main aapki madad ke liye hoon. Kis entry ya hisaab mein kaam hai?\"}",
-  "ant lazm klam arbi": "{\"calls\":[],\"reply\":\"Main Roman Urdu ya English mein baat kar sakta hoon, Arabic mein nahi.\"}"
+  "ant lazm klam arbi": "{\"calls\":[],\"reply\":\"Main Roman Urdu ya English mein baat kar sakta hoon, Arabic mein nahi.\"}",
+  "io kan io sbik anjlsh": "{\"calls\":[],\"reply\":\"Yes, I can speak English. How can I help with your entries?\"}"
  }
 }
