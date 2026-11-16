@@ -1,5 +1,5 @@
 {
- "version": 60,
+ "version": 61,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -119,6 +119,7 @@
   "dil betab hai": "{\"calls\":[],\"reply\":\"Dil ko sukoon dein. Kya main kuch hisaab mein darj karun?\"}",
   "o mere dil ka": "{\"calls\":[],\"reply\":\"Gaana yaad aa gaya? Kya main kuch hisaab mein darj karun?\"}",
   "mujhe koi gana yad nahin aaya": "{\"calls\":[],\"reply\":\"Koi baat nahin! Kya main kuch hisaab mein darj karun?\"}",
-  "aur sunao sab theek hai": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Main hisaab mein kuch darj karne mein madad kar sakta hoon.\"}"
+  "aur sunao sab theek hai": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Main hisaab mein kuch darj karne mein madad kar sakta hoon.\"}",
+  "mera dost mujhse naraz hai": "{\"calls\":[],\"reply\":\"Yeh sun kar afsos hua. Dosti mein baat cheet se sab theek ho jata hai.\"}"
  }
 }
