@@ -1,5 +1,5 @@
 {
- "version": 38,
+ "version": 39,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -97,6 +97,7 @@
   "pal gaya": "{\"calls\":[],\"reply\":\"Theek hai. Kuch aur save karna ho to batayein.\"}",
   "hello kya haal hai": "{\"calls\":[],\"reply\":\"Hello! Main theek hun, aap batayein kya save karna hai?\"}",
   "kuchh nahin sev karna bus aap ka hal chal puchna hai": "{\"calls\":[],\"reply\":\"Main theek hun, shukriya! Kuch save nahi karna, bas aapka haal-chaal poochna tha.\"}",
-  "aur sab achcha hai": "{\"calls\":[],\"reply\":\"Shukriya, sab achha sunke khushi hui! Kuch save karna ho to batayein.\"}"
+  "aur sab achcha hai": "{\"calls\":[],\"reply\":\"Shukriya, sab achha sunke khushi hui! Kuch save karna ho to batayein.\"}",
+  "achcha achcha country ka jawab diya hai": "{\"calls\":[],\"reply\":\"Theek hai, shukriya. Kuch aur check karna ho to batayein.\"}"
  }
 }
