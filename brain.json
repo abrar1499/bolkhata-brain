@@ -1,5 +1,5 @@
 {
- "version": 105,
+ "version": 106,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -159,7 +159,8 @@
   "acha ik bat batao": "{\"calls\":[],\"reply\":\"Ji, poochiye. Aap kya jaanna chahte hain?\"}",
   "g dekha daye": "{\"calls\":[{\"name\":\"show\",\"input\":{\"view\":\"list\",\"types\":[\"expense\"]}}],\"reply\":\"Ji, abhi app mein bache ke kharche ka koi entry nahi hai.\"}",
   "# qari ke fee": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Education\",\"item\":\"Qari fee\"}]",
-  "sex karna hai": "{\"calls\":[],\"reply\":\"Is app mein yeh madad nahi; sehat ka masla ho to doctor se milein.\"}"
+  "sex karna hai": "{\"calls\":[],\"reply\":\"Is app mein yeh madad nahi; sehat ka masla ho to doctor se milein.\"}",
+  "idhr hi kuch hisab karna hai": "{\"calls\":[],\"reply\":\"Theek hai, batayein kya hisab karna hai: entry, total ya balance?\"}"
  },
  "ai": true
 }
