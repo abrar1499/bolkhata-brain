@@ -1,5 +1,5 @@
 {
- "version": 121,
+ "version": 122,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -169,7 +169,8 @@
   "sab kesa chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai, aap bataiye, aaj kaisa din raha? Hisaab-kitaab mein bhi madad kar sakta hoon.\"}",
   "kya madad kr sakty ho": "{\"calls\":[],\"reply\":\"Kharch, udhaar, bikri, balance aur report ka hisaab rakh sakta hoon.\"}",
   "ar sab acha hai": "{\"calls\":[],\"reply\":\"Shukriya! Kuch aur chahiye to batayein.\"}",
-  "ar bohat kuch chahye": "{\"calls\":[],\"reply\":\"Zaroor, batayein kya chahiye: entry, list, report ya balance?\"}"
+  "ar bohat kuch chahye": "{\"calls\":[],\"reply\":\"Zaroor, batayein kya chahiye: entry, list, report ya balance?\"}",
+  "mujhe mango chahye": "{\"calls\":[],\"reply\":\"Aap mango kharidna chahte hain, ya mango ki entries dekhni hain? Batayein.\"}"
  },
  "ai": true
 }
