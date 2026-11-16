@@ -1,5 +1,5 @@
 {
- "version": 76,
+ "version": 77,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -135,6 +135,7 @@
   "mein kon si lingoij bol rha hon": "{\"calls\":[],\"reply\":\"Aap Urdu zaban bol rahe hain.\"}",
   "aur to lkh hi nzr arhi hai ap ko": "{\"calls\":[],\"reply\":\"Ji haan, likha hua saaf nazar aa raha hai.\"}",
   "lkha a rha hai": "{\"calls\":[],\"reply\":\"Ji haan, aapka message saaf likha hua nazar aa raha hai.\"}",
-  "kya kar rahi ho": "{\"calls\":[],\"reply\":\"Main aap ke ledger aur hisaab mein madad kar rahi hoon, aap ka kaam batayein.\"}"
+  "kya kar rahi ho": "{\"calls\":[],\"reply\":\"Main aap ke ledger aur hisaab mein madad kar rahi hoon, aap ka kaam batayein.\"}",
+  "delet karo sab kuch": "{\"calls\":[],\"reply\":\"Sab entries delete karni hain? Confirm karne ke liye \\\"haan\\\" likhein.\"}"
  }
 }
