@@ -1,5 +1,5 @@
 {
- "version": 31,
+ "version": 32,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -90,6 +90,7 @@
   "@ ne # diya # @ ko diya # ki chez li # ki cream li": "[{\"type\":\"received_back\",\"person\":\"@0\",\"amount\":\"#0\"},{\"type\":\"lent\",\"person\":\"@1\",\"amount\":\"#1\"},{\"type\":\"expense\",\"item\":\"Chez\",\"amount\":\"#2\",\"category\":\"Other\"},{\"type\":\"expense\",\"item\":\"Cream\",\"amount\":\"#3\",\"category\":\"Personal care\"}]",
   "kya kr rahy ho": "{\"calls\":[],\"reply\":\"Main aapke ledger mein kaam kar raha hoon, bataiye kya madad chahiye.\"}",
   "kitna kam krty ho": "{\"calls\":[],\"reply\":\"Main aapke ledger ka kaam karta hoon, bataiye kya hisaab rakhna hai.\"}",
-  "mobile cover liya": "{\"calls\":[],\"reply\":\"Mobile cover kitne ka tha? Amount batayein to main save kar doon.\"}"
+  "mobile cover liya": "{\"calls\":[],\"reply\":\"Mobile cover kitne ka tha? Amount batayein to main save kar doon.\"}",
+  "#": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Shopping\",\"item\":\"Mobile cover\"}]"
  }
 }
