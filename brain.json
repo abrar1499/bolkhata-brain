@@ -1,5 +1,5 @@
 {
- "version": 80,
+ "version": 81,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -139,6 +139,7 @@
   "delet karo sab kuch": "{\"calls\":[],\"reply\":\"Sab entries delete karni hain? Confirm karne ke liye \\\"haan\\\" likhein.\"}",
   "chat delet karo": "{\"calls\":[],\"reply\":\"Main chat delete nahi kar sakta; entries delete karni hon to batayein.\"}",
   "na ho yah": "{\"calls\":[],\"reply\":\"Theek hai, koi masla nahi. Jab zaroorat ho, bata dein.\"}",
-  "nhi hai zaroort mujhe kase ke be": "{\"calls\":[],\"reply\":\"Theek hai, koi baat nahi. Jab bhi zaroorat ho, main yahin hoon.\"}"
+  "nhi hai zaroort mujhe kase ke be": "{\"calls\":[],\"reply\":\"Theek hai, koi baat nahi. Jab bhi zaroorat ho, main yahin hoon.\"}",
+  "kya kr rahay ho": "{\"calls\":[],\"reply\":\"Main aapke hisaab kitaab mein madad kar raha hoon, aap batayein kya darkaar hai?\"}"
  }
 }
