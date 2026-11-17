@@ -1,5 +1,5 @@
 {
- "version": 145,
+ "version": 146,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -33,7 +33,7 @@
   "ar sunao mtlb men thek hun ap btaye": "{\"calls\":[],\"reply\":\"Main bhi theek hun, shukriya! Batayein, kya dekhna hai?\"}",
   "bs thek": "{\"calls\":[],\"reply\":\"Shukriya, theek sunkar khushi hui. Kuch dekhna ya likhna ho to batayein.\"}",
   "koi kahani sunao": "{\"calls\":[],\"reply\":\"Main sirf is app ke hisaab-kitaab mein madad kar sakta hoon, kahani nahi sunata.\"}",
-  "acha": "{\"calls\":[],\"reply\":\"Theek hai, aap app ke hisaab-kitaab ke bare mein kuch bhi poochh sakte hain.\"}",
+  "acha": "{\"calls\":[],\"reply\":\"Alright, let me know whenever you want to add or check an entry.\",\"lang\":\"English\"}",
   "achai": "{\"calls\":[],\"reply\":\"Achha, koi aur kaam ho to batayein.\"}",
   "i love you": "{\"calls\":[],\"reply\":\"Thanks, that's kind! I'm here to help with your ledger whenever you need.\"}",
   "i love u": "{\"calls\":[],\"reply\":\"Thanks, that's kind! I'm here to help with your ledger.\"}",
