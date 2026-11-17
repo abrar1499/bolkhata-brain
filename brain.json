@@ -1,5 +1,5 @@
 {
- "version": 147,
+ "version": 148,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -191,7 +191,8 @@
   "i am good too": "{\"calls\":[],\"reply\":\"Glad to hear you're doing well! How can I help with your books today?\",\"lang\":\"English\"}",
   "kif": "{\"calls\":[],\"reply\":\"I'm doing well, thank you! How can I help with your books today?\",\"lang\":\"English\"}",
   "ke kr rah ho": "{\"calls\":[],\"reply\":\"Just keeping your books up to date. Anything you want to add or check?\",\"lang\":\"English\"}",
-  "hello kya hal hai": "{\"calls\":[],\"reply\":\"Hello! I'm doing well, thanks for asking. How can I help with your books today?\",\"lang\":\"English\"}"
+  "hello kya hal hai": "{\"calls\":[],\"reply\":\"Hello! I'm doing well, thanks for asking. How can I help with your books today?\",\"lang\":\"English\"}",
+  "kigh": "{\"calls\":[],\"reply\":\"Sorry, I didn't catch that. Could you say it again, or tell me what to record?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
