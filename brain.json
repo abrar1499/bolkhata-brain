@@ -1,5 +1,5 @@
 {
- "version": 159,
+ "version": 160,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -198,7 +198,9 @@
   "kujh ni": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi kuch chahiye bata dijiye.\",\"lang\":\"English\"}",
   "hi": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}",
   "kese ho": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap kaise hain?\",\"lang\":\"English\"}",
-  "i am good": "{\"calls\":[],\"reply\":\"Glad to hear it, how can I help with your ledger today?\",\"lang\":\"English\"}"
+  "i am good": "{\"calls\":[],\"reply\":\"Glad to hear it, how can I help with your ledger today?\",\"lang\":\"English\"}",
+  "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"amount\":\"#0\",\"category\":\"Transport\"}]",
+  "kya hal chal hai apka": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap kaise hain? Kharcha ya hisaab mein kisi cheez mein madad chahiye to batayein.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
