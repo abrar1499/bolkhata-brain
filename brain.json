@@ -1,5 +1,5 @@
 {
- "version": 168,
+ "version": 169,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -204,7 +204,8 @@
   "aj mene @ se # liya": "[{\"type\":\"received_back\",\"person\":\"@0\",\"amount\":\"#0\"}]",
   "kya hal hai bhai sahb": "{\"calls\":[],\"reply\":\"Sab theek hai, bhai sahab! Aap kaise hain?\",\"lang\":\"English\"}",
   "mujue pakistan jana hai": "{\"calls\":[],\"reply\":\"Achha, safar mubarak ho! Kab jaana hai?\",\"lang\":\"English\"}",
-  "mujhe ticket kahan search krni chahye": "{\"calls\":[],\"reply\":\"Aap Google Flights, Skyscanner ya Kayak par dates daal kar prices compare kar sakte hain. Phir PIA, Airblue, Flyjinnah ya Saudia jaisi airline ki official website se direct booking karein. Dhoka se bachne ke liye sirf official site ya registered travel agent se payment karein.\",\"lang\":\"English\"}"
+  "mujhe ticket kahan search krni chahye": "{\"calls\":[],\"reply\":\"Aap Google Flights, Skyscanner ya Kayak par dates daal kar prices compare kar sakte hain. Phir PIA, Airblue, Flyjinnah ya Saudia jaisi airline ki official website se direct booking karein. Dhoka se bachne ke liye sirf official site ya registered travel agent se payment karein.\",\"lang\":\"English\"}",
+  "tume kya lagta hai ye sab thek hai": "{\"calls\":[],\"reply\":\"Ji haan, ye sab theek lag raha hai. Official website aur trusted app se booking karein, to safar aasan rahega.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
