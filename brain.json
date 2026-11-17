@@ -1,5 +1,5 @@
 {
- "version": 142,
+ "version": 143,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -188,7 +188,8 @@
   "wat ar yo dong": "{\"calls\":[],\"reply\":\"Hello! I'm doing well, thanks for asking. How can I help with your ledger today?\"}",
   "kase ho": "{\"calls\":[],\"reply\":\"Small talk: answer briefly, no tools needed.\\n\\nMain theek hoon, shukriya. Aap kaise hain?\"}",
   "ima good": "{\"calls\":[],\"reply\":\"Glad to hear you're good!\",\"lang\":\"English\"}",
-  "i am good too": "{\"calls\":[],\"reply\":\"Glad to hear you're doing well! How can I help with your books today?\",\"lang\":\"English\"}"
+  "i am good too": "{\"calls\":[],\"reply\":\"Glad to hear you're doing well! How can I help with your books today?\",\"lang\":\"English\"}",
+  "kif": "{\"calls\":[],\"reply\":\"I'm doing well, thank you! How can I help with your books today?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
