@@ -1,5 +1,5 @@
 {
- "version": 154,
+ "version": 155,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -196,7 +196,8 @@
   "kf": "{\"calls\":[],\"reply\":\"Sorry, I didn't catch that. Could you say it again, or tell me what to record?\",\"lang\":\"English\"}",
   "kif halk": "{\"calls\":[],\"reply\":\"الحمد لله، أنا بخير. كيف يمكنني مساعدتك اليوم؟\",\"lang\":\"English\"}",
   "hello": "{\"calls\":[],\"reply\":\"Hello! How can I help with your books today?\",\"lang\":\"English\"}",
-  "kujh ni": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi kuch chahiye bata dijiye.\",\"lang\":\"English\"}"
+  "kujh ni": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi kuch chahiye bata dijiye.\",\"lang\":\"English\"}",
+  "hi": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
