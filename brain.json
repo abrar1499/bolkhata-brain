@@ -1,9 +1,8 @@
 {
- "version": 158,
+ "version": 159,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
-  "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"amount\":\"#0\",\"category\":\"Transport\"}]",
   "nashtq #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Nashta\",\"category\":\"Food\"}]",
   "# lunch": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Lunch\",\"category\":\"Food\"}]",
   "@ ko # diy": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
