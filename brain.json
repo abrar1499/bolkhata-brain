@@ -1,5 +1,5 @@
 {
- "version": 161,
+ "version": 162,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -97,7 +97,6 @@
   "kuchh nahin sev karna bus aap ka hal chal puchna hai": "{\"calls\":[],\"reply\":\"Main theek hun, shukriya! Kuch save nahi karna, bas aapka haal-chaal poochna tha.\"}",
   "aur sab achcha hai": "{\"calls\":[],\"reply\":\"Shukriya, sab achha sunke khushi hui! Kuch save karna ho to batayein.\"}",
   "achcha achcha country ka jawab diya hai": "{\"calls\":[],\"reply\":\"Theek hai, shukriya. Kuch aur check karna ho to batayein.\"}",
-  "details": "{\"calls\":[{\"name\":\"show\",\"input\":{\"view\":\"breakdown\",\"words\":[\"cloud\"]}}],\"reply\":\"\"}",
   "waqar saudia": "{\"calls\":[],\"reply\":\"Did you mean a Saudia ticket for Waqar? Please tell me the amount.\"}",
   "abhi tak facebook mein kaun kaun se entry padi hai": "{\"calls\":[{\"name\":\"show\",\"input\":{\"view\":\"list\",\"words\":[\"Facebook\"]}}],\"reply\":\"Facebook ki koi entry nahi mili abhi tak.\"}",
   "sab kuchh achcha hai": "{\"calls\":[],\"reply\":\"Shukriya, sab kuch achcha sunkar khushi hui! Kuch save ya dekhna ho to batayein.\"}",
