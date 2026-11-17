@@ -1,5 +1,5 @@
 {
- "version": 155,
+ "version": 156,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -197,7 +197,8 @@
   "kif halk": "{\"calls\":[],\"reply\":\"الحمد لله، أنا بخير. كيف يمكنني مساعدتك اليوم؟\",\"lang\":\"English\"}",
   "hello": "{\"calls\":[],\"reply\":\"Hello! How can I help with your books today?\",\"lang\":\"English\"}",
   "kujh ni": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi kuch chahiye bata dijiye.\",\"lang\":\"English\"}",
-  "hi": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}"
+  "hi": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}",
+  "kese ho": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap kaise hain?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
