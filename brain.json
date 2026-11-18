@@ -1,5 +1,5 @@
 {
- "version": 185,
+ "version": 186,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -221,7 +221,8 @@
   "u": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "ru": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "i": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
-  "o": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}"
+  "o": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
+  "helo kya hal hai thik ho sab": "{\"calls\":[],\"reply\":\"नमस्ते! मैं ठीक हूँ, आप कैसे हैं?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
