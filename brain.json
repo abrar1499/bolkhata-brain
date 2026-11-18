@@ -1,5 +1,5 @@
 {
- "version": 210,
+ "version": 211,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -243,7 +243,8 @@
   "okay i have gave": "{\"calls\":[],\"reply\":\"Got it. The 50 SAR given to Honey is recorded.\",\"lang\":\"English\"}",
   "mein ne abtda nam bola hai": "{\"calls\":[],\"reply\":\"کیا آپ کا مطلب Ibza ہے؟ یا کوئی اور نام ہے؟\",\"lang\":\"English\"}",
   "kahan ja rahay ho": "{\"calls\":[],\"reply\":\"Main yahin hoon, aap ka hisaab-kitaab mein madad ke liye tayyar hoon. Kya karna hai?\",\"lang\":\"English\"}",
-  "@ thapera ne # kachi ent dali": "[{\"type\":\"work\",\"person\":\"@0\",\"item\":\"Kachi eent\",\"qty\":\"#0\"}]"
+  "@ thapera ne # kachi ent dali": "[{\"type\":\"work\",\"person\":\"@0\",\"item\":\"Kachi eent\",\"qty\":\"#0\"}]",
+  "@ ne # kachi ent dali": "[{\"type\":\"work\",\"qty\":\"#0\",\"item\":\"Kachi eent\",\"person\":\"@0\"}]"
  },
  "ai": true
 }
