@@ -1,5 +1,5 @@
 {
- "version": 187,
+ "version": 188,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -223,7 +223,8 @@
   "i": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "o": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "helo kya hal hai thik ho sab": "{\"calls\":[],\"reply\":\"नमस्ते! मैं ठीक हूँ, आप कैसे हैं?\",\"lang\":\"English\"}",
-  "hey what are you doing": "{\"calls\":[],\"reply\":\"I'm here and ready to help with your ledger. What would you like to record or check?\",\"lang\":\"English\"}"
+  "hey what are you doing": "{\"calls\":[],\"reply\":\"I'm here and ready to help with your ledger. What would you like to record or check?\",\"lang\":\"English\"}",
+  "# to @": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]"
  },
  "ai": true
 }
