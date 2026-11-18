@@ -1,5 +1,5 @@
 {
- "version": 255,
+ "version": 256,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -272,8 +272,7 @@
   "kya ho raha hai": "{\"calls\":[],\"reply\":\"Kuch khaas nahi, sab theek chal raha hai. Koi hisaab dekhna ho to batayein.\",\"lang\":\"English\"}",
   "ka ho rah hai": "{\"calls\":[],\"reply\":\"Kuch khaas nahi, sab theek chal raha hai. Koi hisaab dekhna ho to batayein.\",\"lang\":\"English\"}",
   "kaa hao raha jai": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Aap ko kis hisaab mein madad chahiye?\",\"lang\":\"English\"}",
-  "tumara damag kidhr hai": "{\"calls\":[],\"reply\":\"Main yahin hoon, bataiye kis hisaab mein madad chahiye?\",\"lang\":\"English\"}",
-  "tumary damag me kya chal raha hai": "{\"calls\":[],\"reply\":\"Main theek hoon, aap bataiye kis hisaab mein madad chahiye?\",\"lang\":\"English\"}"
+  "tumara damag kidhr hai": "{\"calls\":[],\"reply\":\"Main yahin hoon, bataiye kis hisaab mein madad chahiye?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
