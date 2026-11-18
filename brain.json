@@ -1,5 +1,5 @@
 {
- "version": 266,
+ "version": 267,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -281,7 +281,8 @@
   "shopping #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Shopping\",\"item\":\"Shopping\"}]",
   "taxi #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Taxi\",\"category\":\"Transport\"}]",
   "# phone": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Phone\",\"category\":\"Mobile & Internet\"}]",
-  "# cover": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Cover\",\"category\":\"Shopping\"}]"
+  "# cover": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Cover\",\"category\":\"Shopping\"}]",
+  "red medicine": "{\"calls\":[],\"reply\":\"Medicine ka amount kitna tha? Please tell me the amount.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
