@@ -1,5 +1,5 @@
 {
- "version": 212,
+ "version": 213,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -245,7 +245,8 @@
   "kahan ja rahay ho": "{\"calls\":[],\"reply\":\"Main yahin hoon, aap ka hisaab-kitaab mein madad ke liye tayyar hoon. Kya karna hai?\",\"lang\":\"English\"}",
   "@ thapera ne # kachi ent dali": "[{\"type\":\"work\",\"person\":\"@0\",\"item\":\"Kachi eent\",\"qty\":\"#0\"}]",
   "@ ne # kachi ent dali": "[{\"type\":\"work\",\"qty\":\"#0\",\"item\":\"Kachi eent\",\"person\":\"@0\"}]",
-  "khana khaia": "{\"calls\":[],\"reply\":\"Khane ki raqam batayein, to main save kar dun.\",\"lang\":\"English\"}"
+  "khana khaia": "{\"calls\":[],\"reply\":\"Khane ki raqam batayein, to main save kar dun.\",\"lang\":\"English\"}",
+  "btaia to hai # rupay ka khana khaia": "[{\"type\":\"expense\",\"category\":\"Food\",\"item\":\"Khana\",\"amount\":\"#0\"}]"
  },
  "ai": true
 }
