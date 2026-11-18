@@ -1,4 +1,4 @@
-name: Phone model (Qwen3 0.6B -> Q4_0 GGUF)
+name: Phone models (Qwen3 -> Q4_0 GGUF)
 
 on:
   push:
@@ -12,9 +12,14 @@ jobs:
   quantize:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    strategy:
+      matrix:
+        include:
+          - repo: Qwen/Qwen3-0.6B
+            out: gupshup-qwen3-0.6b-Q4_0.gguf
+          - repo: Qwen/Qwen3-1.7B
+            out: gupshup-qwen3-1.7b-Q4_0.gguf
     steps:
-      - uses: actions/checkout@v4
-
       - name: Tools (llama.cpp)
         run: |
           git clone --depth 1 https://github.com/ggml-org/llama.cpp
@@ -22,23 +27,35 @@ jobs:
           cmake -S llama.cpp -B build -DLLAMA_OPENSSL=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_SERVER=OFF -DGGML_NATIVE=OFF
           cmake --build build --target llama-quantize -j 4
 
-      - name: Download model (Qwen3 0.6B, Apache-2.0)
-        run: |
-          python -c "from huggingface_hub import snapshot_download; snapshot_download('Qwen/Qwen3-0.6B', local_dir='model')"
-          ls -lh model
+      - name: Download model (Apache-2.0)
+        run: python -c "from huggingface_hub import snapshot_download; snapshot_download('${{ matrix.repo }}', local_dir='model')"
 
       - name: Convert + quantize (Q4_0 = fastest on phone ARM CPUs)
         run: |
           python llama.cpp/convert_hf_to_gguf.py model --outtype f16 --outfile model-f16.gguf
-          ./build/bin/llama-quantize model-f16.gguf gupshup-qwen3-0.6b-Q4_0.gguf Q4_0
+          ./build/bin/llama-quantize model-f16.gguf ${{ matrix.out }} Q4_0
           ls -lh *.gguf
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.out }}
+          path: ${{ matrix.out }}
+
+  release:
+    needs: quantize
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release delete phone-model-v1 --yes --cleanup-tag || true
-          gh release create phone-model-v1 gupshup-qwen3-0.6b-Q4_0.gguf \
-            --target "${GITHUB_SHA}" \
-            --title "Phone model: Qwen3 0.6B (Q4_0)" \
-            --notes "Qwen3-0.6B (Apache-2.0) quantized to Q4_0 GGUF for phones. Open in PocketPal AI: Models -> + -> Add local model."
+          ls -lh out
+          gh release delete phone-model-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create phone-model-v1 out/*.gguf -R "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Phone models: Qwen3 0.6B + 1.7B (Q4_0)" \
+            --notes "Qwen3 (Apache-2.0) quantized to Q4_0 GGUF for phones. 0.6B = fastest (any phone). 1.7B = better answers (6GB+ RAM). Open in PocketPal AI: Models -> + -> Add local model."
