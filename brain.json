@@ -1,5 +1,5 @@
 {
- "version": 189,
+ "version": 190,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -225,7 +225,8 @@
   "helo kya hal hai thik ho sab": "{\"calls\":[],\"reply\":\"नमस्ते! मैं ठीक हूँ, आप कैसे हैं?\",\"lang\":\"English\"}",
   "hey what are you doing": "{\"calls\":[],\"reply\":\"I'm here and ready to help with your ledger. What would you like to record or check?\",\"lang\":\"English\"}",
   "# to @": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
-  "okay i have given # to @ as well": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]"
+  "okay i have given # to @ as well": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
+  "# has been given for shoes": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Shopping\",\"item\":\"Shoes\"}]"
  },
  "ai": true
 }
