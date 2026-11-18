@@ -1,5 +1,5 @@
 {
- "version": 215,
+ "version": 216,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -248,7 +248,8 @@
   "khana khaia": "{\"calls\":[],\"reply\":\"Khane ki raqam batayein, to main save kar dun.\",\"lang\":\"English\"}",
   "btaia to hai # rupay ka khana khaia": "[{\"type\":\"expense\",\"category\":\"Food\",\"item\":\"Khana\",\"amount\":\"#0\"}]",
   "@ ka # rupay diye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
-  "@ ne # rupay liya": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\",\"note\":\"Rupay liye\"}]"
+  "@ ne # rupay liya": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\",\"note\":\"Rupay liye\"}]",
+  "chae #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Chai\"}]"
  },
  "ai": true
 }
