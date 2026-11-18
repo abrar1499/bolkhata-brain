@@ -1,5 +1,5 @@
 {
- "version": 204,
+ "version": 205,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -237,7 +237,8 @@
   "hfsa ko azar diya": "{\"calls\":[],\"reply\":\"حفصہ کو کتنی رقم دی؟ رقم بتائیں تو محفوظ کر دوں گا۔\",\"lang\":\"English\"}",
   "fza smjh nahi ati tmhin": "{\"calls\":[],\"reply\":\"Maaf kijiye, mujhe samajhne mein dikkat hui; kya aap dobara bata sakti hain?\",\"lang\":\"English\"}",
   "hilo": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}",
-  "aoke theek hai": "{\"calls\":[],\"reply\":\"Theek hai! Jab bhi kuch likhna ho, bataiye.\",\"lang\":\"English\"}"
+  "aoke theek hai": "{\"calls\":[],\"reply\":\"Theek hai! Jab bhi kuch likhna ho, bataiye.\",\"lang\":\"English\"}",
+  "kya ho rha hai": "{\"calls\":[],\"reply\":\"Sab kuch theek hai. Aap jo bhi kharcha ya hisaab likhna chahein, bataiye.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
