@@ -1,5 +1,5 @@
 {
- "version": 200,
+ "version": 201,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -234,7 +234,8 @@
   "israel": "{\"calls\":[],\"reply\":\"How much did you give Israel?\",\"lang\":\"English\"}",
   "kar diya": "{\"calls\":[],\"reply\":\"Theek hai, kaam ho gaya.\",\"lang\":\"English\"}",
   "hello hijra ke naam se likho": "{\"calls\":[],\"reply\":\"Hijra ke naam se kya likhna hai? Raqam aur wajah batayein.\",\"lang\":\"English\"}",
-  "hfsa ko azar diya": "{\"calls\":[],\"reply\":\"حفصہ کو کتنی رقم دی؟ رقم بتائیں تو محفوظ کر دوں گا۔\",\"lang\":\"English\"}"
+  "hfsa ko azar diya": "{\"calls\":[],\"reply\":\"حفصہ کو کتنی رقم دی؟ رقم بتائیں تو محفوظ کر دوں گا۔\",\"lang\":\"English\"}",
+  "fza smjh nahi ati tmhin": "{\"calls\":[],\"reply\":\"Maaf kijiye, mujhe samajhne mein dikkat hui; kya aap dobara bata sakti hain?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
