@@ -24,15 +24,17 @@ jobs:
           sizes = {f.rfilename: f.size for f in info.siblings if f.rfilename.endswith(".gguf") and "/" not in f.rfilename}
           for k, v in sorted(sizes.items(), key=lambda x: x[1]): print(f"{v/1e9:.2f} GB  {k}")
           order = ["Q4_0", "IQ4_NL", "IQ4_XS", "Q4_K_S", "Q3_K_M"]
-          pick = next((f for p in order for f, sz in sizes.items() if p in f and sz < 2.0e9), None)
+          pick = "gemma-3n-E2B-it-Q4_0.gguf"
           print("PICK", pick, sizes.get(pick))
           shutil.copy(hf_hub_download(repo, pick), "gupshup-gemma3n-e2b.gguf")
           PY
-          ls -lh *.gguf
+          split -b 1500M -d -a 1 gupshup-gemma3n-e2b.gguf gupshup-gemma3n-e2b.gguf.part
+          sha256sum gupshup-gemma3n-e2b.gguf | tee gupshup-gemma3n-e2b.sha256
+          ls -lh gupshup-gemma3n-e2b.gguf*
       - name: Publish release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete gemma3n-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
-          gh release create gemma3n-v1 gupshup-gemma3n-e2b.gguf -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+          gh release create gemma3n-v1 gupshup-gemma3n-e2b.gguf.part0 gupshup-gemma3n-e2b.gguf.part1 gupshup-gemma3n-e2b.sha256 -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
             --title "Phone model: Gemma 3n E2B (Q4)" --notes "Google Gemma 3n E2B instruct, GGUF from unsloth. Use under the Gemma Terms of Use."
