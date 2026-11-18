@@ -1,5 +1,5 @@
 {
- "version": 222,
+ "version": 223,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -253,7 +253,8 @@
   "koi kam nahin sare kam galat karte ho tum": "{\"calls\":[],\"reply\":\"Maaf kijiye, batayein kya galat hua, main theek karne ki koshish karunga.\",\"lang\":\"English\"}",
   "aaj main # ka nashta kiya": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]",
   "helo kya hal hai": "{\"calls\":[],\"reply\":\"Main theek hun, shukriya! Kharcha darj karna ho to batayein.\",\"lang\":\"English\"}",
-  "aaiefja ko": "{\"calls\":[],\"reply\":\"Ye naam Afza hai ya koi aur? Raqam bhi bata dein.\",\"lang\":\"English\"}"
+  "aaiefja ko": "{\"calls\":[],\"reply\":\"Ye naam Afza hai ya koi aur? Raqam bhi bata dein.\",\"lang\":\"English\"}",
+  "@ ko # diya": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]"
  },
  "ai": true
 }
