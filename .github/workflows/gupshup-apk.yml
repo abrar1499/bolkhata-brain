@@ -53,8 +53,9 @@ jobs:
         run: |
           cp llama.cpp/examples/llama.android/app/build/outputs/apk/debug/app-debug.apk GupShup.apk
           ls -lh GupShup.apk
+          gh release delete gupshup-app-v2 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
           gh release delete gupshup-app-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
-          gh release create gupshup-app-v1 GupShup.apk -R "$GITHUB_REPOSITORY" \
+          gh release create gupshup-app-v2 GupShup.apk -R "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
-            --title "Gup Shup APK (offline AI)" \
+            --title "Gup Shup APK v2 (Gemma option)" \
             --notes "Android 10+ (64-bit). First launch: choose Tez (447 MB) or Behtar (1.2 GB) model to download once; after that it works offline."

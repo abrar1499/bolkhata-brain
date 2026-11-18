@@ -88,14 +88,16 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Model chuno (sirf pehli dafa)")
             .setItems(
                 arrayOf(
-                    "⚡ Tez model — 447 MB (har phone)",
+                    "🌟 Sab se samajhdar (Gemma) — 3 GB (8 GB+ RAM)",
                     "🧠 Behtar model — 1.2 GB (6 GB+ RAM)",
+                    "⚡ Tez model — 447 MB (har phone)",
                     "📁 Phone se .gguf file chuno"
                 )
             ) { _, which ->
                 when (which) {
-                    0 -> download(URL_FAST, "gupshup-fast.gguf")
-                    1 -> download(URL_BETTER, "gupshup-better.gguf")
+                    0 -> download(listOf(URL_GEMMA_0, URL_GEMMA_1), "gupshup-gemma3n.gguf")
+                    1 -> download(listOf(URL_BETTER), "gupshup-better.gguf")
+                    2 -> download(listOf(URL_FAST), "gupshup-fast.gguf")
                     else -> pickFile.launch(arrayOf("*/*"))
                 }
             }
@@ -105,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun modelsDir() = File(filesDir, "models").also { if (!it.exists()) it.mkdirs() }
 
-    private fun download(url: String, name: String) {
+    private fun download(urls: List<String>, name: String) {
         busy = true
         userActionFab.isEnabled = false
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -115,29 +117,37 @@ class MainActivity : AppCompatActivity() {
             val part = File(modelsDir(), "$name.part")
             try {
                 if (!target.exists()) {
-                    val conn = (URL(url).openConnection() as HttpURLConnection).apply {
-                        instanceFollowRedirects = true
-                        connectTimeout = 20_000
-                        readTimeout = 60_000
+                    part.delete()
+                    // total size of all parts (for the progress bar)
+                    var total = 0L
+                    for (u in urls) {
+                        val h = (URL(u).openConnection() as HttpURLConnection).apply { requestMethod = "HEAD"; instanceFollowRedirects = true }
+                        total += h.contentLengthLong.coerceAtLeast(0); h.disconnect()
                     }
-                    conn.connect()
-                    if (conn.responseCode != 200) error("HTTP ${conn.responseCode}")
-                    val total = conn.contentLengthLong
                     var done = 0L
                     var lastPct = -1
-                    conn.inputStream.use { input ->
-                        FileOutputStream(part).use { out ->
-                            val buf = ByteArray(256 * 1024)
-                            while (true) {
-                                val n = input.read(buf)
-                                if (n < 0) break
-                                out.write(buf, 0, n)
-                                done += n
-                                val pct = if (total > 0) (done * 100 / total).toInt() else -1
-                                if (pct != lastPct) {
-                                    lastPct = pct
-                                    withContext(Dispatchers.Main) {
-                                        statusTv.text = "Download: $pct%  (${done / 1_048_576} / ${total / 1_048_576} MB)"
+                    FileOutputStream(part, true).use { out ->
+                        for (u in urls) {
+                            val conn = (URL(u).openConnection() as HttpURLConnection).apply {
+                                instanceFollowRedirects = true
+                                connectTimeout = 20_000
+                                readTimeout = 60_000
+                            }
+                            conn.connect()
+                            if (conn.responseCode != 200) error("HTTP ${conn.responseCode}")
+                            conn.inputStream.use { input ->
+                                val buf = ByteArray(256 * 1024)
+                                while (true) {
+                                    val n = input.read(buf)
+                                    if (n < 0) break
+                                    out.write(buf, 0, n)
+                                    done += n
+                                    val pct = if (total > 0) (done * 100 / total).toInt() else -1
+                                    if (pct != lastPct) {
+                                        lastPct = pct
+                                        withContext(Dispatchers.Main) {
+                                            statusTv.text = "Download: $pct%  (${done / 1_048_576} / ${total / 1_048_576} MB)"
+                                        }
                                     }
                                 }
                             }
@@ -323,10 +333,14 @@ class MainActivity : AppCompatActivity() {
         private const val MAX_REPLY_TOKENS = 120
         private const val URL_FAST =
             "https://github.com/abrar1499/bolkhata-brain/releases/download/phone-model-v1/gupshup-qwen3-0.6b-Q4_0.gguf"
+        private const val URL_GEMMA_0 =
+            "https://github.com/abrar1499/bolkhata-brain/releases/download/gemma3n-v1/gupshup-gemma3n-e2b.gguf.part0"
+        private const val URL_GEMMA_1 =
+            "https://github.com/abrar1499/bolkhata-brain/releases/download/gemma3n-v1/gupshup-gemma3n-e2b.gguf.part1"
         private const val URL_BETTER =
             "https://github.com/abrar1499/bolkhata-brain/releases/download/phone-model-v1/gupshup-qwen3-1.7b-Q4_0.gguf"
         private const val SYSTEM_PROMPT =
-            "Tum \"Gup Shup\" ho, ek dostana saathi. Hamesha Roman Urdu me jawab do (Latin huroof, jaise WhatsApp par likhte hain). Jawab chhote, 1-3 jumle. /no_think"
+            "Tum \"Gup Shup\" ho, ek dostana saathi. Hamesha Roman Urdu me jawab do (Latin huroof, jaise WhatsApp par likhte hain). Jawab chhote, 1-3 jumle. Apna naam har jawab me mat likho. /no_think"
         private val DAYS = arrayOf("Itwaar", "Peer", "Mangal", "Budh", "Jumeraat", "Jumma", "Hafta")
         private const val SELF_HARM =
             "Mujhe bohat afsos hai ke tum itna bura mehsoos kar rahe ho 💙 Tum akele nahi ho. Please abhi kisi apne ko call karo, ya kisi doctor ya counsellor se baat karo. Agar khud ko nuqsan ka khatra hai to foran emergency par call karo (Saudi Arabia: ambulance 997, police 999; Pakistan: 1122). Saudi me Ministry of Health ki 937 line bhi din raat khuli hai. Tumhari zindagi bohat qeemti hai."
