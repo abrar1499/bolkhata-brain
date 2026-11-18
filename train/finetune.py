@@ -72,13 +72,16 @@ for i, (x, y) in enumerate(data):
 
 model = model.merge_and_unload()
 model.eval()
-for q in ["kya haal hai yaar?", "ek chhota sa joke sunao", "aaj bohat thak gaya hoon", "Lahore ke bare me batao"]:
-    msgs = [{"role": "system", "content": SYS}, {"role": "user", "content": q}]
-    ids = tok.apply_chat_template(msgs, add_generation_prompt=True, enable_thinking=False, return_tensors="pt")
-    with torch.no_grad():
-        out = model.generate(ids, max_new_tokens=60, do_sample=True, temperature=0.6, top_p=0.9)
-    print(f"Q: {q}\nA: {tok.decode(out[0][ids.shape[1]:], skip_special_tokens=True).strip()}\n", flush=True)
-
 model.save_pretrained("trained", safe_serialization=True)
 tok.save_pretrained("trained")
-print("saved")
+print("saved", flush=True)
+for q in ["kya haal hai yaar?", "ek chhota sa joke sunao", "aaj bohat thak gaya hoon", "Lahore ke bare me batao"]:
+    try:
+        msgs = [{"role": "system", "content": SYS}, {"role": "user", "content": q}]
+        text = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True, enable_thinking=False)
+        ids = tok(text, return_tensors="pt", add_special_tokens=False)["input_ids"]
+        with torch.no_grad():
+            out = model.generate(ids, max_new_tokens=60, do_sample=True, temperature=0.6, top_p=0.9)
+        print(f"Q: {q}\nA: {tok.decode(out[0][ids.shape[1]:], skip_special_tokens=True).strip()}\n", flush=True)
+    except Exception as e:
+        print("test failed:", e)
