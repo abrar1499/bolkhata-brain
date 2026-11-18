@@ -1,5 +1,5 @@
 {
- "version": 194,
+ "version": 195,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -229,7 +229,8 @@
   "# has been given for shoes": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Shopping\",\"item\":\"Shoes\"}]",
   "riyal for dinner": "{\"calls\":[],\"reply\":\"How much did you spend on dinner, in riyals?\",\"lang\":\"English\"}",
   "# riyal time": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Dinner\"}]",
-  "# riyal @ ko diye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]"
+  "# riyal @ ko diye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
+  "rojgar diya": "{\"calls\":[],\"reply\":\"Kis ko aur kitne rupay diye? Naam aur amount dobara bataiye.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
