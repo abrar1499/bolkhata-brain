@@ -1,5 +1,5 @@
 {
- "version": 233,
+ "version": 234,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -257,5 +257,5 @@
   "hilo kya hal hai": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap ka hisaab kitab kaisa chal raha hai?\",\"lang\":\"English\"}",
   "aoke klir ho chki hai gd": "{\"calls\":[],\"reply\":\"Theek hai, chat clear ho gayi hai. Kuch aur chahiye to batayein.\",\"lang\":\"English\"}"
  },
- "ai": false
+ "ai": true
 }
