@@ -1,5 +1,5 @@
 {
- "version": 238,
+ "version": 239,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -257,7 +257,8 @@
   "hilo kya hal hai": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap ka hisaab kitab kaisa chal raha hai?\",\"lang\":\"English\"}",
   "aoke klir ho chki hai gd": "{\"calls\":[],\"reply\":\"Theek hai, chat clear ho gayi hai. Kuch aur chahiye to batayein.\",\"lang\":\"English\"}",
   "sab sae chal raha hqu": "{\"calls\":[],\"reply\":\"Alhamdulillah, sab theek chal raha hai! Aap batayein, kaise hain?\",\"lang\":\"English\"}",
-  "men thek jun": "{\"calls\":[],\"reply\":\"Alhamdulillah, yeh sun kar acha laga! Kaam ka koi hisaab ho to batayein.\",\"lang\":\"English\"}"
+  "men thek jun": "{\"calls\":[],\"reply\":\"Alhamdulillah, yeh sun kar acha laga! Kaam ka koi hisaab ho to batayein.\",\"lang\":\"English\"}",
+  "ar sab kese hain": "{\"calls\":[],\"reply\":\"Sab theek hain, shukriya! Aap ka kaam ka koi hisaab ho to batayein.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
