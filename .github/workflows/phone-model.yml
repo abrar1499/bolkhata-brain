@@ -1,0 +1,44 @@
+name: Phone model (Qwen3 0.6B -> Q4_0 GGUF)
+
+on:
+  push:
+    branches: [phone-model]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  quantize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tools (llama.cpp)
+        run: |
+          git clone --depth 1 https://github.com/ggml-org/llama.cpp
+          pip install -r llama.cpp/requirements/requirements-convert_hf_to_gguf.txt huggingface_hub
+          cmake -S llama.cpp -B build -DLLAMA_OPENSSL=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_SERVER=OFF -DGGML_NATIVE=OFF
+          cmake --build build --target llama-quantize -j 4
+
+      - name: Download model (Qwen3 0.6B, Apache-2.0)
+        run: |
+          python -c "from huggingface_hub import snapshot_download; snapshot_download('Qwen/Qwen3-0.6B', local_dir='model')"
+          ls -lh model
+
+      - name: Convert + quantize (Q4_0 = fastest on phone ARM CPUs)
+        run: |
+          python llama.cpp/convert_hf_to_gguf.py model --outtype f16 --outfile model-f16.gguf
+          ./build/bin/llama-quantize model-f16.gguf gupshup-qwen3-0.6b-Q4_0.gguf Q4_0
+          ls -lh *.gguf
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete phone-model-v1 --yes --cleanup-tag || true
+          gh release create phone-model-v1 gupshup-qwen3-0.6b-Q4_0.gguf \
+            --target "${GITHUB_SHA}" \
+            --title "Phone model: Qwen3 0.6B (Q4_0)" \
+            --notes "Qwen3-0.6B (Apache-2.0) quantized to Q4_0 GGUF for phones. Open in PocketPal AI: Models -> + -> Add local model."
