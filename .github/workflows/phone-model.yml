@@ -20,6 +20,10 @@ jobs:
             out: gupshup-qwen3-0.6b-Q4_0.gguf
           - repo: Qwen/Qwen3-1.7B
             out: gupshup-qwen3-1.7b-Q4_0.gguf
+          - repo: Qwen/Qwen2.5-0.5B-Instruct
+            out: gupshup-qwen25-0.5b-Q4_0.gguf
+          - repo: Qwen/Qwen2.5-1.5B-Instruct
+            out: gupshup-qwen25-1.5b-Q4_0.gguf
     steps:
       - name: Tools (llama.cpp)
         run: |
@@ -58,5 +62,5 @@ jobs:
           gh release delete phone-model-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
           gh release create phone-model-v1 out/*.gguf -R "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
-            --title "Phone models: Qwen3 0.6B + 1.7B (Q4_0)" \
-            --notes "Qwen3 (Apache-2.0) quantized to Q4_0 GGUF for phones. 0.6B = fastest (any phone). 1.7B = better answers (6GB+ RAM). Open in PocketPal AI: Models -> + -> Add local model."
+            --title "Phone models (Q4_0 GGUF)" \
+            --notes "Qwen3 0.6B/1.7B and Qwen2.5 0.5B/1.5B Instruct (Apache-2.0) quantized to Q4_0 GGUF for phones. Qwen2.5 models have no thinking mode (used by the Gup Shup app)."
