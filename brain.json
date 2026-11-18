@@ -1,5 +1,5 @@
 {
- "version": 186,
+ "version": 187,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -222,7 +222,8 @@
   "ru": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "i": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "o": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
-  "helo kya hal hai thik ho sab": "{\"calls\":[],\"reply\":\"नमस्ते! मैं ठीक हूँ, आप कैसे हैं?\",\"lang\":\"English\"}"
+  "helo kya hal hai thik ho sab": "{\"calls\":[],\"reply\":\"नमस्ते! मैं ठीक हूँ, आप कैसे हैं?\",\"lang\":\"English\"}",
+  "hey what are you doing": "{\"calls\":[],\"reply\":\"I'm here and ready to help with your ledger. What would you like to record or check?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
