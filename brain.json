@@ -1,5 +1,5 @@
 {
- "version": 183,
+ "version": 184,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -219,7 +219,8 @@
   "y": "{\"calls\":[],\"reply\":\"I'm not sure what you meant by \\\"y\\\". Could you tell me what you'd like to record or check?\",\"lang\":\"English\"}",
   "e": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "u": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
-  "ru": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}"
+  "ru": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
+  "i": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
