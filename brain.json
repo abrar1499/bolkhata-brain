@@ -1,5 +1,5 @@
 {
- "version": 184,
+ "version": 185,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -220,7 +220,8 @@
   "e": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "u": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
   "ru": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
-  "i": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}"
+  "i": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}",
+  "o": "{\"calls\":[],\"reply\":\"Please type a full message, such as an expense, a payment, or a question about your books.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
