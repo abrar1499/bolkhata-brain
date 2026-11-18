@@ -1,5 +1,5 @@
 {
- "version": 259,
+ "version": 260,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -274,7 +274,8 @@
   "tumara damag kidhr hai": "{\"calls\":[],\"reply\":\"Main yahin hoon, bataiye kis hisaab mein madad chahiye?\",\"lang\":\"English\"}",
   "tumary damag me kya chal raha hai": "{\"calls\":[],\"reply\":\"Main theek hoon, bas aap ke hisaab mein madad ke liye tayyar hoon. Kya kuch likhna ya dekhna hai?\",\"lang\":\"English\"}",
   "i am good thank you so much": "{\"calls\":[],\"reply\":\"Glad to hear it, thank you!\",\"lang\":\"English\"}",
-  "today i breakfast for # riyal": "[{\"type\":\"expense\",\"category\":\"Food\",\"item\":\"Breakfast\",\"amount\":\"#0\"}]"
+  "today i breakfast for # riyal": "[{\"type\":\"expense\",\"category\":\"Food\",\"item\":\"Breakfast\",\"amount\":\"#0\"}]",
+  "i given # riyal to @": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]"
  },
  "ai": true
 }
