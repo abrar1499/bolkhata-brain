@@ -1,5 +1,5 @@
 {
- "version": 218,
+ "version": 219,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -251,7 +251,8 @@
   "@ ne # rupay liya": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\",\"note\":\"Rupay liye\"}]",
   "chae #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Chai\"}]",
   "maine bola sab achchha hai": "{\"calls\":[],\"reply\":\"Theek hai, sab achha hai. Koi aur kaam ho to batayein.\",\"lang\":\"English\"}",
-  "koi kam nahin sare kam galat karte ho tum": "{\"calls\":[],\"reply\":\"Maaf kijiye, batayein kya galat hua, main theek karne ki koshish karunga.\",\"lang\":\"English\"}"
+  "koi kam nahin sare kam galat karte ho tum": "{\"calls\":[],\"reply\":\"Maaf kijiye, batayein kya galat hua, main theek karne ki koshish karunga.\",\"lang\":\"English\"}",
+  "aaj main # ka nashta kiya": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]"
  },
  "ai": true
 }
