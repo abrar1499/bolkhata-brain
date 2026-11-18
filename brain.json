@@ -1,5 +1,5 @@
 {
- "version": 248,
+ "version": 249,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -267,7 +267,8 @@
   "ka ho raha hai": "{\"calls\":[],\"reply\":\"Sab theek hai, aap batayein kya chahiye?\",\"lang\":\"English\"}",
   "ka ho ra hai": "{\"calls\":[],\"reply\":\"Sab theek hai, aap batayein kya hisaab dekhna hai?\",\"lang\":\"English\"}",
   "kya ho ra hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai, aap batayein kya hisaab dekhna hai?\",\"lang\":\"English\"}",
-  "ke ho ra hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai, aap kis hisaab ke baare mein poochna chahte hain?\",\"lang\":\"English\"}"
+  "ke ho ra hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai, aap kis hisaab ke baare mein poochna chahte hain?\",\"lang\":\"English\"}",
+  "ka ho raha jai": "{\"calls\":[],\"reply\":\"Kuch khaas nahi, sab theek chal raha hai. Aap ko hisaab dekhna hai?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
