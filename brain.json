@@ -1,5 +1,5 @@
 {
- "version": 206,
+ "version": 207,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -193,7 +193,7 @@
   "kigh": "{\"calls\":[],\"reply\":\"Sorry, I didn't catch that. Could you say it again, or tell me what to record?\",\"lang\":\"English\"}",
   "kf": "{\"calls\":[],\"reply\":\"Sorry, I didn't catch that. Could you say it again, or tell me what to record?\",\"lang\":\"English\"}",
   "kif halk": "{\"calls\":[],\"reply\":\"الحمد لله، أنا بخير. كيف يمكنني مساعدتك اليوم؟\",\"lang\":\"English\"}",
-  "hello": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}",
+  "hello": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your books today?\",\"lang\":\"English\"}",
   "kujh ni": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi kuch chahiye bata dijiye.\",\"lang\":\"English\"}",
   "hi": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}",
   "kese ho": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap kaise hain?\",\"lang\":\"English\"}",
@@ -239,7 +239,9 @@
   "hilo": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}",
   "aoke theek hai": "{\"calls\":[],\"reply\":\"Theek hai! Jab bhi kuch likhna ho, bataiye.\",\"lang\":\"English\"}",
   "kya ho rha hai": "{\"calls\":[],\"reply\":\"Sab kuch theek hai. Aap jo bhi kharcha ya hisaab likhna chahein, bataiye.\",\"lang\":\"English\"}",
-  "chlo sahi hai": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi hisaab likhna ho, bataiye.\",\"lang\":\"English\"}"
+  "chlo sahi hai": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi hisaab likhna ho, bataiye.\",\"lang\":\"English\"}",
+  "okay i have gave": "{\"calls\":[],\"reply\":\"Got it. The 50 SAR given to Honey is recorded.\",\"lang\":\"English\"}",
+  "mein ne abtda nam bola hai": "{\"calls\":[],\"reply\":\"کیا آپ کا مطلب Ibza ہے؟ یا کوئی اور نام ہے؟\",\"lang\":\"English\"}"
  },
  "ai": true
 }
