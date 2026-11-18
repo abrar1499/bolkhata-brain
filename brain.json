@@ -1,5 +1,5 @@
 {
- "version": 243,
+ "version": 244,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -262,7 +262,8 @@
   "ap thek hu": "{\"calls\":[],\"reply\":\"Shukriya, main bhi theek hoon! Koi hisaab ho to batayein.\",\"lang\":\"English\"}",
   "ar sunayn kya chal eaha hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai! Aap ka koi hisaab ya entry dekhni ho to batayein.\",\"lang\":\"English\"}",
   "ki ho ra hai": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Aap ka koi hisaab ya entry dekhni ho to batayein.\",\"lang\":\"English\"}",
-  "kia ho ra hai": "{\"calls\":[],\"reply\":\"Kuch khaas nahi, sab theek chal raha hai. Aap ko koi hisaab dekhna ho to batayein.\",\"lang\":\"English\"}"
+  "kia ho ra hai": "{\"calls\":[],\"reply\":\"Kuch khaas nahi, sab theek chal raha hai. Aap ko koi hisaab dekhna ho to batayein.\",\"lang\":\"English\"}",
+  "kia ho raha hai": "{\"calls\":[],\"reply\":\"Kuch khaas nahi, sab theek chal raha hai; aap ko koi hisaab dekhna ho to batayein.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
