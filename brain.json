@@ -1,5 +1,5 @@
 {
- "version": 219,
+ "version": 220,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -252,7 +252,8 @@
   "chae #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Chai\"}]",
   "maine bola sab achchha hai": "{\"calls\":[],\"reply\":\"Theek hai, sab achha hai. Koi aur kaam ho to batayein.\",\"lang\":\"English\"}",
   "koi kam nahin sare kam galat karte ho tum": "{\"calls\":[],\"reply\":\"Maaf kijiye, batayein kya galat hua, main theek karne ki koshish karunga.\",\"lang\":\"English\"}",
-  "aaj main # ka nashta kiya": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]"
+  "aaj main # ka nashta kiya": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]",
+  "helo kya hal hai": "{\"calls\":[],\"reply\":\"Main theek hun, shukriya! Kharcha darj karna ho to batayein.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
