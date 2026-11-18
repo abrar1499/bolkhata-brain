@@ -17,13 +17,15 @@ jobs:
         run: |
           pip install huggingface_hub
           python - <<'PY'
-          from huggingface_hub import list_repo_files, hf_hub_download
+          from huggingface_hub import HfApi, hf_hub_download
           import shutil
           repo = "unsloth/gemma-3n-E2B-it-GGUF"
-          files = list_repo_files(repo)
-          print("\n".join(f for f in files if f.endswith(".gguf")))
-          pick = next((f for p in ["Q4_0", "Q4_K_M", "Q4_K_S"] for f in files if p in f and f.endswith(".gguf") and "/" not in f), None)
-          print("PICK", pick)
+          info = HfApi().model_info(repo, files_metadata=True)
+          sizes = {f.rfilename: f.size for f in info.siblings if f.rfilename.endswith(".gguf") and "/" not in f.rfilename}
+          for k, v in sorted(sizes.items(), key=lambda x: x[1]): print(f"{v/1e9:.2f} GB  {k}")
+          order = ["Q4_0", "IQ4_NL", "IQ4_XS", "Q4_K_S", "Q3_K_M"]
+          pick = next((f for p in order for f, sz in sizes.items() if p in f and sz < 2.0e9), None)
+          print("PICK", pick, sizes.get(pick))
           shutil.copy(hf_hub_download(repo, pick), "gupshup-gemma3n-e2b.gguf")
           PY
           ls -lh *.gguf
