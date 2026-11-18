@@ -31,6 +31,7 @@ jobs:
           sed -i 's/applicationId = "com.example.llama.aichat"/applicationId = "com.abrar.gupshup"/' $A/app/build.gradle.kts
           sed -i 's/minSdk = 33/minSdk = 29/' $A/app/build.gradle.kts $A/lib/build.gradle.kts
           sed -i 's/abiFilters += listOf("arm64-v8a", "x86_64")/abiFilters += listOf("arm64-v8a")/' $A/lib/build.gradle.kts
+          sed -i 's/return __android_log_is_loggable(prio, LOG_TAG, LOG_MIN_LEVEL);/return prio >= LOG_MIN_LEVEL;/' $A/lib/src/main/cpp/logging.h
           sed -i 's/DEFAULT_CONTEXT_SIZE    = 8192/DEFAULT_CONTEXT_SIZE    = 2048/; s/DEFAULT_SAMPLER_TEMP    = 0.3f/DEFAULT_SAMPLER_TEMP    = 0.5f/' $A/lib/src/main/cpp/ai_chat.cpp
           perl -0pi -e 's/(<ScrollView\s+android:layout_width="match_parent"\s+)android:layout_height="0dp"\s+android:layout_weight="1"/$1android:layout_height="wrap_content"/' $A/app/src/main/res/layout/activity_main.xml
           perl -0pi -e 's/android:text="Selected GGUF model.s metadata will show here."/android:text="Gup Shup"/' $A/app/src/main/res/layout/activity_main.xml

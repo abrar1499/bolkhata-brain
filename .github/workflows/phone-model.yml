@@ -3,6 +3,7 @@ name: Phone models (Qwen3 -> Q4_0 GGUF)
 on:
   push:
     branches: [phone-model]
+    paths: [.github/workflows/phone-model.yml]
   workflow_dispatch:
 
 permissions:
