@@ -1,0 +1,44 @@
+name: Phone model (Gemma 4 E2B QAT GGUF)
+on:
+  push:
+    branches: [phone-model]
+    paths: [.github/workflows/gemma4.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find and download smallest high-quality GGUF
+        run: |
+          pip install huggingface_hub
+          python - <<'PY'
+          from huggingface_hub import HfApi, hf_hub_download
+          import shutil, sys
+          api = HfApi(); got = None
+          for repo in ["google/gemma-4-E2B-it-qat-q4_0-gguf", "unsloth/gemma-4-E2B-it-qat-GGUF", "unsloth/gemma-4-E2B-it-GGUF"]:
+              try:
+                  info = api.model_info(repo, files_metadata=True)
+              except Exception as e:
+                  print("NO", repo, type(e).__name__); continue
+              sizes = {f.rfilename: f.size for f in info.siblings if f.rfilename.endswith(".gguf")}
+              for k, v in sorted(sizes.items(), key=lambda x: x[1] or 0): print(f"{repo}  {(v or 0)/1e9:.2f} GB  {k}")
+              pick = next((f for p in ["q4_0", "Q4_0", "IQ4_NL", "Q4_K_M"] for f in sizes if p in f and "mmproj" not in f), None)
+              if not pick: continue
+              try:
+                  shutil.copy(hf_hub_download(repo, pick), "gupshup-gemma4-e2b.gguf"); got = (repo, pick); break
+              except Exception as e:
+                  print("DL FAIL", repo, pick, type(e).__name__)
+          print("GOT", got)
+          if not got: sys.exit(1)
+          PY
+          ls -l gupshup-gemma4-e2b.gguf
+          split -b 1500M -d -a 1 gupshup-gemma4-e2b.gguf gupshup-gemma4-e2b.gguf.part
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete gemma4-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create gemma4-v1 gupshup-gemma4-e2b.gguf.part* -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Phone model: Gemma 4 E2B (QAT Q4)" --notes "Google Gemma 4 E2B instruct GGUF. Use under the Gemma Terms of Use."
