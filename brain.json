@@ -1,5 +1,5 @@
 {
- "version": 170,
+ "version": 171,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -206,7 +206,8 @@
   "mujue pakistan jana hai": "{\"calls\":[],\"reply\":\"Achha, safar mubarak ho! Kab jaana hai?\",\"lang\":\"English\"}",
   "mujhe ticket kahan search krni chahye": "{\"calls\":[],\"reply\":\"Aap Google Flights, Skyscanner ya Kayak par dates daal kar prices compare kar sakte hain. Phir PIA, Airblue, Flyjinnah ya Saudia jaisi airline ki official website se direct booking karein. Dhoka se bachne ke liye sirf official site ya registered travel agent se payment karein.\",\"lang\":\"English\"}",
   "tume kya lagta hai ye sab thek hai": "{\"calls\":[],\"reply\":\"Ji haan, ye sab theek lag raha hai. Official website aur trusted app se booking karein, to safar aasan rahega.\",\"lang\":\"English\"}",
-  "# riyal @ ka diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]"
+  "# riyal @ ka diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
+  "indira riyal": "{\"calls\":[],\"reply\":\"I didn't catch the amount. How much riyal did you give or receive, and with whom?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
