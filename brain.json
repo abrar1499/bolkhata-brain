@@ -1,5 +1,5 @@
 {
- "version": 171,
+ "version": 172,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -207,7 +207,8 @@
   "mujhe ticket kahan search krni chahye": "{\"calls\":[],\"reply\":\"Aap Google Flights, Skyscanner ya Kayak par dates daal kar prices compare kar sakte hain. Phir PIA, Airblue, Flyjinnah ya Saudia jaisi airline ki official website se direct booking karein. Dhoka se bachne ke liye sirf official site ya registered travel agent se payment karein.\",\"lang\":\"English\"}",
   "tume kya lagta hai ye sab thek hai": "{\"calls\":[],\"reply\":\"Ji haan, ye sab theek lag raha hai. Official website aur trusted app se booking karein, to safar aasan rahega.\",\"lang\":\"English\"}",
   "# riyal @ ka diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
-  "indira riyal": "{\"calls\":[],\"reply\":\"I didn't catch the amount. How much riyal did you give or receive, and with whom?\",\"lang\":\"English\"}"
+  "indira riyal": "{\"calls\":[],\"reply\":\"I didn't catch the amount. How much riyal did you give or receive, and with whom?\",\"lang\":\"English\"}",
+  "aaj maine mere pas # tha usmen se # ki men chij li # @ kar diya ajhar fija ko diya aur # ka sut liya": "[{\"type\":\"expense\",\"amount\":\"#1\",\"category\":\"Other\",\"item\":\"Main cheez\"},{\"type\":\"lent\",\"amount\":\"#2\",\"person\":\"@0\"},{\"type\":\"expense\",\"amount\":\"#3\",\"category\":\"Shopping\",\"item\":\"Suit\"}]"
  },
  "ai": true
 }
