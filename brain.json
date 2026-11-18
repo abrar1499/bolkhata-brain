@@ -1,5 +1,5 @@
 {
- "version": 179,
+ "version": 180,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -215,7 +215,8 @@
   "sabjili": "{\"calls\":[],\"reply\":\"Sabzi ka kitna kharcha hua? Amount batayein to main save kar dunga.\",\"lang\":\"English\"}",
   "# riyal": "[{\"type\":\"expense\",\"category\":\"Food\",\"item\":\"Sabzi\",\"amount\":\"#0\"}]",
   "# riyal ka shyam puliya": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Shyam Puliya\",\"category\":\"Food\"}]",
-  "h": "{\"calls\":[],\"reply\":\"Hi! What would you like to record or check?\",\"lang\":\"English\"}"
+  "h": "{\"calls\":[],\"reply\":\"Hi! What would you like to record or check?\",\"lang\":\"English\"}",
+  "y": "{\"calls\":[],\"reply\":\"I'm not sure what you meant by \\\"y\\\". Could you tell me what you'd like to record or check?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
