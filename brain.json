@@ -1,5 +1,5 @@
 {
- "version": 224,
+ "version": 225,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -182,7 +182,7 @@
   "kam to bht hain": "{\"calls\":[],\"reply\":\"Kaam to bohot hai, lekin aap ek ek kaam karte jayein, main madad karunga!\"}",
   "kuch b madad kr do": "{\"calls\":[],\"reply\":\"Main aap ki madad kar sakta hoon: kharcha likhna, logon ka hisaab, reports aur list dekhna. Bas batayein kya karna hai.\"}",
   "hskdks": "{\"calls\":[],\"reply\":\"Maaf kijiye, yeh samajh nahi aaya. Kya aap entry, total ya report dekhna chahte hain?\"}",
-  "wat ar yo dong": "{\"calls\":[],\"reply\":\"Hello! I'm doing well, thanks for asking. How can I help with your ledger today?\"}",
+  "wat ar yo dong": "{\"calls\":[],\"reply\":\"Main theek hoon, aap ka hisaab kitab mein madad ke liye hazir hoon.\",\"lang\":\"English\"}",
   "kase ho": "{\"calls\":[],\"reply\":\"Small talk: answer briefly, no tools needed.\\n\\nMain theek hoon, shukriya. Aap kaise hain?\"}",
   "ima good": "{\"calls\":[],\"reply\":\"Glad to hear you're good!\",\"lang\":\"English\"}",
   "i am good too": "{\"calls\":[],\"reply\":\"Glad to hear you're doing well! How can I help with your books today?\",\"lang\":\"English\"}",
