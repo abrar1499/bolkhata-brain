@@ -1,5 +1,5 @@
 {
- "version": 223,
+ "version": 224,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -254,7 +254,8 @@
   "aaj main # ka nashta kiya": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]",
   "helo kya hal hai": "{\"calls\":[],\"reply\":\"Main theek hun, shukriya! Kharcha darj karna ho to batayein.\",\"lang\":\"English\"}",
   "aaiefja ko": "{\"calls\":[],\"reply\":\"Ye naam Afza hai ya koi aur? Raqam bhi bata dein.\",\"lang\":\"English\"}",
-  "@ ko # diya": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]"
+  "@ ko # diya": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
+  "hilo kya hal hai": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap ka hisaab kitab kaisa chal raha hai?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
