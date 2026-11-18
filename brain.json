@@ -1,5 +1,5 @@
 {
- "version": 176,
+ "version": 177,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -212,7 +212,8 @@
   "# ras kar diya # @ ko diya # @ ko diya": "[{\"type\":\"lent\",\"amount\":\"#1\",\"person\":\"@0\"},{\"type\":\"lent\",\"amount\":\"#2\",\"person\":\"@1\"}]",
   "hot se chodte sath": "{\"calls\":[],\"reply\":\"Sorry, I didn't catch that. Please repeat it or type what you want me to do.\",\"lang\":\"English\"}",
   "# riyal ka nashta kiya": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]",
-  "sabjili": "{\"calls\":[],\"reply\":\"Sabzi ka kitna kharcha hua? Amount batayein to main save kar dunga.\",\"lang\":\"English\"}"
+  "sabjili": "{\"calls\":[],\"reply\":\"Sabzi ka kitna kharcha hua? Amount batayein to main save kar dunga.\",\"lang\":\"English\"}",
+  "# riyal": "[{\"type\":\"expense\",\"category\":\"Food\",\"item\":\"Sabzi\",\"amount\":\"#0\"}]"
  },
  "ai": true
 }
