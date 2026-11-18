@@ -1,5 +1,5 @@
 {
- "version": 267,
+ "version": 268,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -86,7 +86,7 @@
   "kya kr rahy ho": "{\"calls\":[],\"reply\":\"Main aapke ledger mein kaam kar raha hoon, bataiye kya madad chahiye.\"}",
   "kitna kam krty ho": "{\"calls\":[],\"reply\":\"Main aapke ledger ka kaam karta hoon, bataiye kya hisaab rakhna hai.\"}",
   "mobile cover liya": "{\"calls\":[],\"reply\":\"Mobile cover kitne ka tha? Amount batayein to main save kar doon.\"}",
-  "#": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Shopping\",\"item\":\"Mobile cover\"}]",
+  "#": "[{\"type\":\"expense\",\"category\":\"Health\",\"item\":\"Red medicine\",\"amount\":\"#0\"}]",
   "charger liya": "{\"calls\":[],\"reply\":\"Charger kitne ka tha? Amount batayein to main save kar doon.\"}",
   "# ka": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Charger\",\"category\":\"Shopping\"}]",
   "pal gaya": "{\"calls\":[],\"reply\":\"Theek hai. Kuch aur save karna ho to batayein.\"}",
