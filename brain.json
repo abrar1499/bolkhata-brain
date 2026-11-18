@@ -1,5 +1,5 @@
 {
- "version": 261,
+ "version": 262,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -276,7 +276,8 @@
   "i am good thank you so much": "{\"calls\":[],\"reply\":\"Glad to hear it, thank you!\",\"lang\":\"English\"}",
   "today i breakfast for # riyal": "[{\"type\":\"expense\",\"category\":\"Food\",\"item\":\"Breakfast\",\"amount\":\"#0\"}]",
   "i given # riyal to @": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
-  "and i give": "{\"calls\":[],\"reply\":\"Who did you give money to, and how much?\",\"lang\":\"English\"}"
+  "and i give": "{\"calls\":[],\"reply\":\"Who did you give money to, and how much?\",\"lang\":\"English\"}",
+  "okay i take water # herpes": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Water\"}]"
  },
  "ai": true
 }
