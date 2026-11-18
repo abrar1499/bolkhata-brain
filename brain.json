@@ -1,5 +1,5 @@
 {
- "version": 227,
+ "version": 228,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -21,7 +21,7 @@
   "galt jwb": "{\"calls\":[],\"reply\":\"Kis date ya type ka data chahiye?\"}",
   "mtlb": "{\"calls\":[],\"reply\":\"Koi khas baat nahi, aap batao?\"}",
   "fffjjd": "{\"calls\":[],\"reply\":\"I didn't get that; could you clarify?\"}",
-  "kya hal hai": "{\"calls\":[],\"reply\":\"Sab theek, aap kaise hain?\"}",
+  "kya hal hai": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Aap ka hisaab kitaab mein kya madad karoon?\",\"lang\":\"English\"}",
   "kya chl raha hal": "{\"calls\":[],\"reply\":\"Sab theek hai, aapka din kaisa?\"}",
   "kya chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek hai, aap kaise hain?\"}",
   "men thek hun": "{\"calls\":[],\"reply\":\"Theek hai, aap ka din kaisa ja raha hai?\"}",
