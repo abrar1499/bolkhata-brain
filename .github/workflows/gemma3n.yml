@@ -1,0 +1,36 @@
+name: Phone model (Gemma 3n E2B GGUF)
+
+on:
+  push:
+    branches: [phone-model]
+    paths: [.github/workflows/gemma3n.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download ready GGUF (ungated mirror)
+        run: |
+          pip install huggingface_hub
+          python - <<'PY'
+          from huggingface_hub import list_repo_files, hf_hub_download
+          import shutil
+          repo = "unsloth/gemma-3n-E2B-it-GGUF"
+          files = list_repo_files(repo)
+          print("\n".join(f for f in files if f.endswith(".gguf")))
+          pick = next((f for p in ["Q4_0", "Q4_K_M", "Q4_K_S"] for f in files if p in f and f.endswith(".gguf") and "/" not in f), None)
+          print("PICK", pick)
+          shutil.copy(hf_hub_download(repo, pick), "gupshup-gemma3n-e2b.gguf")
+          PY
+          ls -lh *.gguf
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete gemma3n-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create gemma3n-v1 gupshup-gemma3n-e2b.gguf -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Phone model: Gemma 3n E2B (Q4)" --notes "Google Gemma 3n E2B instruct, GGUF from unsloth. Use under the Gemma Terms of Use."
