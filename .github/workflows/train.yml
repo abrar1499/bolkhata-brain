@@ -1,0 +1,43 @@
+name: Train Roman Urdu model (CPU)
+
+on:
+  push:
+    branches: [phone-model]
+    paths: [train/**, .github/workflows/train.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: |
+          pip install --index-url https://download.pytorch.org/whl/cpu torch
+          pip install "transformers>=4.51" peft datasets accelerate
+      - name: Train (LoRA, time-limited)
+        env:
+          TIME_LIMIT_MIN: "250"
+          N_SAMPLES: "1500"
+        run: python train/finetune.py
+      - name: Convert + quantize
+        run: |
+          git clone --depth 1 https://github.com/ggml-org/llama.cpp
+          pip install -r llama.cpp/requirements/requirements-convert_hf_to_gguf.txt
+          cmake -S llama.cpp -B build -DLLAMA_OPENSSL=OFF -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_SERVER=OFF -DGGML_NATIVE=OFF
+          cmake --build build --target llama-quantize -j 4
+          python llama.cpp/convert_hf_to_gguf.py trained --outtype f16 --outfile t-f16.gguf
+          ./build/bin/llama-quantize t-f16.gguf gupshup-trained-1.7b-Q4_0.gguf Q4_0
+          ls -lh *.gguf
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete trained-model-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create trained-model-v1 gupshup-trained-1.7b-Q4_0.gguf -R "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" --title "Gup Shup trained model (Roman Urdu, 1.7B Q4_0)" \
+            --notes "Qwen3-1.7B (Apache-2.0) + LoRA on open Roman Urdu instruction data, trained on CPU in GitHub Actions."
