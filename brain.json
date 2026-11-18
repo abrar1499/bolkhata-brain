@@ -1,5 +1,5 @@
 {
- "version": 196,
+ "version": 197,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -231,7 +231,8 @@
   "# riyal time": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Dinner\"}]",
   "# riyal @ ko diye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
   "rojgar diya": "{\"calls\":[],\"reply\":\"Kis ko aur kitne rupay diye? Naam aur amount dobara bataiye.\",\"lang\":\"English\"}",
-  "israel": "{\"calls\":[],\"reply\":\"How much did you give Israel?\",\"lang\":\"English\"}"
+  "israel": "{\"calls\":[],\"reply\":\"How much did you give Israel?\",\"lang\":\"English\"}",
+  "kar diya": "{\"calls\":[],\"reply\":\"Theek hai, kaam ho gaya.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
