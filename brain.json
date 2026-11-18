@@ -1,5 +1,5 @@
 {
- "version": 198,
+ "version": 199,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -232,7 +232,8 @@
   "# riyal @ ko diye": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
   "rojgar diya": "{\"calls\":[],\"reply\":\"Kis ko aur kitne rupay diye? Naam aur amount dobara bataiye.\",\"lang\":\"English\"}",
   "israel": "{\"calls\":[],\"reply\":\"How much did you give Israel?\",\"lang\":\"English\"}",
-  "kar diya": "{\"calls\":[],\"reply\":\"Theek hai, kaam ho gaya.\",\"lang\":\"English\"}"
+  "kar diya": "{\"calls\":[],\"reply\":\"Theek hai, kaam ho gaya.\",\"lang\":\"English\"}",
+  "hello hijra ke naam se likho": "{\"calls\":[],\"reply\":\"Hijra ke naam se kya likhna hai? Raqam aur wajah batayein.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
