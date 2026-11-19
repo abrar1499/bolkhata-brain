@@ -1,4 +1,4 @@
-name: Gup Shup APK v3 (LiteRT)
+name: Gup Shup APK v4 (LiteRT + tools)
 on:
   push:
     branches: [phone-model]
@@ -16,6 +16,8 @@ jobs:
         with: { distribution: temurin, java-version: '17' }
       - uses: gradle/actions/setup-gradle@v4
         with: { gradle-version: '8.14.3' }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
       - name: Build
         working-directory: android-litert
         run: gradle :app:assembleDebug --no-daemon --stacktrace
@@ -23,7 +25,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cp android-litert/app/build/outputs/apk/debug/app-debug.apk GupShup-v3.apk && ls -lh GupShup-v3.apk
-          gh release delete gupshup-app-v3 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
-          gh release create gupshup-app-v3 GupShup-v3.apk -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
-            --title "Gup Shup APK v3 (Gemma 4, LiteRT)" --notes "Gemma 4 E2B on Google's LiteRT-LM engine (GPU with CPU fallback). First launch downloads the 2.6 GB model once."
+          cp android-litert/app/build/outputs/apk/debug/app-debug.apk GupShup-v4.apk && ls -lh GupShup-v4.apk
+          gh release delete gupshup-app-v4 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create gupshup-app-v4 GupShup-v4.apk -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Gup Shup APK v4 (Gemma 4 + tools)" --notes "Gemma 4 E2B/E4B on LiteRT-LM, code cards, Python runner, GitHub, HTML to APK."

@@ -1,16 +1,17 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.chaquo.python")
 }
 android {
     namespace = "com.abrar.gupshup"
     compileSdk = 35
     defaultConfig {
-        applicationId = "com.abrar.gupshup.lite"
+        applicationId = "com.abrar.gupshup.pro"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "3.0"
+        versionCode = 4
+        versionName = "4.0"
         ndk { abiFilters += listOf("arm64-v8a") }
     }
     buildTypes { debug { isMinifyEnabled = false } }
@@ -22,6 +23,9 @@ android {
 }
 kotlin {
     compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
+}
+chaquopy {
+    defaultConfig { version = "3.12" }
 }
 dependencies {
     implementation("com.google.ai.edge.litertlm:litertlm-android:0.19.1")
