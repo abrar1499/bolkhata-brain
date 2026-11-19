@@ -1,5 +1,5 @@
 {
- "version": 268,
+ "version": 269,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -282,7 +282,12 @@
   "taxi #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Taxi\",\"category\":\"Transport\"}]",
   "# phone": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Phone\",\"category\":\"Mobile & Internet\"}]",
   "# cover": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Cover\",\"category\":\"Shopping\"}]",
-  "red medicine": "{\"calls\":[],\"reply\":\"Medicine ka amount kitna tha? Please tell me the amount.\",\"lang\":\"English\"}"
+  "red medicine": "{\"calls\":[],\"reply\":\"Medicine ka amount kitna tha? Please tell me the amount.\",\"lang\":\"English\"}",
+  "kidr gaib ho": "{\"calls\":[],\"reply\":\"Main yahin hoon, bataiye kya entry karni ya dekhni hai.\",\"lang\":\"English\"}",
+  "bohat acha chal raha hai": "{\"calls\":[],\"reply\":\"Bohat acha! Kisi entry ya hisaab ke liye mujhe batayein.\",\"lang\":\"English\"}",
+  "mera mode ni thek": "{\"calls\":[],\"reply\":\"Afsos hai ke mood theek nahi. Kya kuch bhari lag raha hai, baat karna chahenge?\",\"lang\":\"English\"}",
+  "koi kam ki bat bata do": "{\"calls\":[],\"reply\":\"Har entry mein sahi type batayein, jaise kharcha, udhaar ya kaam.\",\"lang\":\"English\"}",
+  "ka hal hai#": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap ka hisaab kitab kaisa chal raha hai?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
