@@ -193,6 +193,10 @@ class H(BaseHTTPRequestHandler):
 
 
 def main():
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
     if "--selftest" in sys.argv:
         import litert_lm  # noqa: F401  (checks the bundled engine loads)
         print("SELFTEST OK", litert_lm.__file__)
