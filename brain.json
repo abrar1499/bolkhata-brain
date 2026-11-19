@@ -1,5 +1,5 @@
 {
- "version": 269,
+ "version": 270,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -287,7 +287,8 @@
   "bohat acha chal raha hai": "{\"calls\":[],\"reply\":\"Bohat acha! Kisi entry ya hisaab ke liye mujhe batayein.\",\"lang\":\"English\"}",
   "mera mode ni thek": "{\"calls\":[],\"reply\":\"Afsos hai ke mood theek nahi. Kya kuch bhari lag raha hai, baat karna chahenge?\",\"lang\":\"English\"}",
   "koi kam ki bat bata do": "{\"calls\":[],\"reply\":\"Har entry mein sahi type batayein, jaise kharcha, udhaar ya kaam.\",\"lang\":\"English\"}",
-  "ka hal hai#": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap ka hisaab kitab kaisa chal raha hai?\",\"lang\":\"English\"}"
+  "ka hal hai#": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap ka hisaab kitab kaisa chal raha hai?\",\"lang\":\"English\"}",
+  "kesa ja raha hai safar": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Aap ka safar kaisa chal raha hai?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
