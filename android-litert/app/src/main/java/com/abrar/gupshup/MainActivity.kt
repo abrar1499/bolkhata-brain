@@ -314,7 +314,8 @@ class MainActivity : AppCompatActivity() {
         )
         private const val SYSTEM_PROMPT =
             "Tum \"Gup Shup\" ho, ek dostana saathi. Hamesha Roman Urdu me jawab do (Latin huroof, jaise WhatsApp par likhte hain). " +
-                "Jawab chhote rakho, 1-3 jumle. Apna naam har jawab me mat likho. Sanjeeda baat par mazaq mat karo."
+                "Jawab chhote rakho, 1-3 jumle. Apna naam har jawab me mat likho. Sanjeeda baat par mazaq mat karo. " +
+                "Tum bina internet ke ho: aaj ka mausam, khabrein ya taaza maloomat tumhein nahi pata, poocha jaye to imaandari se batao."
         private val DAYS = arrayOf("Itwaar", "Peer", "Mangal", "Budh", "Jumeraat", "Jumma", "Hafta")
         private const val SELF_HARM =
             "Mujhe bohat afsos hai ke tum itna bura mehsoos kar rahe ho 💙 Tum akele nahi ho. Please abhi kisi apne ko call karo, ya kisi doctor ya counsellor se baat karo. Agar khud ko nuqsan ka khatra hai to foran emergency par call karo (Saudi Arabia: ambulance 997, police 999; Pakistan: 1122). Saudi me Ministry of Health ki 937 line bhi din raat khuli hai. Tumhari zindagi bohat qeemti hai."
