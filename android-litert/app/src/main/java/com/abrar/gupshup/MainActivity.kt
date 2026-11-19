@@ -48,6 +48,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import java.io.RandomAccessFile
+import java.util.concurrent.atomic.AtomicLong
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import java.net.HttpURLConnection
 import java.net.URL
 import java.text.SimpleDateFormat
@@ -419,52 +426,103 @@ class MainActivity : AppCompatActivity() {
 
     private fun modelsDir() = File(filesDir, "models").also { it.mkdirs() }
 
+    /** Fast download: all parts split into 32 MB chunks, 8 parallel connections, resumes after a break. */
     private fun download(tag: String, name: String) {
         busy = true; setReady(false)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         status.text = "Download shuru... (WiFi aur charger behtar hai)"
         lifecycleScope.launch(Dispatchers.IO) {
-            val target = File(modelsDir(), name); val part = File(modelsDir(), "$name.part")
+            val target = File(modelsDir(), name); val part = File(modelsDir(), "$name.part"); val doneFile = File(modelsDir(), "$name.done")
             try {
                 if (!target.exists()) {
-                    val urls = GitHub(null).releaseAssets(MODEL_REPO, tag)
-                    if (urls.isEmpty()) error("model files nahi mili")
-                    part.delete()
-                    var total = 0L
-                    for (u in urls) {
-                        val h = (URL(u).openConnection() as HttpURLConnection).apply { requestMethod = "HEAD"; instanceFollowRedirects = true }
-                        total += h.contentLengthLong.coerceAtLeast(0); h.disconnect()
+                    val parts = GitHub(null).releaseAssetSizes(MODEL_REPO, tag)
+                    if (parts.isEmpty()) error("model files nahi mili")
+                    val total = parts.sumOf { it.second }
+                    // chunk = (url, offset inside that url, length, offset inside final file)
+                    data class Chunk(val i: Int, val url: String, val from: Long, val len: Long, val at: Long)
+                    val chunks = ArrayList<Chunk>(); var base = 0L
+                    for ((u, size) in parts) {
+                        var o = 0L
+                        while (o < size) { val l = minOf(CHUNK, size - o); chunks += Chunk(chunks.size, u, o, l, base + o); o += l }
+                        base += size
                     }
-                    var done = 0L; var lastPct = -1
-                    FileOutputStream(part, true).use { out ->
-                        for (u in urls) {
-                            val c = (URL(u).openConnection() as HttpURLConnection).apply { instanceFollowRedirects = true; connectTimeout = 20_000; readTimeout = 60_000 }
-                            if (c.responseCode != 200) error("HTTP ${c.responseCode}")
-                            c.inputStream.use { inp ->
-                                val buf = ByteArray(256 * 1024)
-                                while (true) {
-                                    val n = inp.read(buf); if (n < 0) break
-                                    out.write(buf, 0, n); done += n
-                                    val pct = if (total > 0) (done * 100 / total).toInt() else -1
-                                    if (pct != lastPct) {
-                                        lastPct = pct
-                                        withContext(Dispatchers.Main) { status.text = "Download: $pct%  (${done shr 20} / ${total shr 20} MB)" }
-                                    }
-                                }
-                            }
+                    val sig = "$tag:$total:${chunks.size}"
+                    val finished = HashSet<Int>()
+                    if (part.exists() && part.length() == total && doneFile.exists()) {
+                        val lines = doneFile.readLines()
+                        if (lines.firstOrNull() == sig) lines.drop(1).mapNotNullTo(finished) { it.toIntOrNull() }
+                    }
+                    if (finished.isEmpty()) { part.delete(); RandomAccessFile(part, "rw").use { it.setLength(total) }; doneFile.writeText("$sig\n") }
+                    val got = AtomicLong(chunks.filter { it.i in finished }.sumOf { it.len })
+                    val startGot = got.get(); val t0 = System.currentTimeMillis()
+                    val ui = launch {
+                        while (true) {
+                            val d = got.get(); val secs = (System.currentTimeMillis() - t0) / 1000.0
+                            val speed = if (secs > 1) (d - startGot) / secs else 0.0
+                            val eta = if (speed > 0) ((total - d) / speed).toLong() else -1
+                            val txt = "Download: ${d * 100 / total}%  (${d shr 20}/${total shr 20} MB)  " +
+                                "%.1f MB/s".format(speed / 1048576) + (if (eta >= 0) "  · ${eta / 60}m ${eta % 60}s baqi" else "")
+                            withContext(Dispatchers.Main) { status.text = txt }
+                            delay(700)
                         }
                     }
-                    part.renameTo(target)
+                    val gate = Semaphore(PARALLEL)
+                    try {
+                        coroutineScope {
+                            chunks.filter { it.i !in finished }.map { c ->
+                                async {
+                                    gate.withPermit {
+                                        var pos = 0L; var tries = 0
+                                        while (pos < c.len) {
+                                            try {
+                                                val conn = (URL(resolve(c.url)).openConnection() as HttpURLConnection).apply {
+                                                    connectTimeout = 20_000; readTimeout = 30_000
+                                                    setRequestProperty("Range", "bytes=${c.from + pos}-${c.from + c.len - 1}")
+                                                }
+                                                if (conn.responseCode != 206) error("HTTP ${conn.responseCode}")
+                                                RandomAccessFile(part, "rw").use { raf ->
+                                                    raf.seek(c.at + pos)
+                                                    conn.inputStream.use { inp ->
+                                                        val buf = ByteArray(512 * 1024)
+                                                        while (pos < c.len) {
+                                                            val n = inp.read(buf, 0, minOf(buf.size.toLong(), c.len - pos).toInt()); if (n < 0) break
+                                                            raf.write(buf, 0, n); pos += n; got.addAndGet(n.toLong())
+                                                        }
+                                                    }
+                                                }
+                                                conn.disconnect()
+                                            } catch (e: Exception) {
+                                                if (++tries > 8) throw e
+                                                delay(2000L * tries)
+                                            }
+                                        }
+                                        synchronized(doneFile) { doneFile.appendText("${c.i}\n") }
+                                    }
+                                }
+                            }.awaitAll()
+                        }
+                    } finally { ui.cancel() }
+                    part.renameTo(target); doneFile.delete()
                 }
                 withContext(Dispatchers.Main) { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); load(target) }
             } catch (e: Exception) {
-                part.delete()
                 withContext(Dispatchers.Main) {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); busy = false
-                    status.text = "Download nahi hua (${e.message}). 🧠 Model dabakar dobara koshish karein."
+                    status.text = "Download ruk gaya (${e.message}). 🧠 Model dabayein — jahan ruka tha wahin se chalega."
                 }
             }
         }
+    }
+
+    /** Follow GitHub's redirect once to get the fast CDN link (fresh each try, links expire). */
+    private fun resolve(url: String): String {
+        var u = url
+        repeat(5) {
+            val c = (URL(u).openConnection() as HttpURLConnection).apply { instanceFollowRedirects = false; requestMethod = "HEAD"; connectTimeout = 20_000 }
+            val code = c.responseCode; val loc = c.getHeaderField("Location"); c.disconnect()
+            if (code in 300..399 && loc != null) u = loc else return u
+        }
+        return u
     }
 
     private val pickFile = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
@@ -581,6 +639,8 @@ class MainActivity : AppCompatActivity() {
         private const val KEY_CLIENT_ID = "gh_client_id"
         private const val KEY_LAST_REPO = "gh_last_repo"
         private const val MODEL_REPO = "abrar1499/bolkhata-brain"
+        private const val CHUNK = 32L * 1024 * 1024
+        private const val PARALLEL = 8
         private val SYSTEM_PROMPT = """
 Tum "Gup Shup" ho: ek dostana aur maahir assistant jo user ke phone par bina internet chalta hai.
 Zaban: hamesha Roman Urdu (Latin huroof) me baat karo, jab tak user English ya Arabic me na likhe. Code ke andar comments English me theek hain.

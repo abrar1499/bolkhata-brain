@@ -123,4 +123,13 @@ class GitHub(var token: String?) {
         val a = JSONObject(r.body).getJSONArray("assets")
         return (0 until a.length()).map { a.getJSONObject(it) }.sortedBy { it.getString("name") }.map { it.getString("browser_download_url") }
     }
+
+    /** Model parts with sizes: (download url, bytes), sorted by name. */
+    fun releaseAssetSizes(repo: String, tag: String): List<Pair<String, Long>> {
+        val r = call("GET", "https://api.github.com/repos/$repo/releases/tags/$tag", auth = false)
+        if (r.code != 200) error("release nahi mili (${r.code})")
+        val a = JSONObject(r.body).getJSONArray("assets")
+        return (0 until a.length()).map { a.getJSONObject(it) }.sortedBy { it.getString("name") }
+            .map { it.getString("browser_download_url") to it.getLong("size") }
+    }
 }
