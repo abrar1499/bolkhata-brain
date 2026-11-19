@@ -1,0 +1,30 @@
+name: Gup Shup Desktop (Windows EXE)
+on:
+  push:
+    branches: [phone-model]
+    paths: [desktop/**, .github/workflows/desktop-exe.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Build EXE
+        run: |
+          pip install litert-lm pyinstaller
+          pyinstaller --onefile --name GupShup --collect-all litert_lm --console desktop/gupshup_desktop.py
+          dir dist
+      - name: Self-test (engine loads inside the EXE)
+        run: dist\GupShup.exe --selftest
+      - name: Publish
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete gupshup-desktop-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create gupshup-desktop-v1 dist/GupShup.exe -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Gup Shup Desktop (Windows)" --notes "Double-click GupShup.exe. First run downloads the 2.6 GB Gemma 4 model once, then works offline. Uses Gemma under the Gemma Terms of Use."
