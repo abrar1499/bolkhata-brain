@@ -24,7 +24,7 @@ jobs:
                   print("NO", repo, type(e).__name__); continue
               files = {f.rfilename: f.size for f in info.siblings if f.rfilename.endswith(".litertlm")}
               for k, v in files.items(): print(f"{repo}  {(v or 0)/1e9:.2f} GB  {k}")
-              pick = next((f for f in files if "E2B" in f or "model" in f), None) or (next(iter(files)) if files else None)
+              pick = "gemma-4-E2B-it.litertlm" if "gemma-4-E2B-it.litertlm" in files else (next(iter(files)) if files else None)
               if not pick: continue
               try:
                   shutil.copy(hf_hub_download(repo, pick), "gupshup-gemma4.litertlm"); got = (repo, pick); break

@@ -1,0 +1,29 @@
+name: Gup Shup APK v3 (LiteRT)
+on:
+  push:
+    branches: [phone-model]
+    paths: [android-litert/**, .github/workflows/gupshup-lite-apk.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '8.14.3' }
+      - name: Build
+        working-directory: android-litert
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android-litert/app/build/outputs/apk/debug/app-debug.apk GupShup-v3.apk && ls -lh GupShup-v3.apk
+          gh release delete gupshup-app-v3 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create gupshup-app-v3 GupShup-v3.apk -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Gup Shup APK v3 (Gemma 4, LiteRT)" --notes "Gemma 4 E2B on Google's LiteRT-LM engine (GPU with CPU fallback). First launch downloads the 2.6 GB model once."
