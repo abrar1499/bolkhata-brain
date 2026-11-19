@@ -196,6 +196,12 @@ def main():
     if "--selftest" in sys.argv:
         import litert_lm  # noqa: F401  (checks the bundled engine loads)
         print("SELFTEST OK", litert_lm.__file__)
+        if "--full" in sys.argv:
+            prepare()
+            print("STATE", state)
+            for q in ["kya hal hai", "ek chhota sa joke sunao"]:
+                print("Q:", q)
+                print("A:", "".join(str(p) for p in conv.send_message_async(q)))
         return
     threading.Thread(target=prepare, daemon=True).start()
     srv = ThreadingHTTPServer(("127.0.0.1", 0), H)

@@ -19,7 +19,9 @@ jobs:
           pyinstaller --onefile --name GupShup --collect-all litert_lm --console desktop/gupshup_desktop.py
           dir dist
       - name: Self-test (engine loads inside the EXE)
-        run: dist\GupShup.exe --selftest
+        run: |
+          $env:PYTHONIOENCODING = "utf-8"
+          dist\GupShup.exe --selftest --full
       - name: Publish
         shell: bash
         env:
