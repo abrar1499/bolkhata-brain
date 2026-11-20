@@ -1,5 +1,5 @@
 {
- "version": 286,
+ "version": 287,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -21,7 +21,7 @@
   "galt jwb": "{\"calls\":[],\"reply\":\"Kis date ya type ka data chahiye?\"}",
   "mtlb": "{\"calls\":[],\"reply\":\"Koi khas baat nahi, aap batao?\"}",
   "fffjjd": "{\"calls\":[],\"reply\":\"I didn't get that; could you clarify?\"}",
-  "kya hal hai": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Aap ka hisaab kitaab mein kya madad karoon?\",\"lang\":\"English\"}",
+  "kya hal hai": "{\"calls\":[],\"reply\":\"Sab theek, aap kaise hain?\"}",
   "kya chl raha hal": "{\"calls\":[],\"reply\":\"Sab theek hai, aapka din kaisa?\"}",
   "kya chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek chal raha hai; aap ko kis hisaab mein madad chahiye?\",\"lang\":\"English\"}",
   "men thek hun": "{\"calls\":[],\"reply\":\"Theek hai, aap ka din kaisa ja raha hai?\"}",
@@ -71,7 +71,7 @@
   "i am good thank you": "{\"calls\":[],\"reply\":\"Glad to hear you are good, thank you!\"}",
   "can you write what i speak": "{\"calls\":[],\"reply\":\"Yes, I can save what you say as ledger entries.\"}",
   "aur sunao kya chal raha hai": "{\"calls\":[],\"reply\":\"Sab theek hai! Main aap ka hisaab kitaab sambhalne mein madad kar sakta hoon.\"}",
-  "what are you doing": "{\"calls\":[],\"reply\":\"I'm here and ready to help with your ledger, entries, or totals whenever you need.\",\"lang\":\"English\"}",
+  "what are you doing": "{\"calls\":[],\"reply\":\"I'm here to help with your ledger: entries, totals, reports and balances.\"}",
   "@ ko # chhant ent d": "[{\"type\":\"sale\",\"person\":\"@0\",\"item\":\"Chhant ent\",\"qty\":\"#0\"}]",
   "ek kam karo": "{\"calls\":[],\"reply\":\"Kaunsi cheez ek kam karni hai? Quantity ya amount batayein.\"}",
   "defa ho": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi hisaab ki zaroorat ho, main yahin hoon.\"}",
@@ -190,7 +190,7 @@
   "kigh": "{\"calls\":[],\"reply\":\"Sorry, I didn't catch that. Could you say it again, or tell me what to record?\",\"lang\":\"English\"}",
   "kf": "{\"calls\":[],\"reply\":\"Sorry, I didn't catch that. Could you say it again, or tell me what to record?\",\"lang\":\"English\"}",
   "kif halk": "{\"calls\":[],\"reply\":\"الحمد لله، أنا بخير. كيف يمكنني مساعدتك اليوم؟\",\"lang\":\"English\"}",
-  "hello": "{\"calls\":[],\"reply\":\"Hello! How can I help with your ledger today?\",\"lang\":\"English\"}",
+  "hello": "{\"calls\":[],\"reply\":\"Hello! How can I help with your books today?\",\"lang\":\"English\"}",
   "kujh ni": "{\"calls\":[],\"reply\":\"Theek hai, jab bhi kuch chahiye bata dijiye.\",\"lang\":\"English\"}",
   "hi": "{\"calls\":[],\"reply\":\"Hello! How can I help you with your ledger today?\",\"lang\":\"English\"}",
   "kese ho": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap kaise hain?\",\"lang\":\"English\"}",
@@ -292,7 +292,7 @@
   "chas le gaye ho": "{\"calls\":[],\"reply\":\"Kya aap kisi cheez se naraz hain? Thoda aur batayein, main madad karunga.\",\"lang\":\"English\"}",
   "mujhe dard hai": "{\"calls\":[],\"reply\":\"Afsos hai ke aap ko dard hai. Agar dard zyada ya lagatar ho, to kisi doctor ko zaroor dikhayein. Aaram karein, paani peeyein, aur agar dard shadeed ho ya saans mein takleef ho to fori madad lein.\",\"lang\":\"English\"}",
   "lunch #": "[{\"type\":\"expense\",\"item\":\"Lunch\",\"amount\":\"#0\",\"category\":\"Food\"}]",
-  "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"category\":\"Transport\",\"amount\":\"#0\"}]",
+  "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"amount\":\"#0\",\"category\":\"Transport\"}]",
   "sae hai": "{\"calls\":[],\"reply\":\"Theek hai, koi aur kaam ho to batayein.\",\"lang\":\"English\"}",
   "aj # kharcha huwa jai": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Other\",\"item\":\"Kharcha\"}]",
   "@ ko diy #": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
@@ -301,7 +301,8 @@
   "mera mode sad hai": "{\"calls\":[],\"reply\":\"Afsoos sunke, umeed hai aaj ka din behtar ho jayega. Main aapki madad ke liye yahan hoon.\",\"lang\":\"English\"}",
   "konsi madad": "{\"calls\":[],\"reply\":\"Main kharcha likhne, udhaar ka hisaab rakhne aur totals dekhne mein madad karta hoon, jaise \\\"chai 50\\\".\",\"lang\":\"English\"}",
   "# nashta": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Nashta\",\"category\":\"Food\"}]",
-  "# @ kondiye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]"
+  "# @ kondiye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
+  "acha": "{\"calls\":[],\"reply\":\"Theek hai, aap app ke hisaab-kitaab ke bare mein kuch bhi poochh sakte hain.\"}"
  },
  "ai": true
 }
