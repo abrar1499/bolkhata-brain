@@ -1,0 +1,45 @@
+name: Phone model (Gemma 4 E4B GPU LiteRT)
+on:
+  push:
+    branches: [phone-model]
+    paths: [.github/workflows/gemma4-e4b-gpu-litert.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download .litertlm
+        run: |
+          pip install huggingface_hub
+          python - <<'PY'
+          from huggingface_hub import HfApi, hf_hub_download
+          import shutil, sys
+          api = HfApi(); got = None
+          for repo in ["litert-community/gemma-4-E4B-it-litert-lm", ]:
+              try:
+                  info = api.model_info(repo, files_metadata=True)
+              except Exception as e:
+                  print("NO", repo, type(e).__name__); continue
+              files = {f.rfilename: f.size for f in info.siblings if f.rfilename.endswith(".litertlm")}
+              for k, v in files.items(): print(f"{repo}  {(v or 0)/1e9:.2f} GB  {k}")
+              pick = "gemma-4-E4B-it-gpu.litertlm" if "gemma-4-E4B-it-gpu.litertlm" in files else None
+              if not pick: continue
+              try:
+                  shutil.copy(hf_hub_download(repo, pick), "gupshup-e4b-gpu.litertlm"); got = (repo, pick); break
+              except Exception as e:
+                  print("DL FAIL", repo, pick, type(e).__name__, e)
+          print("GOT", got)
+          if not got: sys.exit(1)
+          PY
+          ls -l gupshup-e4b-gpu.litertlm
+          split -b 1500M -d -a 1 gupshup-e4b-gpu.litertlm gupshup-e4b-gpu.litertlm.part
+          ls -l gupshup-e4b-gpu.litertlm.part*
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete gemma4-e4b-gpu-litert-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create gemma4-e4b-gpu-litert-v1 gupshup-e4b-gpu.litertlm.part* -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "Phone model: Gemma 4 E4B (LiteRT)" --notes "Google Gemma 4 E4B instruct in LiteRT-LM format. Use under the Gemma Terms of Use."
