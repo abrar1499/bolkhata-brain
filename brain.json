@@ -1,5 +1,5 @@
 {
- "version": 271,
+ "version": 272,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -290,7 +290,8 @@
   "ka hal hai#": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap ka hisaab kitab kaisa chal raha hai?\",\"lang\":\"English\"}",
   "kesa ja raha hai safar": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Aap ka safar kaisa chal raha hai?\",\"lang\":\"English\"}",
   "meri help karo": "{\"calls\":[],\"reply\":\"Zaroor, batayein kis cheez mein madad chahiye, aur kya masla hai?\",\"lang\":\"English\"}",
-  "chas le gaye ho": "{\"calls\":[],\"reply\":\"Kya aap kisi cheez se naraz hain? Thoda aur batayein, main madad karunga.\",\"lang\":\"English\"}"
+  "chas le gaye ho": "{\"calls\":[],\"reply\":\"Kya aap kisi cheez se naraz hain? Thoda aur batayein, main madad karunga.\",\"lang\":\"English\"}",
+  "mujhe dard hai": "{\"calls\":[],\"reply\":\"Afsos hai ke aap ko dard hai. Agar dard zyada ya lagatar ho, to kisi doctor ko zaroor dikhayein. Aaram karein, paani peeyein, aur agar dard shadeed ho ya saans mein takleef ho to fori madad lein.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
