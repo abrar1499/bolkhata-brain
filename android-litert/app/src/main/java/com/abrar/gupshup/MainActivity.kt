@@ -50,6 +50,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var send: Button
     private val views = ArrayList<View>()
     private var streamBox: LinearLayout? = null
+    private var liveDialog: Dialog? = null
+    private var liveCode: TextView? = null
+    private var liveScroll: ScrollView? = null
+    private var liveHead: TextView? = null
+    private var liveDismissed = false
+    private var lastStreamUi = 0L
     private val dp by lazy { resources.displayMetrics.density }
     private val prefs get() = Brain.prefs
     private val gh get() = Brain.gh
@@ -145,9 +151,15 @@ class MainActivity : AppCompatActivity() {
         val msgs = snapshot()
         if (msgs.size < views.size) { renderAll(); return }
         if (msgs.size > views.size) {
+            val wasLive = liveDialog?.isShowing == true && Brain.streaming == null
             streamBox?.let { chat.removeView(it) }; streamBox = null
             for (m in msgs.subList(views.size, msgs.size)) addMsgView(m)
             scrollDown()
+            if (wasLive) {
+                closeLive()
+                val last = msgs.last()
+                segments(last.text).lastOrNull { it.first && it.third.isNotBlank() }?.let { (_, lang, code) -> codePage(guessLang(lang, code), code) }
+            }
         }
         updateStream()
     }
@@ -170,15 +182,79 @@ class MainActivity : AppCompatActivity() {
     private fun updateStream() {
         val s = Brain.streaming
         if (s == null) { streamBox?.let { chat.removeView(it) }; streamBox = null; return }
+        val now = System.currentTimeMillis()
+        if (streamBox != null && now - lastStreamUi < 200) return
+        lastStreamUi = now
         val box = streamBox ?: LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; setPadding(pad(12), pad(9), pad(12), pad(9)); background = rounded("#33493D")
-            addView(TextView(this@MainActivity).apply { textSize = 16f; setTextColor(Color.WHITE) })
-        }.also { streamBox = it; chat.addView(it, lp(false)) }
-        (box.getChildAt(0) as TextView).apply {
-            val code = s.contains("```")
-            text = s; typeface = if (code) Typeface.MONOSPACE else Typeface.DEFAULT; textSize = if (code) 13f else 16f
+        }.also { streamBox = it; chat.addView(it, lp(false)); liveDismissed = false }
+        box.removeAllViews()
+        var lastCode: Pair<String, String>? = null
+        for ((isCode, lang, t) in segments(s)) {
+            if (!isCode) { addText(box, t); continue }
+            val l = guessLang(lang, t); lastCode = l to t
+            val card = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; background = rounded("#0B0F0D", 12f); setPadding(pad(10), pad(8), pad(10), pad(8)) }
+            val head = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+            head.addView(TextView(this).apply { text = "✍️ ${l.ifBlank { "code" }} likh raha hoon · ${t.lines().size} lines"; setTextColor(Color.parseColor("#FFE082")); textSize = 12f },
+                LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+            head.addView(Button(this).apply { text = "⛶ Code page"; textSize = 12f; isAllCaps = false; setOnClickListener { liveDismissed = false; openLive() } })
+            card.addView(head)
+            card.addView(TextView(this).apply {
+                text = t.lines().takeLast(6).joinToString("\n"); typeface = Typeface.MONOSPACE; textSize = 12f; setTextColor(Color.parseColor("#E6F2EA")); maxLines = 6
+            })
+            box.addView(card, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(6) })
+        }
+        if (box.childCount == 0) addText(box, s)
+        lastCode?.let { (l, code) ->
+            if (liveDialog == null && !liveDismissed) openLive()
+            liveHead?.text = "  ✍️ ${l.ifBlank { "code" }} · ${code.lines().size} lines likh raha hoon..."
+            liveCode?.text = code.lines().mapIndexed { i, x -> "${(i + 1).toString().padStart(3)}  $x" }.joinToString("\n")
+            liveScroll?.post { liveScroll?.fullScroll(View.FOCUS_DOWN) }
         }
         scrollDown()
+    }
+
+    /** Live code page that fills in while the model is writing; switches to the full code page when done. */
+    private fun openLive() {
+        if (liveDialog?.isShowing == true) return
+        val d = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(Color.parseColor("#0B0F0D")) }
+        val head = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setBackgroundColor(Color.parseColor("#123524")); gravity = Gravity.CENTER_VERTICAL }
+        head.addView(Button(this).apply { text = "← Chat"; isAllCaps = false; setOnClickListener { liveDismissed = true; closeLive() } })
+        liveHead = TextView(this).apply { setTextColor(Color.parseColor("#FFE082")) }
+        head.addView(liveHead, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+        val sv = ScrollView(this); val hs = HorizontalScrollView(this)
+        liveCode = TextView(this).apply { typeface = Typeface.MONOSPACE; textSize = 13f; setTextColor(Color.parseColor("#E6F2EA")); setPadding(pad(8), pad(10), pad(12), pad(10)) }
+        hs.addView(liveCode); sv.addView(hs); liveScroll = sv
+        root.addView(head); root.addView(sv, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
+        d.setContentView(root)
+        d.setOnCancelListener { liveDismissed = true; closeLive() }
+        liveDialog = d; d.show()
+    }
+
+    private fun closeLive() {
+        runCatching { liveDialog?.dismiss() }
+        liveDialog = null; liveCode = null; liveScroll = null; liveHead = null
+    }
+
+    /** Run HTML/JS and show the result full screen. */
+    private fun preview(html: String) {
+        val d = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(Color.WHITE) }
+        val head = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setBackgroundColor(Color.parseColor("#123524")); gravity = Gravity.CENTER_VERTICAL }
+        val web = android.webkit.WebView(this).apply {
+            settings.javaScriptEnabled = true; settings.domStorageEnabled = true
+            settings.loadWithOverviewMode = true; settings.useWideViewPort = true
+            webChromeClient = android.webkit.WebChromeClient()
+        }
+        head.addView(Button(this).apply { text = "← Wapas"; isAllCaps = false; setOnClickListener { d.dismiss() } })
+        head.addView(TextView(this).apply { text = "  👁 Nateeja (layout)"; setTextColor(Color.WHITE) }, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+        head.addView(Button(this).apply { text = "🔄"; isAllCaps = false; setOnClickListener { web.loadDataWithBaseURL("https://gupshup.local/", html, "text/html", "utf-8", null) } })
+        root.addView(head); root.addView(web, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
+        d.setContentView(root)
+        d.setOnDismissListener { web.destroy() }
+        web.loadDataWithBaseURL("https://gupshup.local/", html, "text/html", "utf-8", null)
+        d.show()
     }
 
     private fun lp(user: Boolean) = LinearLayout.LayoutParams(if (user) WRAP_CONTENT else MATCH_PARENT, WRAP_CONTENT).apply {
@@ -266,7 +342,7 @@ class MainActivity : AppCompatActivity() {
             .also { row.addView(it, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f)) }
         b("📋 Copy") { copy(code) }
         if (lang in PY) b("▶ Chalao") { runPythonCard(box, code) }
-        if (lang in HTML) b("📦 APK") { askApkName(code) }
+        if (lang in HTML) { b("👁 Dekho") { preview(code) }; b("📦 APK") { askApkName(code) } }
         b("💾 GitHub") { saveToGitHubDialog(code, lang) }
         card.addView(row)
         box.addView(card, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(6) })
@@ -307,7 +383,7 @@ class MainActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) { output.text = "Nateeja:\n$r" }
             }
         }
-        if (lang in HTML) b("📦 APK") { d.dismiss(); askApkName(code) }
+        if (lang in HTML) { b("👁 Dekho") { preview(code) }; b("📦 APK") { d.dismiss(); askApkName(code) } }
         b("💾 GitHub") { saveToGitHubDialog(code, lang) }
         root.addView(head)
         root.addView(sv, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
@@ -471,7 +547,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private val PY = setOf("python", "py", "python3")
-        private val HTML = setOf("html", "htm")
+        private val HTML = setOf("html", "htm", "svg")
     }
 }
 
