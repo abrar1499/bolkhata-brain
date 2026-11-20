@@ -1,5 +1,5 @@
 {
- "version": 288,
+ "version": 289,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -28,7 +28,6 @@
   "bohat acha ja raha hai": "{\"calls\":[],\"reply\":\"Bohat achha lag raha hai!\"}",
   "bohat acha": "{\"calls\":[],\"reply\":\"Achha laga sun kar, koi aur madad chahiye?\"}",
   "@ ko # diya os ne kafeel ko dena tha": "[{\"amount\":\"#0\",\"note\":\"os ne kafeel ko dena tha\",\"person\":\"@0\",\"type\":\"lent\"}]",
-  "ar sunao": "{\"calls\":[],\"reply\":\"Aap kya sunna chahte hain: aakhri entries, ya kisi shakhs ka hisaab?\"}",
   "ar sunao mtlb men thek hun ap btaye": "{\"calls\":[],\"reply\":\"Main bhi theek hun, shukriya! Batayein, kya dekhna hai?\"}",
   "bs thek": "{\"calls\":[],\"reply\":\"Shukriya, theek sunkar khushi hui. Kuch dekhna ya likhna ho to batayein.\"}",
   "koi kahani sunao": "{\"calls\":[],\"reply\":\"Main sirf is app ke hisaab-kitaab mein madad kar sakta hoon, kahani nahi sunata.\"}",
