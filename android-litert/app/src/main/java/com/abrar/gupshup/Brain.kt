@@ -244,7 +244,9 @@ object Brain {
         scope.launch {
             shutdown()
             var used = "GPU"
+            val forceCpu = prefs.getBoolean("cpu_" + file.name, false)
             val eng = try {
+                if (forceCpu) error("cpu")
                 Engine(EngineConfig(modelPath = file.path, backend = Backend.GPU(), cacheDir = app.cacheDir.path)).also { it.initialize() }
             } catch (e: Throwable) {
                 used = "CPU"
@@ -260,6 +262,7 @@ object Brain {
             showReady("")
             ready.value = true
             keepAlive("Model tayyar hai, baat-cheet mehfooz hai")
+            pendingResend?.let { m -> pendingResend = null; send(m, hidden = true) }
         }
     }
 
@@ -300,6 +303,8 @@ object Brain {
 
     /** hidden = internal follow-up (auto-fix): not shown as a user bubble. round = auto-fix depth. */
     private class StopGen : Exception()
+    @Volatile private var pendingResend: String? = null
+    private val GARBAGE = Regex("<unused\\d+>|\\[multimodal\\]")
     @Volatile private var stopRequested = false
 
     /** ■ button: stop the current reply. */
@@ -336,6 +341,7 @@ object Brain {
         replyJob = scope.launch {
             val sb = StringBuilder()
             var first = 0L
+            var reloading = false
             try {
                 val prevBot = synchronized(messages) { messages.lastOrNull { it.role == "bot" }?.text }
                 var c = conv
@@ -364,9 +370,20 @@ object Brain {
                     val eng = engine ?: break
                     delay(300); runCatching { c.close() }; c = newConversation(eng); conversation = c; cut = false
                 }
+                // Some small models give garbage tokens on the GPU: switch this model to CPU and ask again.
+                if (GARBAGE.findAll(sb).count() >= 3 && backendUsed == "GPU") {
+                    val path = prefs.getString(KEY_MODEL, null)
+                    if (path != null) {
+                        prefs.edit().putBoolean("cpu_" + File(path).name, true).apply()
+                        streaming = null
+                        note("⚙️ Ye model GPU par ghalat chal raha tha. CPU par shift kar ke dobara jawab bana raha hoon…")
+                        pendingResend = msg; reloading = true
+                        busy = false; load(File(path)); return@launch
+                    }
+                }
                 // A looping reply poisons the chat history: start clean so the next answer is normal.
                 if (cut) engine?.let { eng -> delay(300); runCatching { c.close() }; c = newConversation(eng); conversation = c }
-                val txt = cleanSmall(sb.toString().trim()).replace(Regex("[ \\t]{2,}"), " ")
+                val txt = cleanSmall(GARBAGE.replace(sb.toString(), "").trim()).replace(Regex("[ \\t]{2,}"), " ")
                     .ifEmpty { "Hmm 🤔 dobara poocho?" } + if (stopRequested) "\n\n(■ roka gaya)" else ""
                 streaming = null; val idx = add("bot", txt)
                 if (checkOn && Regex("```\\s*html|<!DOCTYPE|<html", RegexOption.IGNORE_CASE).containsMatchIn(txt)) { pendingCheck = idx; events.tryEmit(-1) }
@@ -376,9 +393,11 @@ object Brain {
                 val eng = engine
                 if (eng != null) runCatching { conversation?.close(); conversation = newConversation(eng) }
             } finally {
+                if (!reloading) {
                 busy = false; ready.value = engine != null
                 if (engine != null) showReady(" · jawab ${"%.1f".format((System.currentTimeMillis() - t0) / 1000.0)}s (shuru ${"%.1f".format(first / 1000.0)}s)")
                 keepAlive("Model tayyar hai, baat-cheet mehfooz hai")
+                }
             }
         }
     }
