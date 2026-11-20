@@ -313,8 +313,9 @@ ${a.versions.last()}"""
     private fun history(upTo: Int): List<Message> {
         val turns = synchronized(messages) { messages.take(minOf(upTo, messages.size)).filter { it.role == "user" || it.role == "bot" }.map { it.copy() } }
         val out = ArrayList<Pair<String, String>>()
-        for (m in turns.takeLast(10)) {
-            val t = m.text.take(1500)
+        for (m in turns.takeLast(8)) {
+            // long answers (code) are cut short: the model only needs the gist to keep the conversation going
+            val t = if (m.text.length > 700) m.text.take(500) + "\n…" else m.text
             if (out.isNotEmpty() && out.last().first == m.role) out[out.size - 1] = m.role to (out.last().second + "\n" + t) else out += m.role to t
         }
         while (out.isNotEmpty() && out.first().first != "user") out.removeAt(0)
