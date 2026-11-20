@@ -189,6 +189,10 @@ Title badal diya.
 FILE:
 ${a.versions.last()}"""
 
+    /** Did the user actually ask for code / an app / a design? */
+    private val CODE_WORDS = Regex("(banao|bana do|bana k|bana ke|banay|banaye|bnao|bna do|code|coding|app\\b|game|website|web ?page|page bana|html|css|javascript|\\bjs\\b|python|script|program|calculator|design|function|kotlin|java\\b|sql|tool|form|card bana|dikhao code|likh ?do code|build|make|create|write)", RegexOption.IGNORE_CASE)
+    private val FENCE = Regex("```[\\s\\S]*?(```|\\z)")
+
     private val EDIT_WORDS = Regex("\\b(is ?me|isme|isko|is ko|ise|usme|us me|isay|badlo|badal|change|add|daal|dal do|lagao|hatao|remove|theek|thik|fix|rang|color|colour|bara|chhota|chota|update|edit|behtar|improve|aur (button|feature))\\b", RegexOption.IGNORE_CASE)
     private val NEW_WORDS = Regex("\\b(naya|nayi|new|alag|ek aur|dusra|doosra)\\b", RegexOption.IGNORE_CASE)
 
@@ -522,6 +526,13 @@ ${a.versions.last()}"""
                 val genSecs = (secs - first / 1000.0).coerceAtLeast(0.1)
                 val info = "%.1fs · %d harf · %.0f harf/s · pehla lafz %.1fs · %s".format(Locale.US, secs, txt.length, txt.length / genSecs, first / 1000.0, backendUsed)
                 var shownTxt = txt; var tag = ""; var artLang = ""
+                // Plain chat must not turn into code: drop code the user never asked for.
+                val wantsCode = editArt >= 0 || hidden || CODE_WORDS.containsMatchIn(msg)
+                if (!wantsCode && txt.contains("```")) {
+                    val plain = FENCE.replace(txt, "").replace(Regex("\\n{3,}"), "\n\n").trim()
+                    if (plain.isNotEmpty()) shownTxt = plain
+                }
+                val txtForArt = if (wantsCode) txt else ""
                 val ea = if (editArt >= 0) art(editArt) else null
                 if (ea != null) {
                     val (patched, ok, bad) = applyPatches(ea.versions.last(), txt)
@@ -532,7 +543,7 @@ ${a.versions.last()}"""
                         full != null -> { val v = addVersion(ea, full.second); tag = "${ea.id}:$v"; artLang = ea.lang }
                         else -> shownTxt = PATCH.replace(txt, "").trim() + "\n\n⚠️ Tabdeeli file me nahi lag saki. ✨ Behtar dobara dabayein ya baat wazeh likhein."
                     }
-                } else mainCode(txt)?.let { (lang, code) ->
+                } else mainCode(txtForArt)?.let { (lang, code) ->
                     val ask = synchronized(messages) { messages.lastOrNull { it.role == "user" }?.text } ?: ""
                     val a = newArtifact(lang, code, ask); tag = "${a.id}:1"; artLang = lang
                 }
@@ -639,7 +650,9 @@ ${a.versions.last()}"""
     private val SYSTEM_PROMPT = """
 Tum "Gup Shup" ho, dostana aur maahir assistant, phone par bina internet. Hamesha Roman Urdu me jawab do (jab tak user English/Arabic na likhe). Apna naam mat likho.
 
-Code wale jawab ka tareeqa HAMESHA ye ho:
+SAB SE ZAROORI: Aam baat-cheet (salam, hello, kya hal hai, tum kaun ho, sawal-jawab, maloomat) me KABHI code mat likho, sirf seedhe alfaaz me 1-3 jumle. Code SIRF tab likho jab user saaf saaf code, app, game, website, page, calculator, design ya program banane ko kahe.
+
+Jab code maanga jaye to tareeqa ye ho:
 1. Pehle 1 jumla: kya bana rahe ho.
 2. Phir code ```html ya ```python block me, poora aur chalne wala, ``` se band.
 3. Aakhir me 1-2 jumle: kaise istemal karein ya kya badal sakte hain.
