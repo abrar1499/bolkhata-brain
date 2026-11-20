@@ -1,5 +1,5 @@
 {
- "version": 276,
+ "version": 277,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -291,7 +291,8 @@
   "meri help karo": "{\"calls\":[],\"reply\":\"Zaroor, batayein kis cheez mein madad chahiye, aur kya masla hai?\",\"lang\":\"English\"}",
   "chas le gaye ho": "{\"calls\":[],\"reply\":\"Kya aap kisi cheez se naraz hain? Thoda aur batayein, main madad karunga.\",\"lang\":\"English\"}",
   "mujhe dard hai": "{\"calls\":[],\"reply\":\"Afsos hai ke aap ko dard hai. Agar dard zyada ya lagatar ho, to kisi doctor ko zaroor dikhayein. Aaram karein, paani peeyein, aur agar dard shadeed ho ya saans mein takleef ho to fori madad lein.\",\"lang\":\"English\"}",
-  "lunch #": "[{\"type\":\"expense\",\"item\":\"Lunch\",\"amount\":\"#0\",\"category\":\"Food\"}]"
+  "lunch #": "[{\"type\":\"expense\",\"item\":\"Lunch\",\"amount\":\"#0\",\"category\":\"Food\"}]",
+  "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"category\":\"Transport\",\"amount\":\"#0\"}]"
  },
  "ai": true
 }
