@@ -10,8 +10,8 @@ android {
         applicationId = "com.abrar.gupshup.pro"
         minSdk = 26
         targetSdk = 35
-        versionCode = 12
-        versionName = "5.2"
+        versionCode = 13
+        versionName = "5.3"
         ndk { abiFilters += listOf("arm64-v8a") }
     }
     signingConfigs {

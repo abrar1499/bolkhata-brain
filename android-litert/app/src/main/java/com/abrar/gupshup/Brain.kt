@@ -253,6 +253,7 @@ object Brain {
                     busy = false; status.value = "Model load nahi hua (${e2.message}). 🧠 Model dabayein."; return@launch
                 }
             }
+            small = file.length() < 1_500_000_000L
             engine = eng; conversation = newConversation(eng); backendUsed = used; modelName = file.name.substringBefore('.')
             prefs.edit().putString(KEY_MODEL, file.path).apply()
             busy = false
@@ -262,11 +263,15 @@ object Brain {
         }
     }
 
+    /** True for tiny models (< 1.5 GB file): simpler prompt with examples, more varied sampling, loop guard. */
+    @Volatile private var small = false
+    private fun norm(t: String) = t.lowercase().replace(Regex("[^a-z0-9]"), "")
+
     private fun newConversation(eng: Engine): Conversation = eng.createConversation(
         ConversationConfig(
-            systemInstruction = Contents.of(SYSTEM_PROMPT),
-            tools = if (toolsOn) listOf(tool(AppTools())) else emptyList(),
-            samplerConfig = SamplerConfig(topK = 40, topP = 0.95, temperature = 0.6),
+            systemInstruction = Contents.of(if (small) SMALL_PROMPT else SYSTEM_PROMPT),
+            tools = if (toolsOn && !small) listOf(tool(AppTools())) else emptyList(),
+            samplerConfig = if (small) SamplerConfig(topK = 40, topP = 0.9, temperature = 0.8) else SamplerConfig(topK = 40, topP = 0.95, temperature = 0.6),
             thinkingConfig = ThinkingConfig(enableThinking = false),
         )
     )
@@ -299,9 +304,19 @@ object Brain {
             val sb = StringBuilder()
             var first = 0L
             try {
-                conv.sendMessageAsync(msg).collect { part ->
-                    if (first == 0L) first = System.currentTimeMillis() - t0
-                    sb.append(part.toString()); streaming = sb.toString().trim().ifEmpty { "…" }; events.tryEmit(-1)
+                val prevBot = synchronized(messages) { messages.lastOrNull { it.role == "bot" }?.text }
+                var c = conv
+                for (attempt in 0..1) {
+                    sb.clear(); streaming = "…"; events.tryEmit(-1)
+                    c.sendMessageAsync(msg).collect { part ->
+                        if (first == 0L) first = System.currentTimeMillis() - t0
+                        sb.append(part.toString()); streaming = sb.toString().trim().ifEmpty { "…" }; events.tryEmit(-1)
+                    }
+                    // Small models get stuck repeating themselves: start a fresh conversation and ask again once.
+                    val stuck = small && (norm(sb.toString()) == norm(prevBot ?: "") || norm(sb.toString()).isEmpty())
+                    if (!stuck || attempt == 1) break
+                    val eng = engine ?: break
+                    runCatching { c.close() }; c = newConversation(eng); conversation = c
                 }
                 val txt = sb.toString().trim().ifEmpty { "Hmm 🤔 dobara poocho?" }
                 streaming = null; val idx = add("bot", txt)
@@ -415,6 +430,21 @@ Design, drawing, pattern, card, game ya app maangi jaye to ASAL cheez banao, kab
 - App/game: ek file ka mukammal mobile HTML (CSS aur JavaScript andar). <head> me <meta name="viewport" content="width=device-width, initial-scale=1"> zaroor. Poori screen istemal karo (width 100%, bare buttons, font 20px+), modern rang aur gol kone. Har button sirf ek dafa, har button ka kaam chale, koi JavaScript error na ho. Likhne se pehle soch lo ke poora logic sahi hai.
 Python me sirf standard library, input() nahi, print() se nateeja.
 Aam gup-shup me jawab chhota (1-3 jumle). Sanjeeda baat par mazaq nahi. Mausam, khabrein ya taaza maloomat tumhein nahi pata, imaandari se batao.
+""".trim()
+    private val SMALL_PROMPT = """
+Tum Gup Shup ho, ek dostana saathi. User ki baat ka seedha jawab do. Roman Urdu me likho (English huroof me Urdu, jaise WhatsApp par). Jawab 1-2 chhote jumle. User se uska naam mat poocho. Apna pichla jawab mat dohrao.
+
+Misaalein:
+User: hello
+Gup Shup: Walaikum assalam! Kaise hain aap? Main aap ki kya madad karun?
+User: kya ho raha hai
+Gup Shup: Bas aap se baat ho rahi hai 🙂 Aap sunao, aaj kya plan hai?
+User: mera naam abrar hai
+Gup Shup: Bohat khoob Abrar bhai! Batayein, kis cheez me madad chahiye?
+User: chai kaise banti hai
+Gup Shup: Pani ubaal kar patti daalein, phir doodh aur cheeni daal kar 2-3 minute pakayein. Bas chai tayyar!
+User: 5 aur 7 kitne hote hain
+Gup Shup: 5 aur 7 milkar 12 hote hain.
 """.trim()
     private val DAYS = arrayOf("Itwaar", "Peer", "Mangal", "Budh", "Jumeraat", "Jumma", "Hafta")
     private const val SELF_HARM =
