@@ -621,9 +621,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun withViewport(html: String): String =
         if (html.contains("name=\"viewport\"", true) || html.contains("name='viewport'", true)) html
-        else if (Regex("<head[^>]*>", RegexOption.IGNORE_CASE).containsMatchIn(html))
-            html.replaceFirst(Regex("<head[^>]*>", RegexOption.IGNORE_CASE)) { it.value + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" }
-        else "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">$html"
+        else Regex("<head[^>]*>", RegexOption.IGNORE_CASE).find(html)?.let { m ->
+            html.replaceRange(m.range.last + 1, m.range.last + 1, VIEWPORT)
+        } ?: (VIEWPORT + html)
 
     private fun maybeCheck() {
         val i = Brain.pendingCheck
@@ -860,6 +860,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private val PY = setOf("python", "py", "python3")
         private val HTML = setOf("html", "htm", "svg")
+        private const val VIEWPORT = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
     }
 }
 
