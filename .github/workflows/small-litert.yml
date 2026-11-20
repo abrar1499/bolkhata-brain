@@ -1,0 +1,52 @@
+name: Phone model (small ~200MB LiteRT)
+on:
+  push:
+    branches: [phone-model]
+    paths: [.github/workflows/small-litert.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find and download a small .litertlm
+        run: |
+          pip install -q huggingface_hub
+          python - <<'PY'
+          from huggingface_hub import HfApi, hf_hub_download
+          import shutil, sys
+          api = HfApi(); cands = []
+          repos = set(["litert-community/gemma-3-270m-it", "litert-community/Gemma3-270M-IT", "google/gemma-3-270m-it-litert-lm",
+                       "litert-community/Qwen3-0.6B", "litert-community/SmolLM2-360M-Instruct", "litert-community/Gemma3-1B-IT"])
+          for q in ["270m", "gemma-3-270m", "0.6B", "360M", "smol"]:
+              try:
+                  for m in api.list_models(author="litert-community", search=q, limit=50): repos.add(m.id)
+              except Exception as e: print("search fail", q, e)
+          for repo in sorted(repos):
+              try: info = api.model_info(repo, files_metadata=True)
+              except Exception as e: print("NO", repo, type(e).__name__); continue
+              for f in info.siblings:
+                  if f.rfilename.endswith(".litertlm") and f.size:
+                      print(f"{repo}  {f.size/1e6:.0f} MB  {f.rfilename}")
+                      cands.append((f.size, repo, f.rfilename))
+          # prefer gemma 270m instruct, then anything small
+          small = [c for c in cands if 80e6 < c[0] < 450e6]
+          def score(c):
+              n = (c[1] + c[2]).lower()
+              return (0 if "270m" in n and "it" in n else 1, 0 if "q8" in n or "int8" in n else 1, c[0])
+          small.sort(key=score)
+          print("CANDIDATES", small[:5])
+          for size, repo, fn in small:
+              try:
+                  shutil.copy(hf_hub_download(repo, fn), "gupshup-small.litertlm"); print("GOT", repo, fn, size); break
+              except Exception as e: print("DL FAIL", repo, fn, e)
+          else: sys.exit(1)
+          PY
+          ls -l gupshup-small.litertlm
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete small-litert-v1 -R "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create small-litert-v1 gupshup-small.litertlm -R "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "Small phone model (LiteRT)" --notes "Small model for Gup Shup."
