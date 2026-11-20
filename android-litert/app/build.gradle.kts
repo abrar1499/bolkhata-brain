@@ -14,7 +14,13 @@ android {
         versionName = "4.3"
         ndk { abiFilters += listOf("arm64-v8a") }
     }
-    buildTypes { debug { isMinifyEnabled = false } }
+    signingConfigs {
+        create("fixed") {
+            storeFile = file("gupshup-debug.jks"); storePassword = "gupshup123"
+            keyAlias = "gupshup"; keyPassword = "gupshup123"
+        }
+    }
+    buildTypes { debug { isMinifyEnabled = false; signingConfig = signingConfigs.getByName("fixed") } }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
