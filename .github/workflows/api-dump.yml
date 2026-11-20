@@ -14,4 +14,4 @@ jobs:
           unzip -oq l.aar classes.jar && mkdir c && cd c && unzip -oq ../classes.jar
           for f in $(find . -name '*.class' | grep -v '\$[0-9]' | sort); do n=${f#./}; n=${n%.class}; javap -cp . "${n//\//.}" 2>/dev/null; done | grep -v "^Compiled" > ../api.txt
           cd ..; wc -l api.txt; grep -n "class\|interface" api.txt | head -80
-          grep -n -i "image\|vision\|audio\|maxNum\|Content\b\|Contents\|cancel" api.txt | head -80
+          for c in 'litertlm.EngineConfig ' 'litertlm.Message ' 'litertlm.Message\$Companion' 'litertlm.RepetitionPenaltyConfig' 'litertlm.NoRepeatNgramConfig' 'litertlm.SpeculativeDecodingConfig ' 'litertlm.SamplerConfig ' 'litertlm.ConversationConfig ' 'litertlm.Engine ' 'litertlm.Role ' 'litertlm.Channel '; do echo "=== $c"; awk -v c="$c" 'index($0,c)&&/class/{p=1} p{print} p&&/^}/{p=0}' api.txt | grep -v 'component\|copy\|hashCode\|equals\|toString' | head -40; done
