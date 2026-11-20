@@ -267,6 +267,14 @@ object Brain {
     @Volatile private var small = false
     private fun norm(t: String) = t.lowercase().replace(Regex("[^a-z0-9]"), "")
 
+    /** Tiny models keep writing fake "User:/Gup Shup:" turns. Keep only the real first answer. */
+    private fun cleanSmall(t: String): String {
+        if (!small || t.contains("```")) return t
+        var x = t.replace(Regex("^\\s*(Gup Shup|Assistant|Model)\\s*:\\s*", RegexOption.IGNORE_CASE), "")
+        Regex("(^|\\n)\\s*(User|Gup Shup|Assistant|Misaal\\w*)\\s*:", RegexOption.IGNORE_CASE).find(x)?.let { x = x.substring(0, it.range.first) }
+        return x.trim().lines().firstOrNull { it.isNotBlank() }?.trim() ?: x.trim()
+    }
+
     private fun newConversation(eng: Engine): Conversation = eng.createConversation(
         ConversationConfig(
             systemInstruction = Contents.of(if (small) SMALL_PROMPT else SYSTEM_PROMPT),
@@ -310,15 +318,15 @@ object Brain {
                     sb.clear(); streaming = "…"; events.tryEmit(-1)
                     c.sendMessageAsync(msg).collect { part ->
                         if (first == 0L) first = System.currentTimeMillis() - t0
-                        sb.append(part.toString()); streaming = sb.toString().trim().ifEmpty { "…" }; events.tryEmit(-1)
+                        sb.append(part.toString()); streaming = cleanSmall(sb.toString().trim()).ifEmpty { "…" }; events.tryEmit(-1)
                     }
                     // Small models get stuck repeating themselves: start a fresh conversation and ask again once.
-                    val stuck = small && (norm(sb.toString()) == norm(prevBot ?: "") || norm(sb.toString()).isEmpty())
+                    val stuck = small && (norm(cleanSmall(sb.toString())) == norm(prevBot ?: "") || norm(cleanSmall(sb.toString())).isEmpty())
                     if (!stuck || attempt == 1) break
                     val eng = engine ?: break
                     runCatching { c.close() }; c = newConversation(eng); conversation = c
                 }
-                val txt = sb.toString().trim().ifEmpty { "Hmm 🤔 dobara poocho?" }
+                val txt = cleanSmall(sb.toString().trim()).ifEmpty { "Hmm 🤔 dobara poocho?" }
                 streaming = null; val idx = add("bot", txt)
                 if (checkOn && Regex("```\\s*html|<!DOCTYPE|<html", RegexOption.IGNORE_CASE).containsMatchIn(txt)) { pendingCheck = idx; events.tryEmit(-1) }
             } catch (e: Throwable) {
@@ -432,19 +440,7 @@ Python me sirf standard library, input() nahi, print() se nateeja.
 Aam gup-shup me jawab chhota (1-3 jumle). Sanjeeda baat par mazaq nahi. Mausam, khabrein ya taaza maloomat tumhein nahi pata, imaandari se batao.
 """.trim()
     private val SMALL_PROMPT = """
-Tum Gup Shup ho, ek dostana saathi. User ki baat ka seedha jawab do. Roman Urdu me likho (English huroof me Urdu, jaise WhatsApp par). Jawab 1-2 chhote jumle. User se uska naam mat poocho. Apna pichla jawab mat dohrao.
-
-Misaalein:
-User: hello
-Gup Shup: Walaikum assalam! Kaise hain aap? Main aap ki kya madad karun?
-User: kya ho raha hai
-Gup Shup: Bas aap se baat ho rahi hai 🙂 Aap sunao, aaj kya plan hai?
-User: mera naam abrar hai
-Gup Shup: Bohat khoob Abrar bhai! Batayein, kis cheez me madad chahiye?
-User: chai kaise banti hai
-Gup Shup: Pani ubaal kar patti daalein, phir doodh aur cheeni daal kar 2-3 minute pakayein. Bas chai tayyar!
-User: 5 aur 7 kitne hote hain
-Gup Shup: 5 aur 7 milkar 12 hote hain.
+Tum Gup Shup ho, ek dostana saathi. Sirf user ki aakhri baat ka jawab do. Roman Urdu me likho (English huroof me Urdu). Sirf 1-2 chhote jumle. User ka naam mat poocho.
 """.trim()
     private val DAYS = arrayOf("Itwaar", "Peer", "Mangal", "Budh", "Jumeraat", "Jumma", "Hafta")
     private const val SELF_HARM =
