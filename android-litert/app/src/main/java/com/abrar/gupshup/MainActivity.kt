@@ -83,6 +83,8 @@ class MainActivity : AppCompatActivity() {
     private var liveScroll: ScrollView? = null
     private var liveHead: TextView? = null
     private var lastStreamUi = 0L
+    /** Typewriter: how many characters of the streaming reply are shown so far. */
+    private var typed = 0
     private val dp by lazy { resources.displayMetrics.density }
     private val prefs get() = Brain.prefs
     private val gh get() = Brain.gh
@@ -106,6 +108,16 @@ class MainActivity : AppCompatActivity() {
                 launch { Brain.ready.collect { setSendEnabled(it) } }
                 launch { Brain.events.collect { onEvent(it) } }
                 launch { while (true) { syncNew(); maybeCheck(); delay(1500) } }
+                launch {   // typewriter: reveal the reply letter by letter, catching up smoothly with the model
+                    while (true) {
+                        delay(28)
+                        val st = Brain.streaming ?: continue
+                        if (st == "…" || typed >= st.length) continue
+                        val gap = st.length - typed
+                        typed += maxOf(1, gap / 6)
+                        updateStream(force = true)
+                    }
+                }
             }
         }
         if (!Brain.hasModel && !Brain.busy) showModelChooser()
@@ -362,7 +374,7 @@ class MainActivity : AppCompatActivity() {
         hideEmpty()
         val col: LinearLayout
         if (streamBox == null) {
-            val (row, c) = assistantRow(); streamBox = row; chat.addView(row); col = c
+            val (row, c) = assistantRow(); streamBox = row; chat.addView(row); col = c; typed = 0
         } else col = streamBox!!.getChildAt(1) as LinearLayout
         col.removeAllViews()
         if (s == "…") {   // thinking dots
@@ -376,8 +388,11 @@ class MainActivity : AppCompatActivity() {
         }
         typing?.cancel(); typing = null
         var lastCode: Pair<String, String>? = null
-        for ((isCode, lang, t) in segments(s)) {
-            if (!isCode) { addText(col, t); continue }
+        val shown = s.take(typed.coerceIn(0, s.length))
+        val segs = segments(shown)
+        for ((idx, seg) in segs.withIndex()) {
+            val (isCode, lang, t) = seg
+            if (!isCode) { addText(col, if (idx == segs.lastIndex) "$t▍" else t); continue }
             val l = guessLang(lang, t); lastCode = l to t
             val card = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; background = shape(CODE_BG, 14f, LINE) }
             val head = row(
@@ -392,7 +407,7 @@ class MainActivity : AppCompatActivity() {
             })
             col.addView(card, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(8) })
         }
-        if (col.childCount == 0) addText(col, s)
+        if (col.childCount == 0) addText(col, "▍")
         lastCode?.let { (l, code) ->
             liveHead?.text = "  ✍️ ${l.ifBlank { "code" }} · ${code.lines().size} lines…"
             liveCode?.text = numbered(code)
