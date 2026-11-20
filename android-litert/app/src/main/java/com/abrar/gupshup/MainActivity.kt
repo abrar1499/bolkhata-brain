@@ -200,13 +200,12 @@ class MainActivity : AppCompatActivity() {
             head.addView(Button(this).apply { text = "⛶ Code page"; textSize = 12f; isAllCaps = false; setOnClickListener { liveDismissed = false; openLive() } })
             card.addView(head)
             card.addView(TextView(this).apply {
-                text = t.lines().takeLast(6).joinToString("\n"); typeface = Typeface.MONOSPACE; textSize = 12f; setTextColor(Color.parseColor("#E6F2EA")); maxLines = 6
+                text = t.lines().takeLast(12).joinToString("\n"); typeface = Typeface.MONOSPACE; textSize = 12f; setTextColor(Color.parseColor("#E6F2EA")); maxLines = 12
             })
             box.addView(card, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(6) })
         }
         if (box.childCount == 0) addText(box, s)
         lastCode?.let { (l, code) ->
-            if (liveDialog == null && !liveDismissed) openLive()
             liveHead?.text = "  ✍️ ${l.ifBlank { "code" }} · ${code.lines().size} lines likh raha hoon..."
             liveCode?.text = code.lines().mapIndexed { i, x -> "${(i + 1).toString().padStart(3)}  $x" }.joinToString("\n")
             liveScroll?.post { liveScroll?.fullScroll(View.FOCUS_DOWN) }
