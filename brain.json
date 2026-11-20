@@ -1,5 +1,5 @@
 {
- "version": 281,
+ "version": 282,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -296,7 +296,8 @@
   "sae hai": "{\"calls\":[],\"reply\":\"Theek hai, koi aur kaam ho to batayein.\",\"lang\":\"English\"}",
   "aj # kharcha huwa jai": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Other\",\"item\":\"Kharcha\"}]",
   "@ ko diy #": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
-  "kaprry #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Kapray\",\"category\":\"Shopping\"}]"
+  "kaprry #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Kapray\",\"category\":\"Shopping\"}]",
+  "@ nu diye #": "[{\"type\":\"received_back\",\"person\":\"@0\",\"amount\":\"#0\"}]"
  },
  "ai": true
 }
