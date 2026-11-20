@@ -1,5 +1,5 @@
 {
- "version": 279,
+ "version": 280,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -294,7 +294,8 @@
   "lunch #": "[{\"type\":\"expense\",\"item\":\"Lunch\",\"amount\":\"#0\",\"category\":\"Food\"}]",
   "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"category\":\"Transport\",\"amount\":\"#0\"}]",
   "sae hai": "{\"calls\":[],\"reply\":\"Theek hai, koi aur kaam ho to batayein.\",\"lang\":\"English\"}",
-  "aj # kharcha huwa jai": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Other\",\"item\":\"Kharcha\"}]"
+  "aj # kharcha huwa jai": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Other\",\"item\":\"Kharcha\"}]",
+  "@ ko diy #": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]"
  },
  "ai": true
 }
