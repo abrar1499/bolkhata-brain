@@ -191,7 +191,8 @@ class MainActivity : AppCompatActivity() {
         }
         send = TextView(this).apply {
             text = "↑"; textSize = 20f; gravity = Gravity.CENTER; setTextColor(Color.BLACK)
-            typeface = Typeface.DEFAULT_BOLD; isClickable = true; setOnClickListener { onSend() }
+            typeface = Typeface.DEFAULT_BOLD; isClickable = true
+            setOnClickListener { if (Brain.streaming != null) Brain.stop() else onSend() }
         }
         pill.addView(input, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
         pill.addView(send, LinearLayout.LayoutParams(pad(40), pad(40)))
@@ -208,12 +209,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(root)
     }
 
+    private var sendMode = ""
     private fun setSendEnabled(on: Boolean) {
         if (!::send.isInitialized) return
-        input.isEnabled = on; send.isEnabled = on
-        send.background = ripple(if (on) gradient(20f) else shape(LINE, 20f))
-        send.text = if (on) "↑" else "•••"; send.textSize = if (on) 20f else 12f
-        send.setTextColor(if (on) Color.BLACK else MUTED)
+        input.isEnabled = on
+        val mode = if (on) "send" else if (Brain.streaming != null) "stop" else "wait"
+        if (mode == sendMode) return
+        sendMode = mode
+        send.isEnabled = mode != "wait"
+        when (mode) {
+            "send" -> { send.background = ripple(gradient(20f)); send.text = "↑"; send.textSize = 20f; send.setTextColor(Color.BLACK) }
+            "stop" -> { send.background = ripple(shape(0xFFE5484D.toInt(), 20f)); send.text = "■"; send.textSize = 16f; send.setTextColor(Color.WHITE) }
+            else -> { send.background = shape(LINE, 20f); send.text = "•••"; send.textSize = 12f; send.setTextColor(MUTED) }
+        }
     }
 
     private fun scrollDown() = scroll.post { scroll.fullScroll(View.FOCUS_DOWN) }
@@ -340,6 +348,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateStream(force: Boolean = false) {
+        setSendEnabled(Brain.ready.value)
         val s = Brain.streaming
         if (s == null) { removeStream(); return }
         val now = System.currentTimeMillis()

@@ -299,6 +299,31 @@ object Brain {
         set(v) { prefs.edit().putBoolean("check_on", v).apply() }
 
     /** hidden = internal follow-up (auto-fix): not shown as a user bubble. round = auto-fix depth. */
+    private class StopGen : Exception()
+    @Volatile private var stopRequested = false
+
+    /** ■ button: stop the current reply. */
+    fun stop() { if (streaming != null) stopRequested = true }
+
+    /** If the text ends in the same 1–25 word block repeated 3+ times, return the text with the loop removed; else null. */
+    private fun trimLoop(t: String): String? {
+        if (t.contains("```")) return null
+        val w = t.trim().split(Regex("\\s+"))
+        val n = w.size
+        for (p in 1..25) {
+            if (n < 3 * p || (p == 1 && n < 6)) continue
+            val reps = if (p == 1) 6 else 3
+            if (n < reps * p) continue
+            var ok = true
+            for (k in 1 until reps) for (j in 0 until p) if (w[n - 1 - j] != w[n - 1 - j - k * p]) { ok = false; break }
+            if (!ok) continue
+            var k = n - p - 1
+            while (k >= 0 && w[k] == w[k + p]) k--
+            return w.subList(0, minOf(n, k + 1 + p)).joinToString(" ").trim() + " …"
+        }
+        return null
+    }
+
     fun send(msg: String, hidden: Boolean = false, round: Int = 0) {
         lastRound = round
         if (!hidden) add("user", msg)
@@ -314,19 +339,35 @@ object Brain {
             try {
                 val prevBot = synchronized(messages) { messages.lastOrNull { it.role == "bot" }?.text }
                 var c = conv
+                var cut = false
                 for (attempt in 0..1) {
-                    sb.clear(); streaming = "…"; events.tryEmit(-1)
-                    c.sendMessageAsync(msg).collect { part ->
-                        if (first == 0L) first = System.currentTimeMillis() - t0
-                        sb.append(part.toString()); streaming = cleanSmall(sb.toString().trim()).ifEmpty { "…" }; events.tryEmit(-1)
-                    }
+                    sb.clear(); streaming = "…"; events.tryEmit(-1); stopRequested = false
+                    try {
+                        c.sendMessageAsync(msg).collect { part ->
+                            if (first == 0L) first = System.currentTimeMillis() - t0
+                            sb.append(part.toString())
+                            val looped = trimLoop(sb.toString())
+                            val tooLong = small && !sb.contains("```") && sb.length > 500
+                            if (looped != null || tooLong || stopRequested) {
+                                if (looped != null) { sb.setLength(0); sb.append(looped) }
+                                cut = cut || looped != null || tooLong
+                                runCatching { c.cancelProcess() }
+                                throw StopGen()
+                            }
+                            streaming = cleanSmall(sb.toString().trim()).ifEmpty { "…" }; events.tryEmit(-1)
+                        }
+                    } catch (_: StopGen) { }
+                    if (stopRequested) break
                     // Small models get stuck repeating themselves: start a fresh conversation and ask again once.
                     val stuck = small && (norm(cleanSmall(sb.toString())) == norm(prevBot ?: "") || norm(cleanSmall(sb.toString())).isEmpty())
                     if (!stuck || attempt == 1) break
                     val eng = engine ?: break
-                    runCatching { c.close() }; c = newConversation(eng); conversation = c
+                    delay(300); runCatching { c.close() }; c = newConversation(eng); conversation = c; cut = false
                 }
-                val txt = cleanSmall(sb.toString().trim()).ifEmpty { "Hmm 🤔 dobara poocho?" }
+                // A looping reply poisons the chat history: start clean so the next answer is normal.
+                if (cut) engine?.let { eng -> delay(300); runCatching { c.close() }; c = newConversation(eng); conversation = c }
+                val txt = cleanSmall(sb.toString().trim()).replace(Regex("[ \\t]{2,}"), " ")
+                    .ifEmpty { "Hmm 🤔 dobara poocho?" } + if (stopRequested) "\n\n(■ roka gaya)" else ""
                 streaming = null; val idx = add("bot", txt)
                 if (checkOn && Regex("```\\s*html|<!DOCTYPE|<html", RegexOption.IGNORE_CASE).containsMatchIn(txt)) { pendingCheck = idx; events.tryEmit(-1) }
             } catch (e: Throwable) {
