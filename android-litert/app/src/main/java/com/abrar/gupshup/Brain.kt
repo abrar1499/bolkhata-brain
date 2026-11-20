@@ -148,7 +148,8 @@ object Brain {
     private fun applyPatches(code: String, txt: String): Triple<String, Int, Int> {
         var cur = code; var ok = 0; var bad = 0
         for (m in PATCH.findAll(txt)) {
-            val find = m.groupValues[1].trimEnd('\n'); val repl = m.groupValues[2].trimEnd('\n')
+            fun noFence(x: String) = x.lines().filterNot { it.trim().startsWith("```") }.joinToString("\n")
+            val find = noFence(m.groupValues[1]).trimEnd('\n'); val repl = noFence(m.groupValues[2]).trimEnd('\n')
             if (find.isBlank()) { bad++; continue }
             if (cur.contains(find)) { cur = cur.replaceFirst(find, repl); ok++; continue }
             val lines = cur.lines(); val want = find.lines().map { it.trim() }.filter { it.isNotEmpty() }
@@ -164,27 +165,29 @@ object Brain {
                 if (k == want.size) { hit = i; end = j; break }
             }
             if (hit < 0) { bad++; continue }
-            cur = (lines.subList(0, hit) + repl.lines() + lines.subList(end, lines.size)).joinToString("\n"); ok++
+            cur = (lines.subList(0, hit) + (if (repl.isEmpty()) emptyList() else repl.lines()) + lines.subList(end, lines.size)).joinToString("\n"); ok++
         }
         return Triple(cur, ok, bad)
     }
 
-    private fun editPrompt(a: Artifact, ask: String): String {
-        val fence = a.lang.ifBlank { "text" }
-        return """Neeche "${a.title}" ki file hai. Is me ye kaam karo: $ask
+    private fun editPrompt(a: Artifact, ask: String): String = """Tum ek file me tabdeeli kar rahe ho. Kaam: $ask
 
-Poori file dobara MAT likho. Pehle 1 jumla likho ke kya badla, phir sirf badalne wale hisse is format me do (har tabdeeli ka alag block):
+Qawaid:
+- Poori file dobara MAT likho.
+- Pehle 1 jumla: kya badla.
+- Phir har tabdeeli ka ek chhota block. DHOONDO me file ki sirf wo 1-6 lines jo badalni hain (bilkul waisi hi), BADLO me un ki nayi shakal. Line hatani ho to BADLO khaali chhod do.
+- ``` mat lagao.
+
+Misaal (agar title badalna ho):
+Title badal diya.
 <<<<<<< DHOONDO
-(file ki asal lines, bilkul waisi hi jaisi file me hain)
+<title>Purana</title>
 =======
-(un ki jagah nayi lines)
+<title>Naya</title>
 >>>>>>> BADLO
 
 FILE:
-```$fence
-${a.versions.last()}
-```"""
-    }
+${a.versions.last()}"""
 
     private val EDIT_WORDS = Regex("\\b(is ?me|isme|isko|is ko|ise|usme|us me|isay|badlo|badal|change|add|daal|dal do|lagao|hatao|remove|theek|thik|fix|rang|color|colour|bara|chhota|chota|update|edit|behtar|improve|aur (button|feature))\\b", RegexOption.IGNORE_CASE)
     private val NEW_WORDS = Regex("\\b(naya|nayi|new|alag|ek aur|dusra|doosra)\\b", RegexOption.IGNORE_CASE)
