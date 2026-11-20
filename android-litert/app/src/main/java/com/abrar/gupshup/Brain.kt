@@ -43,7 +43,10 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicLong
 
-data class Msg(val role: String, var text: String, var info: String = "")   // role: user | bot | note
+data class Msg(val role: String, var text: String, var info: String = "", var art: String = "")
+
+/** A saved piece of work (app, page, script) with all its versions. */
+data class Artifact(val id: Int, var title: String, val lang: String, val versions: MutableList<String>)   // role: user | bot | note
 
 /**
  * Everything that must survive the screen going away (WhatsApp, home button, rotation):
@@ -79,9 +82,118 @@ object Brain {
     fun init(ctx: Context) {
         if (started) return
         started = true; app = ctx.applicationContext
-        restoreChat()
+        restoreChat(); restoreArts()
         val saved = prefs.getString(KEY_MODEL, null)?.let { File(it) }?.takeIf { it.exists() && it.length() > 100_000_000 }
         if (saved != null) load(saved)
+    }
+
+    // ---------------- artifacts ----------------
+    val artifacts = ArrayList<Artifact>()
+    @Volatile var currentArt = -1
+    private val artFile get() = File(app.filesDir, "artifacts.json")
+
+    private fun restoreArts() {
+        runCatching {
+            val o = JSONObject(artFile.readText()); currentArt = o.optInt("cur", -1)
+            val a = o.getJSONArray("list")
+            synchronized(artifacts) {
+                for (i in 0 until a.length()) a.getJSONObject(i).let { j ->
+                    val v = j.getJSONArray("v")
+                    artifacts += Artifact(j.getInt("id"), j.getString("t"), j.getString("l"), (0 until v.length()).map { v.getString(it) }.toMutableList())
+                }
+            }
+        }
+    }
+
+    private fun saveArts() {
+        val a = JSONArray()
+        synchronized(artifacts) { artifacts.takeLast(60).forEach { x ->
+            a.put(JSONObject().put("id", x.id).put("t", x.title).put("l", x.lang).put("v", JSONArray(x.versions.takeLast(15))))
+        } }
+        runCatching { artFile.writeText(JSONObject().put("cur", currentArt).put("list", a).toString()) }
+    }
+
+    fun art(id: Int): Artifact? = synchronized(artifacts) { artifacts.firstOrNull { it.id == id } }
+    fun artList(): List<Artifact> = synchronized(artifacts) { artifacts.reversed().map { it.copy(versions = it.versions.toMutableList()) } }
+
+    private fun titleOf(code: String, lang: String, fallback: String): String =
+        Regex("<title>(.*?)</title>", RegexOption.IGNORE_CASE).find(code)?.groupValues?.get(1)?.trim()?.takeIf { it.isNotBlank() }?.take(40)
+            ?: fallback.replace(Regex("[^\\p{L}\\p{N} ]"), " ").trim().split(Regex("\\s+")).take(5).joinToString(" ").ifBlank { lang.ifBlank { "Code" } }
+
+    private fun newArtifact(lang: String, code: String, ask: String): Artifact {
+        val a = synchronized(artifacts) {
+            Artifact((artifacts.maxOfOrNull { it.id } ?: 0) + 1, titleOf(code, lang, ask), lang, mutableListOf(code)).also { artifacts += it }
+        }
+        currentArt = a.id; saveArts(); return a
+    }
+
+    private fun addVersion(a: Artifact, code: String): Int {
+        synchronized(artifacts) { a.versions += code; titleOf(code, a.lang, "").takeIf { code.contains("<title>", true) }?.let { a.title = it } }
+        currentArt = a.id; saveArts(); return a.versions.size
+    }
+
+    /** Longest fenced code block in a reply: (lang, code) or null. */
+    private fun mainCode(txt: String): Pair<String, String>? {
+        val re = Regex("```[ \\t]*([\\w+#.-]*)[^\\n]*\\n([\\s\\S]*?)(?:\\n?[ \\t]*```|\\z)")
+        val best = re.findAll(txt).maxByOrNull { it.groupValues[2].length } ?: return null
+        val code = best.groupValues[2].trimEnd(); if (code.length < 120) return null
+        var lang = best.groupValues[1].lowercase()
+        if (lang.isBlank()) lang = if (code.trimStart().startsWith("<")) "html" else if (Regex("^\\s*(def |import |print\\()", RegexOption.MULTILINE).containsMatchIn(code)) "python" else ""
+        return lang to code
+    }
+
+    private val PATCH = Regex("<{5,}[^\\n]*\\n([\\s\\S]*?)\\n?={5,}[^\\n]*\\n([\\s\\S]*?)\\n?>{5,}[^\\n]*")
+
+    /** Apply DHOONDO/BADLO blocks. Exact match first, then line match ignoring spaces. Returns (newCode, applied, failed). */
+    private fun applyPatches(code: String, txt: String): Triple<String, Int, Int> {
+        var cur = code; var ok = 0; var bad = 0
+        for (m in PATCH.findAll(txt)) {
+            val find = m.groupValues[1].trimEnd('\n'); val repl = m.groupValues[2].trimEnd('\n')
+            if (find.isBlank()) { bad++; continue }
+            if (cur.contains(find)) { cur = cur.replaceFirst(find, repl); ok++; continue }
+            val lines = cur.lines(); val want = find.lines().map { it.trim() }.filter { it.isNotEmpty() }
+            var hit = -1; var end = -1
+            outer@ for (i in lines.indices) {
+                var j = i; var k = 0
+                while (j < lines.size && k < want.size) {
+                    val t = lines[j].trim()
+                    if (t.isEmpty()) { j++; continue }
+                    if (t.replace(Regex("\\s+"), "") != want[k].replace(Regex("\\s+"), "")) continue@outer
+                    j++; k++
+                }
+                if (k == want.size) { hit = i; end = j; break }
+            }
+            if (hit < 0) { bad++; continue }
+            cur = (lines.subList(0, hit) + repl.lines() + lines.subList(end, lines.size)).joinToString("\n"); ok++
+        }
+        return Triple(cur, ok, bad)
+    }
+
+    private fun editPrompt(a: Artifact, ask: String): String {
+        val fence = a.lang.ifBlank { "text" }
+        return """Neeche "${a.title}" ki file hai. Is me ye kaam karo: $ask
+
+Poori file dobara MAT likho. Pehle 1 jumla likho ke kya badla, phir sirf badalne wale hisse is format me do (har tabdeeli ka alag block):
+<<<<<<< DHOONDO
+(file ki asal lines, bilkul waisi hi jaisi file me hain)
+=======
+(un ki jagah nayi lines)
+>>>>>>> BADLO
+
+FILE:
+```$fence
+${a.versions.last()}
+```"""
+    }
+
+    private val EDIT_WORDS = Regex("\\b(is ?me|isme|isko|is ko|ise|usme|us me|isay|badlo|badal|change|add|daal|dal do|lagao|hatao|remove|theek|thik|fix|rang|color|colour|bara|chhota|chota|update|edit|behtar|improve|aur (button|feature))\\b", RegexOption.IGNORE_CASE)
+    private val NEW_WORDS = Regex("\\b(naya|nayi|new|alag|ek aur|dusra|doosra)\\b", RegexOption.IGNORE_CASE)
+
+    /** Ask the model to change an artifact with small edits instead of rewriting it. */
+    fun edit(artId: Int, ask: String, shown: String? = ask, round: Int = 0) {
+        val a = art(artId) ?: return send(ask)
+        if (shown != null) add("user", shown) else note("✏️ ${a.title} me tabdeeli…")
+        send(editPrompt(a, ask), hidden = true, round = round, editArt = artId, fresh = true)
     }
 
     // ---------------- chat history ----------------
@@ -90,18 +202,18 @@ object Brain {
     private fun restoreChat() {
         runCatching {
             val a = JSONArray(chatFile.readText())
-            synchronized(messages) { for (i in 0 until a.length()) a.getJSONObject(i).let { messages += Msg(it.getString("r"), it.getString("t"), it.optString("i", "")) } }
+            synchronized(messages) { for (i in 0 until a.length()) a.getJSONObject(i).let { messages += Msg(it.getString("r"), it.getString("t"), it.optString("i", ""), it.optString("a", "")) } }
         }
     }
 
     private fun saveChat() {
         val a = JSONArray()
-        synchronized(messages) { messages.takeLast(200).forEach { a.put(JSONObject().put("r", it.role).put("t", it.text).put("i", it.info)) } }
+        synchronized(messages) { messages.takeLast(200).forEach { a.put(JSONObject().put("r", it.role).put("t", it.text).put("i", it.info).put("a", it.art)) } }
         runCatching { chatFile.writeText(a.toString()) }
     }
 
-    fun add(role: String, text: String, info: String = ""): Int {
-        val i = synchronized(messages) { messages += Msg(role, text, info); messages.size - 1 }
+    fun add(role: String, text: String, info: String = "", art: String = ""): Int {
+        val i = synchronized(messages) { messages += Msg(role, text, info, art); messages.size - 1 }
         saveChat(); events.tryEmit(-1); return i
     }
 
@@ -343,10 +455,13 @@ object Brain {
         return null
     }
 
-    fun send(msg: String, hidden: Boolean = false, round: Int = 0) {
+    fun send(msg: String, hidden: Boolean = false, round: Int = 0, editArt: Int = -1, fresh: Boolean = false) {
         lastRound = round
+        // "is me dark mode daal do" → edit the current artifact instead of writing everything again
+        if (!hidden && editArt < 0 && !small && currentArt >= 0 && art(currentArt) != null &&
+            EDIT_WORDS.containsMatchIn(msg) && !NEW_WORDS.containsMatchIn(msg)) { edit(currentArt, msg); return }
         if (!hidden) add("user", msg)
-        localReply(msg)?.let { add("bot", it); return }
+        if (editArt < 0) localReply(msg)?.let { add("bot", it); return }
         val conv = conversation ?: return
         ready.value = false; busy = true; streaming = "…"; events.tryEmit(-1)
         keepAlive("Jawab likh raha hoon...")
@@ -359,6 +474,7 @@ object Brain {
             try {
                 val prevBot = synchronized(messages) { messages.lastOrNull { it.role == "bot" }?.text }
                 var c = conv
+                if (fresh) engine?.let { eng -> runCatching { c.close() }; c = newConversation(eng); conversation = c }
                 var cut = false
                 for (attempt in 0..1) {
                     sb.clear(); streaming = "…"; events.tryEmit(-1); stopRequested = false
@@ -366,7 +482,7 @@ object Brain {
                         c.sendMessageAsync(msg).collect { part ->
                             if (first == 0L) first = System.currentTimeMillis() - t0
                             sb.append(part.toString())
-                            val looped = trimLoop(sb.toString())
+                            val looped = if (editArt >= 0) null else trimLoop(sb.toString())
                             val tooLong = small && !sb.contains("```") && sb.length > 500
                             if (looped != null || tooLong || stopRequested) {
                                 if (looped != null) { sb.setLength(0); sb.append(looped) }
@@ -402,8 +518,23 @@ object Brain {
                 val secs = (System.currentTimeMillis() - t0) / 1000.0
                 val genSecs = (secs - first / 1000.0).coerceAtLeast(0.1)
                 val info = "%.1fs · %d harf · %.0f harf/s · pehla lafz %.1fs · %s".format(Locale.US, secs, txt.length, txt.length / genSecs, first / 1000.0, backendUsed)
-                streaming = null; val idx = add("bot", txt, info)
-                if (checkOn && Regex("```\\s*html|<!DOCTYPE|<html", RegexOption.IGNORE_CASE).containsMatchIn(txt)) { pendingCheck = idx; events.tryEmit(-1) }
+                var shownTxt = txt; var tag = ""; var artLang = ""
+                val ea = if (editArt >= 0) art(editArt) else null
+                if (ea != null) {
+                    val (patched, ok, bad) = applyPatches(ea.versions.last(), txt)
+                    val full = mainCode(txt)
+                    when {
+                        ok > 0 -> { val v = addVersion(ea, patched); tag = "${ea.id}:$v"; artLang = ea.lang
+                            shownTxt = PATCH.replace(txt, "").trim() + "\n\n✏️ $ok tabdeeli lagayi" + (if (bad > 0) ", $bad nahi lag saki" else "") + " → ${ea.title} v$v" }
+                        full != null -> { val v = addVersion(ea, full.second); tag = "${ea.id}:$v"; artLang = ea.lang }
+                        else -> shownTxt = PATCH.replace(txt, "").trim() + "\n\n⚠️ Tabdeeli file me nahi lag saki. ✨ Behtar dobara dabayein ya baat wazeh likhein."
+                    }
+                } else mainCode(txt)?.let { (lang, code) ->
+                    val ask = synchronized(messages) { messages.lastOrNull { it.role == "user" }?.text } ?: ""
+                    val a = newArtifact(lang, code, ask); tag = "${a.id}:1"; artLang = lang
+                }
+                streaming = null; val idx = add("bot", shownTxt, info, tag)
+                if (checkOn && artLang in setOf("html", "htm", "svg")) { pendingCheck = idx; events.tryEmit(-1) }
             } catch (e: Throwable) {
                 streaming = null
                 add("bot", (sb.toString().trim() + "\n\n(Masla aa gaya: ${e.message}. Dobara koshish karein.)").trim())

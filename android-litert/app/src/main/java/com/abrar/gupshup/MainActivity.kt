@@ -179,6 +179,7 @@ class MainActivity : AppCompatActivity() {
         titles.addView(status)
         header.addView(avatar(38))
         header.addView(titles, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+        header.addView(iconBtn("📄") { artifactsPage() })
         header.addView(iconBtn("🧠") { if (!Brain.busy) modelMenu() })
         header.addView(iconBtn("🐙") { githubMenu() })
         header.addView(iconBtn("✎") { Brain.clearChat() })
@@ -334,7 +335,10 @@ class MainActivity : AppCompatActivity() {
             addView(inner)
         }
         else -> assistantRow().also { (_, col) ->
+            renderingArt = m.art.substringBefore(':').toIntOrNull() ?: -1
             renderAnswer(col, m.text); apkButton(col, m.text)
+            renderingArt = -1
+            artCard(col, m.art)
             if (m.info.isNotBlank()) col.addView(TextView(this).apply {
                 text = m.info; textSize = 11f; setTextColor(0xFF6B727C.toInt()); setPadding(0, pad(4), 0, 0)
             })
@@ -539,17 +543,124 @@ class MainActivity : AppCompatActivity() {
             actions.addView(chip(label, primary, f), LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { marginEnd = pad(6) })
         if (lang in PY) a("▶ Chalao", true) { runPythonCard(box, code) }
         if (lang in HTML) a("👁 Dekho", true) { preview(code) }
-        a("✨ Behtar") { improve() }
+        val myArt = renderingArt
+        a("✨ Behtar") { improve(myArt) }
         if (lang in HTML) a("📦 APK") { askApkName(code) }
         a("💾") { saveToGitHubDialog(code, lang) }
         card.addView(HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false; addView(actions) })
         box.addView(card, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(8); bottomMargin = pad(4) })
     }
 
-    /** One tap self-review: the model checks its own last code and returns a better, complete final version. */
-    private fun improve() {
+    /** One tap: the model finds mistakes in the artifact and fixes them with small edits (no full rewrite). */
+    private var renderingArt = -1
+    private fun improve(artId: Int = Brain.currentArt) {
         if (!Brain.ready.value) { Toast.makeText(this, "Pehle jawab poora hone dein", Toast.LENGTH_SHORT).show(); return }
-        Brain.send("Apna upar wala code khud check karo: koi galti, adhoora hissa ya placeholder ho to theek karo, design aur features behtar karo, aur poora final version do.")
+        if (artId >= 0 && Brain.art(artId) != null)
+            Brain.edit(artId, "Is file me ghaltiyan dhoondo aur theek karo (JavaScript errors, kaam na karne wale buttons, adhoora hissa, placeholder). Phir design aur features thore behtar karo.", "✨ Ghaltiyan dhoond kar theek karo")
+        else Brain.send("Apna upar wala code khud check karo: koi galti, adhoora hissa ya placeholder ho to theek karo, aur poora final version do.")
+    }
+
+    // ===================== artifacts =====================
+    private fun artCard(box: LinearLayout, tag: String) {
+        val id = tag.substringBefore(':').toIntOrNull() ?: return
+        val v = tag.substringAfter(':').toIntOrNull() ?: return
+        val a = Brain.art(id) ?: return
+        val card = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
+            background = ripple(shape(SURF, 14f, ACCENT2)); setPadding(pad(12), pad(10), pad(8), pad(10))
+            isClickable = true; setOnClickListener { artifactView(id, v) }
+        }
+        card.addView(TextView(this).apply { text = "📄"; textSize = 22f })
+        card.addView(LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL; setPadding(pad(10), 0, pad(6), 0)
+            addView(TextView(this@MainActivity).apply { text = a.title; textSize = 15f; setTextColor(TEXT); typeface = Typeface.create("sans-serif-medium", Typeface.BOLD); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
+            addView(TextView(this@MainActivity).apply { text = "Artifact · ${a.lang.ifBlank { "code" }} · v$v"; textSize = 12f; setTextColor(MUTED) })
+        }, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+        if (a.lang in HTML) card.addView(chip("👁", true) { a.versions.getOrNull(v - 1)?.let { preview(it) } })
+        card.addView(View(this).apply { layoutParams = LinearLayout.LayoutParams(pad(6), 1) })
+        card.addView(chip("Kholo") { artifactView(id, v) })
+        box.addView(card, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(8) })
+    }
+
+    private fun artifactsPage() {
+        lateinit var d: Dialog
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(BG) }
+        root.addView(pageHeader("📄 Artifacts", { d.dismiss() }))
+        val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(pad(14), pad(12), pad(14), pad(20)) }
+        val arts = Brain.artList()
+        if (arts.isEmpty()) list.addView(TextView(this).apply {
+            text = "Abhi koi artifact nahi.\nKahein: \"calculator ki app banao\" — jo bhi banega yahan mehfooz ho jayega."
+            setTextColor(MUTED); textSize = 15f; gravity = Gravity.CENTER; setPadding(0, pad(60), 0, 0)
+        })
+        arts.forEach { a ->
+            list.addView(LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
+                background = ripple(shape(SURF, 14f, if (a.id == Brain.currentArt) ACCENT2 else LINE)); setPadding(pad(14), pad(12), pad(12), pad(12))
+                isClickable = true; setOnClickListener { d.dismiss(); artifactView(a.id, a.versions.size) }
+                addView(TextView(this@MainActivity).apply { text = if (a.lang in HTML) "🌐" else if (a.lang in PY) "🐍" else "📄"; textSize = 22f })
+                addView(LinearLayout(this@MainActivity).apply {
+                    orientation = LinearLayout.VERTICAL; setPadding(pad(12), 0, 0, 0)
+                    addView(TextView(this@MainActivity).apply { text = a.title; textSize = 15.5f; setTextColor(TEXT); typeface = Typeface.create("sans-serif-medium", Typeface.BOLD) })
+                    addView(TextView(this@MainActivity).apply { text = "${a.lang.ifBlank { "code" }} · ${a.versions.size} version · ${a.versions.last().lines().size} lines"; textSize = 12f; setTextColor(MUTED) })
+                }, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+            }, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(8) })
+        }
+        root.addView(ScrollView(this).apply { addView(list) }, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
+        d = fullDialog(root); d.show()
+    }
+
+    /** Artifact screen: versions, live preview / code tabs, and actions (edit, copy, APK, save). */
+    private fun artifactView(id: Int, startVersion: Int) {
+        val a = Brain.art(id) ?: return
+        var v = startVersion.coerceIn(1, a.versions.size)
+        lateinit var d: Dialog
+        val isHtml = a.lang in HTML
+        var showCode = !isHtml
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(CODE_BG) }
+        val body = android.widget.FrameLayout(this)
+        val web = if (isHtml) android.webkit.WebView(this).apply {
+            settings.javaScriptEnabled = true; settings.domStorageEnabled = true; webChromeClient = android.webkit.WebChromeClient()
+        } else null
+        val codeText = TextView(this).apply { typeface = Typeface.MONOSPACE; textSize = 13f; setTextColor(0xFFCFE8DA.toInt()); setTextIsSelectable(true); setPadding(pad(8), pad(10), pad(14), pad(10)) }
+        val codeView = ScrollView(this).apply { addView(HorizontalScrollView(this@MainActivity).apply { addView(codeText) }) }
+        web?.let { body.addView(it) }; body.addView(codeView)
+        val versions = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(pad(10), pad(6), pad(10), pad(6)) }
+        val tabs = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(pad(10), 0, pad(10), pad(6)) }
+        fun code() = a.versions[v - 1]
+        fun refresh() {
+            versions.removeAllViews()
+            for (i in 1..a.versions.size) versions.addView(chip("v$i", i == v) { v = i; refresh() },
+                LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { marginEnd = pad(6) })
+            tabs.removeAllViews()
+            if (isHtml) {
+                tabs.addView(chip("👁 Nateeja", !showCode) { showCode = false; refresh() }, LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { marginEnd = pad(6) })
+                tabs.addView(chip("‹/› Code", showCode) { showCode = true; refresh() })
+            }
+            codeText.text = numbered(code())
+            codeView.visibility = if (showCode) View.VISIBLE else View.GONE
+            web?.visibility = if (showCode) View.GONE else View.VISIBLE
+            if (!showCode) web?.loadDataWithBaseURL("https://gupshup.local/", withViewport(code()), "text/html", "utf-8", null)
+        }
+        root.addView(pageHeader("📄 ${a.title}", { d.dismiss() }, chip("⧉") { copy(code()) }))
+        root.addView(HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false; addView(versions); setBackgroundColor(SURF) })
+        root.addView(tabs.apply { setBackgroundColor(SURF) })
+        root.addView(body, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
+        val bottom = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setBackgroundColor(SURF); setPadding(pad(10), pad(10), pad(10), pad(10)) }
+        fun b(t: String, primary: Boolean = false, f: () -> Unit) = bottom.addView(chip(t, primary, f), LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f).apply { marginEnd = pad(6) })
+        b("✏️ Badlo", true) {
+            val et = EditText(this).apply { hint = "Kya badalna hai? (jaise: dark mode daal do)" }
+            AlertDialog.Builder(this).setTitle("✏️ ${a.title} me tabdeeli").setView(et).setPositiveButton("Badlo") { _, _ ->
+                val ask = et.text.toString().trim()
+                if (ask.isNotEmpty() && Brain.ready.value) { d.dismiss(); Brain.edit(a.id, ask) }
+            }.setNegativeButton("Rehne do", null).show()
+        }
+        b("✨ Theek") { d.dismiss(); improve(a.id) }
+        if (a.lang in PY) b("▶") { d.dismiss(); codePage(a.lang, code()) }
+        if (isHtml) b("📦") { askApkName(code()) }
+        b("💾") { saveToGitHubDialog(code(), a.lang) }
+        root.addView(bottom)
+        d = fullDialog(root); d.setOnDismissListener { web?.destroy() }
+        refresh(); d.show()
     }
 
     private fun copy(t: String) {
@@ -659,18 +770,22 @@ class MainActivity : AppCompatActivity() {
         if (i < 0 || checking || Brain.busy) return
         Brain.pendingCheck = -1
         val m = snapshot().getOrNull(i) ?: return
-        val html = segments(m.text).lastOrNull { it.first && guessLang(it.second, it.third) in HTML }?.third ?: return
+        val artId = m.art.substringBefore(':').toIntOrNull() ?: -1
+        val ver = m.art.substringAfter(':').toIntOrNull() ?: 0
+        val html = Brain.art(artId)?.versions?.getOrNull(ver - 1)
+            ?: segments(m.text).lastOrNull { it.first && guessLang(it.second, it.third) in HTML }?.third ?: return
         checking = true
         val n = Brain.note("🔍 Khud test kar raha hoon (har button daba kar)…")
         val round = Brain.lastRound
         selfTest(html) { issues ->
             checking = false
             when {
-                issues.isEmpty() -> Brain.change(n, "✅ Test pass: koi error ya ghalti nahi mili. 👁 Dekho dabayein.")
+                issues.isEmpty() -> Brain.change(n, "✅ Test pass: koi error ya ghalti nahi mili. 👁 dabayein.")
                 round < 1 && Brain.ready.value -> {
-                    Brain.change(n, "🔧 Test me ${issues.size} masle mile, khud theek kar raha hoon:\n" + issues.joinToString("\n") { "• $it" })
-                    Brain.send("Tumhare HTML code ko test kiya to ye masle mile:\n" + issues.joinToString("\n") { "- $it" } +
-                        "\nIn sab ko theek karo. Poora final code ek ```html block me do, mobile par poori screen par bara dikhe, har button ek dafa aur kaam karta ho.", hidden = true, round = 1)
+                    Brain.change(n, "🔧 Test me ${issues.size} masle mile, sirf wohi hisse theek kar raha hoon:\n" + issues.joinToString("\n") { "• $it" })
+                    val ask = "Test me ye masle mile, sirf inhein theek karo:\n" + issues.joinToString("\n") { "- $it" }
+                    if (artId >= 0) Brain.edit(artId, ask, shown = null, round = 1)
+                    else Brain.send(ask + "\nPoora final code ek ```html block me do.", hidden = true, round = 1)
                 }
                 else -> Brain.change(n, "⚠️ Abhi bhi kuch masle hain:\n" + issues.joinToString("\n") { "• $it" } + "\n✨ Behtar dabayein.")
             }
