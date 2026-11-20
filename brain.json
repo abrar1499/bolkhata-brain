@@ -1,5 +1,5 @@
 {
- "version": 282,
+ "version": 283,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -297,7 +297,8 @@
   "aj # kharcha huwa jai": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Other\",\"item\":\"Kharcha\"}]",
   "@ ko diy #": "[{\"type\":\"lent\",\"person\":\"@0\",\"amount\":\"#0\"}]",
   "kaprry #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Kapray\",\"category\":\"Shopping\"}]",
-  "@ nu diye #": "[{\"type\":\"received_back\",\"person\":\"@0\",\"amount\":\"#0\"}]"
+  "@ nu diye #": "[{\"type\":\"received_back\",\"person\":\"@0\",\"amount\":\"#0\"}]",
+  "mera mode sad hai": "{\"calls\":[],\"reply\":\"Afsoos sunke, umeed hai aaj ka din behtar ho jayega. Main aapki madad ke liye yahan hoon.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
