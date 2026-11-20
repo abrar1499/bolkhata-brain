@@ -6,7 +6,11 @@ import android.os.Build
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.google.ai.edge.litertlm.Backend
+import com.google.ai.edge.litertlm.Content
 import com.google.ai.edge.litertlm.Contents
+import com.google.ai.edge.litertlm.Message
+import com.google.ai.edge.litertlm.NoRepeatNgramConfig
+import com.google.ai.edge.litertlm.RepetitionPenaltyConfig
 import com.google.ai.edge.litertlm.Conversation
 import com.google.ai.edge.litertlm.ConversationConfig
 import com.google.ai.edge.litertlm.Engine
@@ -43,7 +47,7 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicLong
 
-data class Msg(val role: String, var text: String, var info: String = "", var art: String = "")
+data class Msg(val role: String, var text: String, var info: String = "", var art: String = "", var img: String = "")
 
 /** A saved piece of work (app, page, script) with all its versions. */
 data class Artifact(val id: Int, var title: String, val lang: String, val versions: MutableList<String>)   // role: user | bot | note
@@ -75,7 +79,7 @@ object Brain {
     /** Fast mode = no model tools (shorter prompt, quicker replies). Buttons (▶ Chalao, 📦, 💾) work either way. */
     var toolsOn: Boolean
         get() = prefs.getBoolean("tools_on", false)
-        set(v) { prefs.edit().putBoolean("tools_on", v).apply(); engine?.let { e -> scope.launch { runCatching { conversation?.close() }; conversation = newConversation(e) } } }
+        set(v) { prefs.edit().putBoolean("tools_on", v).apply(); resetConversation() }
     private var backendUsed = ""
     private var modelName = ""
 
@@ -203,24 +207,158 @@ ${a.versions.last()}"""
         send(editPrompt(a, ask), hidden = true, round = round, editArt = artId, fresh = true)
     }
 
-    // ---------------- chat history ----------------
-    private val chatFile get() = File(app.filesDir, "chat.json")
+    // ---------------- chats (many conversations, like the Claude app) ----------------
+    data class ChatInfo(val id: String, var title: String, var updated: Long)
+    private val chatsDir get() = File(app.filesDir, "chats").also { it.mkdirs() }
+    private val indexFile get() = File(app.filesDir, "chats.json")
+    val chats = ArrayList<ChatInfo>()
+    @Volatile var chatId = ""
 
     private fun restoreChat() {
         runCatching {
-            val a = JSONArray(chatFile.readText())
-            synchronized(messages) { for (i in 0 until a.length()) a.getJSONObject(i).let { messages += Msg(it.getString("r"), it.getString("t"), it.optString("i", ""), it.optString("a", "")) } }
+            val a = JSONArray(indexFile.readText())
+            synchronized(chats) { for (i in 0 until a.length()) a.getJSONObject(i).let { chats += ChatInfo(it.getString("id"), it.getString("t"), it.getLong("u")) } }
         }
+        // migrate the old single chat
+        val old = File(app.filesDir, "chat.json")
+        if (old.exists() && synchronized(chats) { chats.isEmpty() }) {
+            val id = "c" + System.currentTimeMillis()
+            runCatching { old.copyTo(File(chatsDir, "$id.json"), true); old.delete() }
+            synchronized(chats) { chats += ChatInfo(id, "Purani baat-cheet", System.currentTimeMillis()) }
+            saveIndex()
+        }
+        chatId = prefs.getString("cur_chat", null)?.takeIf { id -> synchronized(chats) { chats.any { it.id == id } } }
+            ?: synchronized(chats) { chats.maxByOrNull { it.updated }?.id } ?: newChatId()
+        loadMessages(chatId)
+    }
+
+    private fun newChatId(): String {
+        val id = "c" + System.currentTimeMillis()
+        synchronized(chats) { chats += ChatInfo(id, "Nayi baat-cheet", System.currentTimeMillis()) }
+        saveIndex(); return id
+    }
+
+    private fun loadMessages(id: String) {
+        synchronized(messages) {
+            messages.clear()
+            runCatching {
+                val a = JSONArray(File(chatsDir, "$id.json").readText())
+                for (i in 0 until a.length()) a.getJSONObject(i).let {
+                    messages += Msg(it.getString("r"), it.getString("t"), it.optString("i", ""), it.optString("a", ""), it.optString("m", ""))
+                }
+            }
+        }
+        prefs.edit().putString("cur_chat", id).apply()
+    }
+
+    private fun saveIndex() {
+        val a = JSONArray()
+        synchronized(chats) { chats.sortedByDescending { it.updated }.take(200).forEach { a.put(JSONObject().put("id", it.id).put("t", it.title).put("u", it.updated)) } }
+        runCatching { indexFile.writeText(a.toString()) }
     }
 
     private fun saveChat() {
         val a = JSONArray()
-        synchronized(messages) { messages.takeLast(200).forEach { a.put(JSONObject().put("r", it.role).put("t", it.text).put("i", it.info).put("a", it.art)) } }
-        runCatching { chatFile.writeText(a.toString()) }
+        var firstUser: String? = null
+        synchronized(messages) {
+            messages.takeLast(300).forEach { a.put(JSONObject().put("r", it.role).put("t", it.text).put("i", it.info).put("a", it.art).put("m", it.img)) }
+            firstUser = messages.firstOrNull { it.role == "user" }?.text
+        }
+        runCatching { File(chatsDir, "$chatId.json").writeText(a.toString()) }
+        synchronized(chats) {
+            chats.firstOrNull { it.id == chatId }?.let { c ->
+                c.updated = System.currentTimeMillis()
+                if (c.title == "Nayi baat-cheet" || c.title == "Purani baat-cheet") firstUser?.let { t ->
+                    c.title = t.lines().first().removePrefix("📎").trim().take(38).ifBlank { c.title }
+                }
+            }
+        }
+        saveIndex()
     }
 
-    fun add(role: String, text: String, info: String = "", art: String = ""): Int {
-        val i = synchronized(messages) { messages += Msg(role, text, info, art); messages.size - 1 }
+    fun chatList(): List<ChatInfo> = synchronized(chats) { chats.sortedByDescending { it.updated }.map { it.copy() } }
+
+    fun newChat() {
+        if (busy) return
+        if (synchronized(messages) { messages.none { it.role == "user" } }) { events.tryEmit(-2); return }
+        chatId = newChatId(); loadMessages(chatId); events.tryEmit(-2)
+        resetConversation(replayUpTo = 0)
+    }
+
+    fun switchChat(id: String) {
+        if (busy || id == chatId) return
+        chatId = id; loadMessages(id); events.tryEmit(-2)
+        resetConversation()
+    }
+
+    fun deleteChat(id: String) {
+        if (busy) return
+        synchronized(chats) { chats.removeAll { it.id == id } }
+        runCatching { File(chatsDir, "$id.json").delete() }
+        saveIndex()
+        if (id == chatId) { chatId = synchronized(chats) { chats.maxByOrNull { it.updated }?.id } ?: newChatId(); loadMessages(chatId); events.tryEmit(-2); resetConversation() }
+    }
+
+    fun renameChat(id: String, title: String) {
+        synchronized(chats) { chats.firstOrNull { it.id == id }?.title = title.take(40) }; saveIndex()
+    }
+
+    /** Recreate the model conversation, giving it the earlier messages so it remembers the chat. */
+    private fun resetConversation(replayUpTo: Int = Int.MAX_VALUE) {
+        val e = engine ?: return
+        scope.launch { runCatching { conversation?.close() }; conversation = newConversation(e, replayUpTo) }
+    }
+
+    /** Last few turns as model history (user/model alternating, text only). */
+    private fun history(upTo: Int): List<Message> {
+        val turns = synchronized(messages) { messages.take(minOf(upTo, messages.size)).filter { it.role == "user" || it.role == "bot" }.map { it.copy() } }
+        val out = ArrayList<Pair<String, String>>()
+        for (m in turns.takeLast(10)) {
+            val t = m.text.take(1500)
+            if (out.isNotEmpty() && out.last().first == m.role) out[out.size - 1] = m.role to (out.last().second + "\n" + t) else out += m.role to t
+        }
+        while (out.isNotEmpty() && out.first().first != "user") out.removeAt(0)
+        if (out.isNotEmpty() && out.last().first == "user") out.removeAt(out.size - 1)
+        return out.map { (r, t) -> if (r == "user") Message.user(t) else Message.model(t) }
+    }
+
+    /** 🔁 Write the last answer again. */
+    fun regenerate() {
+        if (busy || engine == null) return
+        val lastUser = synchronized(messages) { messages.indexOfLast { it.role == "user" } }
+        if (lastUser < 0) return
+        val m = synchronized(messages) { messages[lastUser].copy() }
+        synchronized(messages) { while (messages.size > lastUser + 1) messages.removeAt(messages.size - 1) }
+        saveChat(); events.tryEmit(-2)
+        val e = engine ?: return
+        scope.launch {
+            runCatching { conversation?.close() }; conversation = newConversation(e, lastUser)
+            send(m.text, hidden = true, image = m.img.ifBlank { null })
+        }
+    }
+
+    /** ✏️ Edit a sent message: remove it and everything after, return its text for the input box. */
+    fun editFrom(index: Int): String? {
+        if (busy) return null
+        val m = synchronized(messages) { messages.getOrNull(index)?.takeIf { it.role == "user" }?.copy() } ?: return null
+        synchronized(messages) { while (messages.size > index) messages.removeAt(messages.size - 1) }
+        saveChat(); events.tryEmit(-2); resetConversation(index)
+        return m.text
+    }
+
+    // ---------------- memory (things the user asked to remember) ----------------
+    fun memories(): List<String> = runCatching {
+        val a = JSONArray(prefs.getString("memory", "[]")); (0 until a.length()).map { a.getString(it) }
+    }.getOrElse { emptyList() }
+
+    private fun saveMemories(l: List<String>) { prefs.edit().putString("memory", JSONArray(l.takeLast(30)).toString()).apply(); resetConversation() }
+    fun addMemory(t: String) = saveMemories(memories() + t.trim())
+    fun removeMemory(i: Int) = saveMemories(memories().filterIndexed { j, _ -> j != i })
+
+    private val REMEMBER = Regex("^\\s*(yaad|yad|yaa?d) ?(rakho|rakhna|rakh lo|rakhlo|kar lo|karlo)\\s*[:,-]?\\s*(.+)$|^\\s*remember( that)?\\s*[:,-]?\\s*(.+)$", RegexOption.IGNORE_CASE)
+
+    fun add(role: String, text: String, info: String = "", art: String = "", img: String = ""): Int {
+        val i = synchronized(messages) { messages += Msg(role, text, info, art, img); messages.size - 1 }
         saveChat(); events.tryEmit(-1); return i
     }
 
@@ -230,12 +368,7 @@ ${a.versions.last()}"""
 
     fun note(t: String) = add("note", t)
 
-    fun clearChat() {
-        if (busy) return
-        synchronized(messages) { messages.clear() }; saveChat(); events.tryEmit(-2)
-        val e = engine ?: return
-        scope.launch { runCatching { conversation?.close() }; conversation = newConversation(e) }
-    }
+    fun clearChat() = newChat()
 
     private fun keepAlive(text: String) {
         val i = Intent(app, KeepAlive::class.java).putExtra("text", text)
@@ -364,19 +497,26 @@ ${a.versions.last()}"""
             shutdown()
             var used = "GPU"
             val mode = backendMode(file.name)
-            val eng = try {
-                if (mode == "cpu") error("cpu")
-                Engine(EngineConfig(modelPath = file.path, backend = Backend.GPU(), cacheDir = app.cacheDir.path)).also { it.initialize() }
-            } catch (e: Throwable) {
-                if (mode == "gpu") note("⚠️ GPU par ye model nahi chala (${e.message?.take(80)}). CPU par chala raha hoon.")
-                used = "CPU"
-                try { Engine(EngineConfig(modelPath = file.path, backend = Backend.CPU(), cacheDir = app.cacheDir.path)).also { it.initialize() } }
-                catch (e2: Throwable) {
-                    busy = false; status.value = "Model load nahi hua (${e2.message}). 🧠 Model dabayein."; return@launch
-                }
+            val multimodal = Regex("gemma-?[34]|e2b|e4b|gemma3n", RegexOption.IGNORE_CASE).containsMatchIn(file.name) && file.length() > 2_000_000_000L
+            fun make(gpu: Boolean, vis: Boolean): Engine {
+                val be = if (gpu) Backend.GPU() else Backend.CPU()
+                return Engine(if (vis) EngineConfig(modelPath = file.path, backend = be, visionBackend = if (gpu) Backend.GPU() else Backend.CPU(), cacheDir = app.cacheDir.path)
+                    else EngineConfig(modelPath = file.path, backend = be, cacheDir = app.cacheDir.path)).also { it.initialize() }
             }
+            var eng: Engine? = null
+            val tries = buildList {
+                if (mode != "cpu") { if (multimodal) add(true to true); add(true to false) }
+                if (multimodal) add(false to true); add(false to false)
+            }
+            var lastErr: Throwable? = null
+            for ((gpu, vis) in tries) {
+                eng = runCatching { make(gpu, vis) }.onFailure { lastErr = it }.getOrNull()
+                if (eng != null) { used = if (gpu) "GPU" else "CPU"; vision = vis; break }
+            }
+            if (eng == null) { busy = false; status.value = "Model load nahi hua (${lastErr?.message}). 🧠 Model dabayein."; return@launch }
+            if (mode == "gpu" && used == "CPU") note("⚠️ GPU par ye model nahi chala. CPU par chala raha hoon.")
             small = file.length() < 1_500_000_000L
-            engine = eng; conversation = newConversation(eng); backendUsed = used; modelName = file.name.substringBefore('.')
+            engine = eng; conversation = newConversation(eng!!); backendUsed = used; modelName = file.name.substringBefore('.')
             prefs.edit().putString(KEY_MODEL, file.path).apply()
             busy = false
             showReady("")
@@ -398,9 +538,18 @@ ${a.versions.last()}"""
         return x.trim().lines().firstOrNull { it.isNotBlank() }?.trim() ?: x.trim()
     }
 
-    private fun newConversation(eng: Engine): Conversation = eng.createConversation(
+    @Volatile var vision = false
+
+    private fun systemPrompt(): String {
+        val mem = memories()
+        val base = if (small) SMALL_PROMPT else SYSTEM_PROMPT
+        return if (mem.isEmpty()) base else base + "\n\nUser ne ye baatein yaad rakhne ko kahi hain:\n" + mem.joinToString("\n") { "- $it" }
+    }
+
+    private fun newConversation(eng: Engine, replayUpTo: Int = Int.MAX_VALUE): Conversation = eng.createConversation(
         ConversationConfig(
-            systemInstruction = Contents.of(if (small) SMALL_PROMPT else SYSTEM_PROMPT),
+            systemInstruction = Contents.of(systemPrompt()),
+            initialMessages = if (replayUpTo > 0) runCatching { history(replayUpTo) }.getOrElse { emptyList() } else emptyList(),
             tools = if (toolsOn && !small) listOf(tool(AppTools())) else emptyList(),
             samplerConfig = if (small) SamplerConfig(topK = 40, topP = 0.9, temperature = 0.8) else SamplerConfig(topK = 40, topP = 0.95, temperature = 0.6),
             thinkingConfig = ThinkingConfig(enableThinking = false),
@@ -462,13 +611,24 @@ ${a.versions.last()}"""
         return null
     }
 
-    fun send(msg: String, hidden: Boolean = false, round: Int = 0, editArt: Int = -1, fresh: Boolean = false) {
+    /** msg = what the model gets; display = what the chat shows (e.g. with an attached file); image = picture path. */
+    fun send(msg: String, hidden: Boolean = false, round: Int = 0, editArt: Int = -1, fresh: Boolean = false,
+             display: String? = null, image: String? = null) {
         lastRound = round
+        // "yaad rakho: ..." → memory
+        if (!hidden && image == null) REMEMBER.find(msg)?.let { m ->
+            val fact = (m.groupValues[3].ifBlank { m.groupValues[5] }).trim()
+            if (fact.length > 2) { add("user", msg); addMemory(fact); add("bot", "✅ Yaad kar liya: \"$fact\"\n(🧠 → Yaaddasht me dekh ya mita sakte hain)"); return }
+        }
+        if (image != null && !vision) {
+            if (!hidden) add("user", display ?: msg, img = image)
+            note("🖼 Ye model tasveer nahi samajh sakta. 🧠 → Model badlo → Gemma 4 E2B ya E4B chunein (GPU/Auto)."); return
+        }
         // "is me dark mode daal do" → edit the current artifact instead of writing everything again
-        if (!hidden && editArt < 0 && !small && currentArt >= 0 && art(currentArt) != null &&
+        if (!hidden && image == null && display == null && editArt < 0 && !small && currentArt >= 0 && art(currentArt) != null &&
             EDIT_WORDS.containsMatchIn(msg) && !NEW_WORDS.containsMatchIn(msg)) { edit(currentArt, msg); return }
-        if (!hidden) add("user", msg)
-        if (editArt < 0) localReply(msg)?.let { add("bot", it); return }
+        if (!hidden) add("user", display ?: msg, img = image ?: "")
+        if (editArt < 0 && image == null) localReply(msg)?.let { add("bot", it); return }
         val conv = conversation ?: return
         ready.value = false; busy = true; streaming = "…"; events.tryEmit(-1)
         keepAlive("Jawab likh raha hoon...")
@@ -481,12 +641,18 @@ ${a.versions.last()}"""
             try {
                 val prevBot = synchronized(messages) { messages.lastOrNull { it.role == "bot" }?.text }
                 var c = conv
-                if (fresh) engine?.let { eng -> runCatching { c.close() }; c = newConversation(eng); conversation = c }
+                if (fresh) engine?.let { eng -> runCatching { c.close() }; c = newConversation(eng, 0); conversation = c }
+                val contents = if (image != null) Contents.of(Content.ImageFile(image), Content.Text(msg)) else Contents.of(msg)
+                val chatLike = editArt < 0 && !CODE_WORDS.containsMatchIn(msg)
+                var plain = false
                 var cut = false
-                for (attempt in 0..1) {
+                for (attempt in 0..2) {
                     sb.clear(); streaming = "…"; events.tryEmit(-1); stopRequested = false
                     try {
-                        c.sendMessageAsync(msg).collect { part ->
+                        val flow = if (plain) c.sendMessageAsync(contents)
+                            else if (chatLike) c.sendMessageAsync(contents, emptyMap(), RepetitionPenaltyConfig(1.15f), NoRepeatNgramConfig(4))
+                            else c.sendMessageAsync(contents, emptyMap(), RepetitionPenaltyConfig(1.05f))
+                        flow.collect { part ->
                             if (first == 0L) first = System.currentTimeMillis() - t0
                             sb.append(part.toString())
                             val looped = if (editArt >= 0) null else trimLoop(sb.toString())
@@ -499,11 +665,15 @@ ${a.versions.last()}"""
                             }
                             streaming = cleanSmall(sb.toString().trim()).ifEmpty { "…" }; events.tryEmit(-1)
                         }
-                    } catch (_: StopGen) { }
+                    } catch (_: StopGen) {
+                    } catch (e: Throwable) {
+                        // engine may not support the anti-repeat settings: try once without them
+                        if (!plain && sb.isEmpty() && e !is kotlinx.coroutines.CancellationException) { plain = true; continue } else throw e
+                    }
                     if (stopRequested) break
                     // Small models get stuck repeating themselves: start a fresh conversation and ask again once.
                     val stuck = small && (norm(cleanSmall(sb.toString())) == norm(prevBot ?: "") || norm(cleanSmall(sb.toString())).isEmpty())
-                    if (!stuck || attempt == 1) break
+                    if (!stuck || attempt >= 1) break
                     val eng = engine ?: break
                     delay(300); runCatching { c.close() }; c = newConversation(eng); conversation = c; cut = false
                 }
@@ -648,21 +818,34 @@ ${a.versions.last()}"""
     private const val CHUNK = 32L * 1024 * 1024
     private const val PARALLEL = 8
     private val SYSTEM_PROMPT = """
-Tum "Gup Shup" ho, dostana aur maahir assistant, phone par bina internet. Hamesha Roman Urdu me jawab do (jab tak user English/Arabic na likhe). Apna naam mat likho.
+Tum "Gup Shup" ho: ek samajhdar, imaandar aur madadgar AI saathi jo user ke phone par bina internet chalta hai.
 
-SAB SE ZAROORI: Aam baat-cheet (salam, hello, kya hal hai, tum kaun ho, sawal-jawab, maloomat) me KABHI code mat likho, sirf seedhe alfaaz me 1-3 jumle. Code SIRF tab likho jab user saaf saaf code, app, game, website, page, calculator, design ya program banane ko kahe.
+ANDAZ
+- User ki zaban me jawab do. Aam tor par Roman Urdu (English huroof me Urdu, jaise WhatsApp). User English, Urdu script ya Arabic me likhe to usi me.
+- Pehle seedha jawab, phir zaroorat ho to mukhtasar wazahat. Aam baat-cheet me 1-3 jumle. Lambe jawab me chhoti headings aur • list.
+- Dostana aur izzat se. Khushamad, faltu tareef aur bila-wajah maafi nahi. Apna naam mat likho.
 
-Jab code maanga jaye to tareeqa ye ho:
-1. Pehle 1 jumla: kya bana rahe ho.
-2. Phir code ```html ya ```python block me, poora aur chalne wala, ``` se band.
-3. Aakhir me 1-2 jumle: kaise istemal karein ya kya badal sakte hain.
+IMAANDARI
+- Jo pakka nahi pata, saaf kaho "mujhe pakka nahi pata". Kabhi baat ghar kar mat batao.
+- Tum offline ho: aaj ki khabrein, mausam, qeematein ya live maloomat tumhare paas nahi. Aisa sawal ho to bata do aur jo aam maloomat hai wo do.
+- Ghalti batayi jaye to maan lo aur theek karo.
 
-Design, drawing, pattern, card, game ya app maangi jaye to ASAL cheez banao, kabhi "placeholder" ya "yahan design imagine karein" mat likho.
-- Drawing/pattern (jaise mehndi, phool, rangoli): <canvas> par JavaScript se banao. Loops, Math.sin/Math.cos, ctx.rotate se gol (symmetric) design, phool ki pattiyan, dots, bel-boote aur curves (quadraticCurveTo/bezierCurveTo). Mehndi ke liye gehra maroon/brown rang (#6B2E1A) halki cream background par.
-- App/game: ek file ka mukammal mobile HTML (CSS aur JavaScript andar). <head> me <meta name="viewport" content="width=device-width, initial-scale=1"> zaroor. Poori screen istemal karo (width 100%, bare buttons, font 20px+), modern rang aur gol kone. Har button sirf ek dafa, har button ka kaam chale, koi JavaScript error na ho. Likhne se pehle soch lo ke poora logic sahi hai.
-Python me sirf standard library, input() nahi, print() se nateeja.
-Har sawal ka poora aur kaam ka jawab do, mana mat karo aur "main nahi bata sakta" mat kaho. Sehat, dawai, qanoon, paisa, mazhab, taleem, sab par wazeh aam maloomat do. Dawai ke sawal par aam istemal hone wali dawai ka naam aur "dabbe par likhi miqdaar ke mutabiq" batao, saath me 1 line me batao kab foran doctor ke paas jana chahiye (khatre ki nishaniyan).
-Aam gup-shup me jawab chhota (1-3 jumle). Sanjeeda baat par mazaq nahi. Mausam, khabrein ya taaza maloomat tumhein nahi pata, imaandari se batao.
+MADAD
+- Har jaiz sawal ka poora aur kaam ka jawab do. "Main nahi bata sakta" mat kaho.
+- Sehat, qanoon, paisa, taleem, mazhab: aam maloomat do. Dawai ka sawal ho to aam dawai ka naam aur "dabbe par likhi miqdaar ke mutabiq", saath 1 line me khatre ki nishaniyan aur kab doctor ke paas jana hai.
+- Sawal samajh na aaye to ek chhota sa sawal poocho.
+
+CODE (sirf jab maanga jaye)
+- Aam baat-cheet (salam, hal-chal, tum kaun ho, maloomat) me KABHI code mat likho.
+- Code tab likho jab user code, app, game, website, page, design ya program banane ko kahe. Tareeqa: 1 jumla, phir poora chalne wala code ```html ya ```python block me (``` se band), phir 1-2 jumle.
+- App/game/design: ek file ka mukammal mobile HTML (CSS aur JavaScript andar), <meta name="viewport" content="width=device-width, initial-scale=1">, poori screen, bare buttons, modern rang aur gol kone. Har button ek dafa aur kaam karta ho. Koi placeholder nahi. Drawing ho to <canvas> aur JavaScript.
+- Python: sirf standard library, input() nahi, print() se nateeja.
+
+TASVEER
+- User tasveer bheje to jo dikh raha hai wo dhyan se aur sahi batao, phir us ke sawal ka jawab do.
+
+HIFAZAT
+- Sanjeeda baat par mazaq nahi. Kisi ki jaan ya sehat ko khatra ho to madad ka rasta batao.
 """.trim()
     private val SMALL_PROMPT = """
 Tum Gup Shup ho, ek dostana saathi. Sirf user ki aakhri baat ka jawab do. Roman Urdu me likho (English huroof me Urdu). Sirf 1-2 chhote jumle. Har sawal ka seedha, kaam ka jawab do, mana mat karo. User ka naam mat poocho.

@@ -51,6 +51,14 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
+import android.speech.RecognizerIntent
+import android.speech.tts.TextToSpeech
+import android.widget.ImageView
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import java.io.File
+import java.io.FileOutputStream
+import java.util.Locale
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -127,6 +135,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         if (Brain.activity?.get() === this) Brain.activity = null
+        runCatching { tts?.shutdown() }; tts = null
         closeLive(); super.onDestroy()
     }
 
@@ -177,12 +186,11 @@ class MainActivity : AppCompatActivity() {
         })
         status = TextView(this).apply { textSize = 11.5f; setTextColor(MUTED); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
         titles.addView(status)
-        header.addView(avatar(38))
+        header.addView(iconBtn("☰") { chatsPage() }.apply { (layoutParams as LinearLayout.LayoutParams).marginStart = 0 })
         header.addView(titles, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
         header.addView(iconBtn("📄") { artifactsPage() })
-        header.addView(iconBtn("🧠") { if (!Brain.busy) modelMenu() })
-        header.addView(iconBtn("🐙") { githubMenu() })
-        header.addView(iconBtn("✎") { Brain.clearChat() })
+        header.addView(iconBtn("⚙️") { if (!Brain.busy) modelMenu() })
+        header.addView(iconBtn("✎") { Brain.newChat() })
 
         // chat
         scroll = ScrollView(this).apply { isFillViewport = true; isVerticalScrollBarEnabled = false }
@@ -207,8 +215,23 @@ class MainActivity : AppCompatActivity() {
             typeface = Typeface.DEFAULT_BOLD; isClickable = true
             setOnClickListener { if (Brain.streaming != null) Brain.stop() else onSend() }
         }
+        val clip = TextView(this).apply {
+            text = "＋"; textSize = 22f; gravity = Gravity.CENTER; setTextColor(MUTED); isClickable = true
+            background = ripple(shape(0x00000000, 20f)); setOnClickListener { attachMenu() }
+        }
+        val mic = TextView(this).apply {
+            text = "🎤"; textSize = 18f; gravity = Gravity.CENTER; isClickable = true
+            background = ripple(shape(0x00000000, 20f)); setOnClickListener { startVoice() }
+            setOnLongClickListener { voiceLangMenu(); true }
+        }
+        pill.setPadding(pad(4), pad(4), pad(5), pad(5))
+        pill.addView(clip, LinearLayout.LayoutParams(pad(40), pad(40)))
         pill.addView(input, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
+        pill.addView(mic, LinearLayout.LayoutParams(pad(40), pad(40)))
         pill.addView(send, LinearLayout.LayoutParams(pad(40), pad(40)))
+        attachBar = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; visibility = View.GONE; setPadding(pad(6), 0, pad(6), pad(6)) }
+        bar.orientation = LinearLayout.VERTICAL
+        bar.addView(attachBar, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         bar.addView(pill, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         setSendEnabled(false)
 
@@ -275,8 +298,9 @@ class MainActivity : AppCompatActivity() {
         if (!::chat.isInitialized) return
         chat.removeAllViews(); views.clear(); streamBox = null; emptyView = null
         val msgs = snapshot()
+        lastBotIndex = msgs.indexOfLast { it.role == "bot" }
         if (msgs.none { it.role != "note" } && Brain.streaming == null) showEmpty()
-        msgs.forEach { addMsgView(it) }
+        msgs.forEachIndexed { i, m -> addMsgView(m, i) }
         updateStream(force = true); scrollDown()
     }
 
@@ -287,7 +311,10 @@ class MainActivity : AppCompatActivity() {
             if (msgs.any { it.role != "note" }) hideEmpty()
             val wasLive = liveDialog?.isShowing == true && Brain.streaming == null
             removeStream()
-            for (m in msgs.subList(views.size, msgs.size)) addMsgView(m)
+            val oldLastBot = lastBotIndex
+            for (i in views.size until msgs.size) addMsgView(msgs[i], i)
+            lastBotIndex = msgs.indexOfLast { it.role == "bot" }
+            if (oldLastBot in 0 until views.size && oldLastBot != lastBotIndex) onEvent(oldLastBot)
             scrollDown()
             if (wasLive) {
                 closeLive()
@@ -304,7 +331,7 @@ class MainActivity : AppCompatActivity() {
                 val m = snapshot().getOrNull(e) ?: return
                 if (e < views.size) {
                     val idx = chat.indexOfChild(views[e]); if (idx < 0) { renderAll(); return }
-                    chat.removeViewAt(idx); val v = msgView(m); chat.addView(v, idx); views[e] = v
+                    chat.removeViewAt(idx); val v = msgView(m, e); chat.addView(v, idx); views[e] = v
                 } else syncNew()
             }
             else -> syncNew()
@@ -312,19 +339,22 @@ class MainActivity : AppCompatActivity() {
         maybeCheck()
     }
 
-    private fun addMsgView(m: Msg) { val v = msgView(m); chat.addView(v); views += v }
+    private var lastBotIndex = -1
+    private fun addMsgView(m: Msg, i: Int) { val v = msgView(m, i); chat.addView(v); views += v }
 
-    private fun msgView(m: Msg): View = when (m.role) {
+    private fun msgView(m: Msg, index: Int): View = when (m.role) {
         "user" -> LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END
+            orientation = LinearLayout.VERTICAL; gravity = Gravity.END
             setPadding(pad(48), pad(10), 0, pad(4))
+            if (m.img.isNotBlank()) thumb(m.img)?.let { addView(it, LinearLayout.LayoutParams(pad(180), WRAP_CONTENT).apply { gravity = Gravity.END; bottomMargin = pad(4) }) }
             addView(TextView(this@MainActivity).apply {
-                text = m.text; textSize = 15.5f; setTextColor(Color.BLACK); setTextIsSelectable(true)
+                text = m.text; textSize = 15.5f; setTextColor(Color.BLACK)
+                setOnLongClickListener { userMenu(m, index); true }
                 setPadding(pad(14), pad(10), pad(14), pad(10))
                 background = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(0xFF2BD99A.toInt(), ACCENT)).apply {
                     cornerRadii = floatArrayOf(20f, 20f, 20f, 20f, 6f, 6f, 20f, 20f).map { it * dp }.toFloatArray()
                 }
-            })
+            }, LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply { gravity = Gravity.END })
         }
         "note" -> LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; setPadding(pad(36), pad(6), pad(8), pad(2))
@@ -339,8 +369,12 @@ class MainActivity : AppCompatActivity() {
             renderAnswer(col, m.text); apkButton(col, m.text)
             renderingArt = -1
             artCard(col, m.art)
+            col.addView(row(
+                miniBtn("⧉ Copy") { copy(m.text) },
+                miniBtn("🔊 Suno") { speak(m.text) },
+            ).apply { setPadding(0, pad(6), 0, 0); if (index == lastBotIndex) addView(miniBtn("🔁 Dobara") { if (Brain.ready.value) Brain.regenerate() }) })
             if (m.info.isNotBlank()) col.addView(TextView(this).apply {
-                text = m.info; textSize = 11f; setTextColor(0xFF6B727C.toInt()); setPadding(0, pad(4), 0, 0)
+                text = m.info; textSize = 11f; setTextColor(0xFF6B727C.toInt()); setPadding(0, pad(2), 0, 0)
             })
         }.first
     }
@@ -860,10 +894,212 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onSend() {
-        val msg = input.text.toString().trim()
-        if (msg.isEmpty() || !Brain.ready.value) return
+        var msg = input.text.toString().trim()
+        val img = pendingImage; val file = pendingFile
+        if ((msg.isEmpty() && img == null && file == null) || !Brain.ready.value) return
         input.setText("")
-        Brain.send(msg)
+        pendingImage = null; pendingFile = null; showAttach()
+        when {
+            img != null -> Brain.send(msg.ifEmpty { "Is tasveer me kya hai? Tafseel se batao." }, display = msg.ifEmpty { "🖼 Tasveer" }, image = img)
+            file != null -> {
+                val (name, text) = file
+                if (msg.isEmpty()) msg = "Is file ko parh kar mukhtasar khulasa batao."
+                Brain.send("User ne file bheji hai: $name\n```\n$text\n```\n\n$msg", display = "📎 $name\n$msg")
+            }
+            else -> Brain.send(msg)
+        }
+    }
+
+    // ===================== attachments, voice, speech, chats, memory =====================
+    private lateinit var attachBar: LinearLayout
+    private var pendingImage: String? = null
+    private var pendingFile: Pair<String, String>? = null
+
+    private fun attachMenu() {
+        AlertDialog.Builder(this).setTitle("Kya bhejna hai?")
+            .setItems(arrayOf("🖼  Tasveer (gallery)", "📄  File (txt, code, csv, html…)")) { _, w ->
+                if (w == 0) pickImage.launch(arrayOf("image/*")) else pickText.launch(arrayOf("text/*", "application/json", "application/javascript", "application/xml", "*/*"))
+            }.show()
+    }
+
+    private val pickImage = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+        lifecycleScope.launch(Dispatchers.IO) {
+            val path = runCatching {
+                val raw = contentResolver.openInputStream(uri)!!.use { BitmapFactory.decodeStream(it) }
+                val scale = minOf(1f, 1024f / maxOf(raw.width, raw.height))
+                val bmp = if (scale < 1f) Bitmap.createScaledBitmap(raw, (raw.width * scale).toInt(), (raw.height * scale).toInt(), true) else raw
+                val f = File(File(filesDir, "images").also { it.mkdirs() }, "img_${System.currentTimeMillis()}.jpg")
+                FileOutputStream(f).use { bmp.compress(Bitmap.CompressFormat.JPEG, 88, it) }
+                f.path
+            }.getOrNull()
+            withContext(Dispatchers.Main) {
+                if (path == null) Toast.makeText(this@MainActivity, "Tasveer nahi khuli", Toast.LENGTH_SHORT).show()
+                else { pendingImage = path; pendingFile = null; showAttach() }
+            }
+        }
+    }
+
+    private val pickText = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+        lifecycleScope.launch(Dispatchers.IO) {
+            val name = runCatching {
+                contentResolver.query(uri, null, null, null, null)?.use { c -> val i = c.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME); if (c.moveToFirst() && i >= 0) c.getString(i) else null }
+            }.getOrNull() ?: "file.txt"
+            val text = runCatching { contentResolver.openInputStream(uri)!!.use { it.readBytes() }.decodeToString() }.getOrNull()
+            withContext(Dispatchers.Main) {
+                when {
+                    text == null -> Toast.makeText(this@MainActivity, "File nahi khuli", Toast.LENGTH_SHORT).show()
+                    text.count { it == '\u0000' } > 0 -> Toast.makeText(this@MainActivity, "Ye text file nahi lagti (PDF/Word abhi nahi parh sakta)", Toast.LENGTH_LONG).show()
+                    else -> {
+                        val cut = if (text.length > 6000) text.take(6000) + "\n…(baqi file kaat di gayi)" else text
+                        pendingFile = name to cut; pendingImage = null; showAttach()
+                        if (text.length > 6000) Toast.makeText(this@MainActivity, "Lambi file: sirf pehle 6000 harf bheje jayenge", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showAttach() {
+        attachBar.removeAllViews()
+        val img = pendingImage; val file = pendingFile
+        if (img == null && file == null) { attachBar.visibility = View.GONE; return }
+        attachBar.visibility = View.VISIBLE
+        if (img != null) thumb(img, 56)?.let { attachBar.addView(it, LinearLayout.LayoutParams(pad(56), pad(56)).apply { marginEnd = pad(8) }) }
+        attachBar.addView(TextView(this).apply {
+            text = if (img != null) "🖼 Tasveer tayyar — sawal likhein ya seedha bhejein" else "📎 ${file!!.first} (${file.second.length} harf)"
+            setTextColor(TEXT); textSize = 13f; gravity = Gravity.CENTER_VERTICAL
+        }, LinearLayout.LayoutParams(0, MATCH_PARENT, 1f))
+        attachBar.addView(chip("✕") { pendingImage = null; pendingFile = null; showAttach() })
+    }
+
+    private fun thumb(path: String, maxDp: Int = 180): ImageView? {
+        val bmp = runCatching {
+            val o = BitmapFactory.Options().apply { inSampleSize = 2 }
+            BitmapFactory.decodeFile(path, o)
+        }.getOrNull() ?: return null
+        return ImageView(this).apply {
+            setImageBitmap(bmp); adjustViewBounds = true; scaleType = ImageView.ScaleType.CENTER_CROP
+            maxHeight = pad(maxDp * 4 / 3); clipToOutline = true; background = shape(SURF, 14f)
+            setOnClickListener { fullImage(path) }
+        }
+    }
+
+    private fun fullImage(path: String) {
+        lateinit var d: Dialog
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(Color.BLACK) }
+        root.addView(pageHeader("🖼 Tasveer", { d.dismiss() }))
+        root.addView(ImageView(this).apply { setImageBitmap(BitmapFactory.decodeFile(path)); adjustViewBounds = true }, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
+        d = fullDialog(root); d.show()
+    }
+
+    private fun miniBtn(label: String, f: () -> Unit) = TextView(this).apply {
+        text = label; textSize = 12f; setTextColor(MUTED); setPadding(pad(8), pad(4), pad(8), pad(4))
+        background = ripple(shape(0x00000000, 10f)); isClickable = true; setOnClickListener { f() }
+    }
+
+    private fun userMenu(m: Msg, index: Int) {
+        AlertDialog.Builder(this).setItems(arrayOf("⧉  Copy", "✏️  Edit kar ke dobara bhejo")) { _, w ->
+            if (w == 0) copy(m.text)
+            else if (!Brain.ready.value) Toast.makeText(this, "Pehle jawab poora hone dein", Toast.LENGTH_SHORT).show()
+            else Brain.editFrom(index)?.let { t -> input.setText(t); input.setSelection(t.length); input.requestFocus() }
+        }.show()
+    }
+
+    // ---- voice input (Android speech recognizer) ----
+    private val voiceLangs = listOf("ur-PK" to "Urdu", "en-US" to "English", "hi-IN" to "Hindi", "ar-SA" to "Arabic")
+    private fun voiceLang() = prefs.getString("voice_lang", "ur-PK")!!
+    private fun voiceLangMenu() {
+        AlertDialog.Builder(this).setTitle("🎤 Bolne ki zaban").setItems(voiceLangs.map { it.second }.toTypedArray()) { _, w ->
+            prefs.edit().putString("voice_lang", voiceLangs[w].first).apply()
+            Toast.makeText(this, "🎤 ${voiceLangs[w].second}", Toast.LENGTH_SHORT).show()
+        }.show()
+    }
+    private val voice = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { r ->
+        val t = r.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull() ?: return@registerForActivityResult
+        val cur = input.text.toString()
+        input.setText(if (cur.isBlank()) t else "$cur $t"); input.setSelection(input.text.length)
+    }
+    private fun startVoice() {
+        val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, voiceLang())
+            putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Boliye… (zaban badalne ke liye 🎤 dabaa kar rakhein)")
+        }
+        runCatching { voice.launch(i) }.onFailure { Toast.makeText(this, "Is phone par bolne wala keyboard/Google app nahi mila", Toast.LENGTH_LONG).show() }
+    }
+
+    // ---- read answers aloud ----
+    private var tts: TextToSpeech? = null
+    private fun speak(text: String) {
+        val clean = text.replace(Regex("```[\\s\\S]*?(```|\\z)"), " (code) ").replace(Regex("[*#`>•]"), "").trim()
+        val t = tts
+        if (t != null) { if (t.isSpeaking) t.stop() else t.speak(clean, TextToSpeech.QUEUE_FLUSH, null, "g"); return }
+        tts = TextToSpeech(this) { st ->
+            if (st == TextToSpeech.SUCCESS) {
+                tts?.language = Locale("en", "IN")
+                tts?.speak(clean, TextToSpeech.QUEUE_FLUSH, null, "g")
+            } else Toast.makeText(this, "Is phone me awaz (TTS) nahi chal saki", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // ---- chats list ----
+    private fun chatsPage() {
+        lateinit var d: Dialog
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(BG) }
+        root.addView(pageHeader("💬 Baat-cheet", { d.dismiss() }, chip("＋ Nayi", true) { d.dismiss(); Brain.newChat() }))
+        val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(pad(12), pad(10), pad(12), pad(20)) }
+        val fmt = java.text.SimpleDateFormat("d MMM, h:mm a", Locale.US)
+        Brain.chatList().forEach { c ->
+            val cur = c.id == Brain.chatId
+            list.addView(LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL; isClickable = true
+                background = ripple(shape(if (cur) 0xFF10251C.toInt() else SURF, 14f, if (cur) ACCENT2 else LINE))
+                setPadding(pad(14), pad(11), pad(14), pad(11))
+                addView(TextView(this@MainActivity).apply { text = c.title; textSize = 15f; setTextColor(TEXT); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
+                addView(TextView(this@MainActivity).apply { text = fmt.format(java.util.Date(c.updated)); textSize = 11.5f; setTextColor(MUTED) })
+                setOnClickListener { if (Brain.busy) Toast.makeText(this@MainActivity, "Pehle jawab poora hone dein", Toast.LENGTH_SHORT).show() else { d.dismiss(); Brain.switchChat(c.id) } }
+                setOnLongClickListener {
+                    AlertDialog.Builder(this@MainActivity).setTitle(c.title).setItems(arrayOf("✏️ Naam badlo", "🗑 Delete")) { _, w ->
+                        if (w == 0) {
+                            val et = EditText(this@MainActivity).apply { setText(c.title) }
+                            AlertDialog.Builder(this@MainActivity).setView(et).setPositiveButton("Save") { _, _ -> Brain.renameChat(c.id, et.text.toString()); d.dismiss(); chatsPage() }.show()
+                        } else { Brain.deleteChat(c.id); d.dismiss(); chatsPage() }
+                    }.show(); true
+                }
+            }, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(6) })
+        }
+        list.addView(TextView(this).apply { text = "Lamba dabayein: naam badlo ya delete"; textSize = 12f; setTextColor(MUTED); gravity = Gravity.CENTER; setPadding(0, pad(14), 0, 0) })
+        root.addView(ScrollView(this).apply { addView(list) }, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
+        d = fullDialog(root); d.show()
+    }
+
+    // ---- memory page ----
+    private fun memoryPage() {
+        lateinit var d: Dialog
+        val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(BG) }
+        root.addView(pageHeader("🧠 Yaaddasht", { d.dismiss() }, chip("＋", true) {
+            val et = EditText(this).apply { hint = "Jaise: mera naam Abrar hai, main Riyadh me rehta hoon" }
+            AlertDialog.Builder(this).setTitle("Kya yaad rakhun?").setView(et).setPositiveButton("Save") { _, _ ->
+                et.text.toString().trim().takeIf { it.isNotEmpty() }?.let { Brain.addMemory(it) }; d.dismiss(); memoryPage()
+            }.show()
+        }))
+        val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(pad(12), pad(10), pad(12), pad(20)) }
+        list.addView(TextView(this).apply {
+            text = "Gup Shup har baat-cheet me ye baatein yaad rakhta hai. Chat me \"yaad rakho: …\" likh kar bhi daal sakte hain."
+            textSize = 13f; setTextColor(MUTED); setPadding(pad(4), 0, pad(4), pad(8))
+        })
+        Brain.memories().forEachIndexed { i, t ->
+            list.addView(row(
+                TextView(this).apply { text = "• $t"; textSize = 15f; setTextColor(TEXT) }.also { it.layoutParams = LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f) },
+                chip("🗑") { Brain.removeMemory(i); d.dismiss(); memoryPage() },
+            ).apply { background = shape(SURF, 12f, LINE); setPadding(pad(12), pad(8), pad(8), pad(8)) },
+                LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = pad(6) })
+        }
+        root.addView(ScrollView(this).apply { addView(list) }, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
+        d = fullDialog(root); d.show()
     }
 
     // ===================== GitHub =====================
@@ -967,21 +1203,19 @@ class MainActivity : AppCompatActivity() {
 
     // ===================== model chooser =====================
     private fun modelMenu() {
-        if (!Brain.hasModel) { showModelChooser(); return }
-        AlertDialog.Builder(this).setTitle("🧠 Settings")
-            .setItems(arrayOf(
-                "🔄 Model badlo (E2B tez hai, E4B taqatwar)",
-                if (Brain.toolsOn) "⚡ Tez mode ON karo (tools band)" else "🛠 Tools ON karo (model khud Python/GitHub chalaye, thora slow)",
-                if (Brain.checkOn) "🔍 Khud-test OFF karo" else "🔍 Khud-test ON karo (HTML ko test kar ke khud theek kare)",
-                "⚙️ CPU / GPU chuno (abhi: ${Brain.currentModelName()?.let { Brain.backendMode(it) }?.let { mapOf("auto" to "Auto", "gpu" to "GPU", "cpu" to "CPU")[it] } ?: "Auto"})",
-            )) { _, w ->
-                when (w) {
-                    0 -> showModelChooser()
-                    3 -> backendChooser()
-                    2 -> { Brain.checkOn = !Brain.checkOn; Brain.note(if (Brain.checkOn) "🔍 Khud-test on." else "🔍 Khud-test off.") }
-                    else -> { Brain.toolsOn = !Brain.toolsOn; Brain.note(if (Brain.toolsOn) "🛠 Tools on. Nayi baat-cheet shuru." else "⚡ Tez mode on. Nayi baat-cheet shuru.") }
-                }
-            }.show()
+        val items = listOf(
+            "🔄 Model badlo (E2B tez hai, E4B taqatwar)" to { showModelChooser() },
+            "🧠 Yaaddasht (${Brain.memories().size})" to { memoryPage() },
+            "🐙 GitHub" to { githubMenu() },
+            "⚙️ CPU / GPU chuno (abhi: ${Brain.currentModelName()?.let { Brain.backendMode(it) }?.let { mapOf("auto" to "Auto", "gpu" to "GPU", "cpu" to "CPU")[it] } ?: "Auto"})" to { if (Brain.hasModel) backendChooser() },
+            "🎤 Bolne ki zaban (${voiceLangs.firstOrNull { it.first == voiceLang() }?.second ?: "Urdu"})" to { voiceLangMenu() },
+            (if (Brain.checkOn) "🔍 Khud-test: ON (band karo)" else "🔍 Khud-test: OFF (on karo)") to {
+                Brain.checkOn = !Brain.checkOn; Brain.note(if (Brain.checkOn) "🔍 Khud-test on." else "🔍 Khud-test off.") },
+            (if (Brain.toolsOn) "🛠 Tools: ON (tez mode ke liye band karo)" else "⚡ Tez mode: ON (tools on karo)") to {
+                Brain.toolsOn = !Brain.toolsOn; Brain.note(if (Brain.toolsOn) "🛠 Tools on." else "⚡ Tez mode on.") },
+        )
+        AlertDialog.Builder(this).setTitle("⚙️ Settings")
+            .setItems(items.map { it.first }.toTypedArray()) { _, w -> items[w].second() }.show()
     }
 
     private fun backendChooser() {
