@@ -1,5 +1,5 @@
 {
- "version": 270,
+ "version": 271,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -288,7 +288,9 @@
   "mera mode ni thek": "{\"calls\":[],\"reply\":\"Afsos hai ke mood theek nahi. Kya kuch bhari lag raha hai, baat karna chahenge?\",\"lang\":\"English\"}",
   "koi kam ki bat bata do": "{\"calls\":[],\"reply\":\"Har entry mein sahi type batayein, jaise kharcha, udhaar ya kaam.\",\"lang\":\"English\"}",
   "ka hal hai#": "{\"calls\":[],\"reply\":\"Main theek hoon, shukriya! Aap ka hisaab kitab kaisa chal raha hai?\",\"lang\":\"English\"}",
-  "kesa ja raha hai safar": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Aap ka safar kaisa chal raha hai?\",\"lang\":\"English\"}"
+  "kesa ja raha hai safar": "{\"calls\":[],\"reply\":\"Sab theek hai, shukriya! Aap ka safar kaisa chal raha hai?\",\"lang\":\"English\"}",
+  "meri help karo": "{\"calls\":[],\"reply\":\"Zaroor, batayein kis cheez mein madad chahiye, aur kya masla hai?\",\"lang\":\"English\"}",
+  "chas le gaye ho": "{\"calls\":[],\"reply\":\"Kya aap kisi cheez se naraz hain? Thoda aur batayein, main madad karunga.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
