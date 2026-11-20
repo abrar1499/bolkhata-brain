@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         fun topBtn(t: String, f: () -> Unit) = Button(this).apply {
             text = t; textSize = 12f; isAllCaps = false; setOnClickListener { f() }
         }.also { actions.addView(it, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f)) }
-        topBtn("🧠 Model") { if (!Brain.busy) showModelChooser() }
+        topBtn("🧠 Model") { if (!Brain.busy) modelMenu() }
         topBtn("🐙 GitHub") { githubMenu() }
         topBtn("＋ Nayi") { Brain.clearChat() }
         top.addView(status); top.addView(actions)
@@ -436,6 +436,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     // ===================== model chooser =====================
+    private fun modelMenu() {
+        if (!Brain.hasModel) { showModelChooser(); return }
+        AlertDialog.Builder(this).setTitle("🧠 Settings")
+            .setItems(arrayOf(
+                "🔄 Model badlo (E2B tez hai, E4B taqatwar)",
+                if (Brain.toolsOn) "⚡ Tez mode ON karo (tools band)" else "🛠 Tools ON karo (model khud Python/GitHub chalaye, thora slow)",
+            )) { _, w ->
+                when (w) {
+                    0 -> showModelChooser()
+                    else -> { Brain.toolsOn = !Brain.toolsOn; Brain.note(if (Brain.toolsOn) "🛠 Tools on. Nayi baat-cheet shuru." else "⚡ Tez mode on. Nayi baat-cheet shuru.") }
+                }
+            }.show()
+    }
+
     private fun showModelChooser() {
         AlertDialog.Builder(this).setTitle("Model chuno")
             .setItems(arrayOf(

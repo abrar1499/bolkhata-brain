@@ -69,6 +69,12 @@ object Brain {
     val prefs by lazy { app.getSharedPreferences("gupshup", Context.MODE_PRIVATE) }
     val gh by lazy { GitHub(prefs.getString(KEY_TOKEN, null)) }
     val hasModel get() = engine != null
+    /** Fast mode = no model tools (shorter prompt, quicker replies). Buttons (▶ Chalao, 📦, 💾) work either way. */
+    var toolsOn: Boolean
+        get() = prefs.getBoolean("tools_on", false)
+        set(v) { prefs.edit().putBoolean("tools_on", v).apply(); engine?.let { e -> scope.launch { runCatching { conversation?.close() }; conversation = newConversation(e) } } }
+    private var backendUsed = ""
+    private var modelName = ""
 
     fun init(ctx: Context) {
         if (started) return
@@ -247,10 +253,10 @@ object Brain {
                     busy = false; status.value = "Model load nahi hua (${e2.message}). 🧠 Model dabayein."; return@launch
                 }
             }
-            engine = eng; conversation = newConversation(eng)
+            engine = eng; conversation = newConversation(eng); backendUsed = used; modelName = file.name.substringBefore('.')
             prefs.edit().putString(KEY_MODEL, file.path).apply()
             busy = false
-            status.value = "✅ ${file.name.substringBefore('.')} tayyar ($used) — bina internet" + (prefs.getString(KEY_LOGIN, null)?.let { " · 🐙 $it" } ?: "")
+            showReady("")
             ready.value = true
             keepAlive("Model tayyar hai, baat-cheet mehfooz hai")
             if (synchronized(messages) { messages.isEmpty() })
@@ -261,11 +267,17 @@ object Brain {
     private fun newConversation(eng: Engine): Conversation = eng.createConversation(
         ConversationConfig(
             systemInstruction = Contents.of(SYSTEM_PROMPT),
-            tools = listOf(tool(AppTools())),
+            tools = if (toolsOn) listOf(tool(AppTools())) else emptyList(),
             samplerConfig = SamplerConfig(topK = 40, topP = 0.95, temperature = 0.6),
             thinkingConfig = ThinkingConfig(enableThinking = false),
         )
     )
+
+    private fun showReady(extra: String) {
+        status.value = "✅ $modelName ($backendUsed)" + (if (toolsOn) " · 🛠 tools" else " · ⚡ tez") +
+            (if (backendUsed == "CPU") " · GPU nahi chala, is liye slow" else "") + extra +
+            (prefs.getString(KEY_LOGIN, null)?.let { " · 🐙 $it" } ?: "")
+    }
 
     // ---------------- reply ----------------
     fun send(msg: String) {
@@ -274,10 +286,14 @@ object Brain {
         val conv = conversation ?: return
         ready.value = false; busy = true; streaming = "…"; events.tryEmit(-1)
         keepAlive("Jawab likh raha hoon...")
+        val t0 = System.currentTimeMillis()
+        status.value = "✍️ soch raha hoon..."
         replyJob = scope.launch {
             val sb = StringBuilder()
+            var first = 0L
             try {
                 conv.sendMessageAsync(msg).collect { part ->
+                    if (first == 0L) first = System.currentTimeMillis() - t0
                     sb.append(part.toString()); streaming = sb.toString().trim().ifEmpty { "…" }; events.tryEmit(-1)
                 }
                 streaming = null; add("bot", sb.toString().trim().ifEmpty { "Hmm 🤔 dobara poocho?" })
@@ -288,6 +304,7 @@ object Brain {
                 if (eng != null) runCatching { conversation?.close(); conversation = newConversation(eng) }
             } finally {
                 busy = false; ready.value = engine != null
+                if (engine != null) showReady(" · jawab ${"%.1f".format((System.currentTimeMillis() - t0) / 1000.0)}s (shuru ${"%.1f".format(first / 1000.0)}s)")
                 keepAlive("Model tayyar hai, baat-cheet mehfooz hai")
             }
         }
@@ -377,20 +394,9 @@ object Brain {
     private const val CHUNK = 32L * 1024 * 1024
     private const val PARALLEL = 8
     private val SYSTEM_PROMPT = """
-Tum "Gup Shup" ho: ek dostana aur maahir assistant jo user ke phone par bina internet chalta hai.
-Zaban: hamesha Roman Urdu (Latin huroof) me baat karo, jab tak user English ya Arabic me na likhe. Code ke andar comments English me theek hain.
-Andaz: seedha aur kaam ka jawab. Gup-shup me 1-3 jumle. Apna naam har jawab me mat likho.
-
-Coding qawaid (zaroori):
-- Code HAMESHA teen backticks ke block me likho, pehli line par zaban ka naam: ```python ... ``` ya ```html ... ```. Block ko ``` se band zaroor karo.
-- Code se pehle sirf 1 jumla, code ke baad 1-2 jumle. Lambi wazahat mat do.
-- Poora, chalne wala code do. Adhoora code ya "..." mat chhoro.
-- Python: sirf standard library. input() mat use karo; misaal ke values code me rakho aur print() se nateeja dikhao.
-- Agar user "app/game/tool banao" kahe: ek hi file wala mukammal HTML (CSS aur JavaScript andar), mobile screen ke liye, chhota aur saaf. User 📦 APK button se is ki Android app bana sakta hai.
-- Hisaab ya logic pakka karna ho to run_python tool se chala kar check karo.
-- GitHub tools sirf tab use karo jab user GitHub ki baat kare. Likhne se pehle app khud user se ijazat leti hai.
-
-Hifazat: sanjeeda baat par mazaq mat karo. Tum bina internet ke ho: aaj ka mausam, khabrein ya taaza maloomat tumhein nahi pata, imaandari se batao.
+Tum "Gup Shup" ho, dostana aur maahir assistant, phone par bina internet. Hamesha Roman Urdu me jawab do (jab tak user English/Arabic na likhe). Jawab chhota aur kaam ka. Apna naam mat likho.
+Code hamesha ```python ya ```html block me, poora aur chalne wala, aur ``` se band karo. Code ke saath wazahat 1-2 jumle. Python me sirf standard library, input() nahi, print() se nateeja. "App banao" par ek file ka mukammal mobile HTML.
+Sanjeeda baat par mazaq nahi. Mausam, khabrein ya taaza maloomat tumhein nahi pata, imaandari se batao.
 """.trim()
     private val DAYS = arrayOf("Itwaar", "Peer", "Mangal", "Budh", "Jumeraat", "Jumma", "Hafta")
     private const val SELF_HARM =
