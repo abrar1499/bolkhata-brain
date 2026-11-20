@@ -278,8 +278,17 @@ object Brain {
     }
 
     // ---------------- reply ----------------
-    fun send(msg: String) {
-        add("user", msg)
+    /** Index of a finished bot reply with HTML that the screen should auto-test, or -1. */
+    @Volatile var pendingCheck = -1
+    @Volatile var lastRound = 0
+    var checkOn: Boolean
+        get() = prefs.getBoolean("check_on", true)
+        set(v) { prefs.edit().putBoolean("check_on", v).apply() }
+
+    /** hidden = internal follow-up (auto-fix): not shown as a user bubble. round = auto-fix depth. */
+    fun send(msg: String, hidden: Boolean = false, round: Int = 0) {
+        lastRound = round
+        if (!hidden) add("user", msg)
         localReply(msg)?.let { add("bot", it); return }
         val conv = conversation ?: return
         ready.value = false; busy = true; streaming = "…"; events.tryEmit(-1)
@@ -294,7 +303,9 @@ object Brain {
                     if (first == 0L) first = System.currentTimeMillis() - t0
                     sb.append(part.toString()); streaming = sb.toString().trim().ifEmpty { "…" }; events.tryEmit(-1)
                 }
-                streaming = null; add("bot", sb.toString().trim().ifEmpty { "Hmm 🤔 dobara poocho?" })
+                val txt = sb.toString().trim().ifEmpty { "Hmm 🤔 dobara poocho?" }
+                streaming = null; val idx = add("bot", txt)
+                if (checkOn && Regex("```\\s*html|<!DOCTYPE|<html", RegexOption.IGNORE_CASE).containsMatchIn(txt)) { pendingCheck = idx; events.tryEmit(-1) }
             } catch (e: Throwable) {
                 streaming = null
                 add("bot", (sb.toString().trim() + "\n\n(Masla aa gaya: ${e.message}. Dobara koshish karein.)").trim())
@@ -401,7 +412,7 @@ Code wale jawab ka tareeqa HAMESHA ye ho:
 
 Design, drawing, pattern, card, game ya app maangi jaye to ASAL cheez banao, kabhi "placeholder" ya "yahan design imagine karein" mat likho.
 - Drawing/pattern (jaise mehndi, phool, rangoli): <canvas> par JavaScript se banao. Loops, Math.sin/Math.cos, ctx.rotate se gol (symmetric) design, phool ki pattiyan, dots, bel-boote aur curves (quadraticCurveTo/bezierCurveTo). Mehndi ke liye gehra maroon/brown rang (#6B2E1A) halki cream background par.
-- App/game: ek file ka mukammal mobile HTML (CSS aur JavaScript andar), buttons kaam karte hon.
+- App/game: ek file ka mukammal mobile HTML (CSS aur JavaScript andar). <head> me <meta name="viewport" content="width=device-width, initial-scale=1"> zaroor. Poori screen istemal karo (width 100%, bare buttons, font 20px+), modern rang aur gol kone. Har button sirf ek dafa, har button ka kaam chale, koi JavaScript error na ho. Likhne se pehle soch lo ke poora logic sahi hai.
 Python me sirf standard library, input() nahi, print() se nateeja.
 Aam gup-shup me jawab chhota (1-3 jumle). Sanjeeda baat par mazaq nahi. Mausam, khabrein ya taaza maloomat tumhein nahi pata, imaandari se batao.
 """.trim()

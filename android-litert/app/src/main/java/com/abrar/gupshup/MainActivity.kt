@@ -105,13 +105,13 @@ class MainActivity : AppCompatActivity() {
                 launch { Brain.status.collect { status.text = it } }
                 launch { Brain.ready.collect { setSendEnabled(it) } }
                 launch { Brain.events.collect { onEvent(it) } }
-                launch { while (true) { syncNew(); delay(1500) } }
+                launch { while (true) { syncNew(); maybeCheck(); delay(1500) } }
             }
         }
         if (!Brain.hasModel && !Brain.busy) showModelChooser()
     }
 
-    override fun onResume() { super.onResume(); Brain.activity = WeakReference(this); renderAll() }
+    override fun onResume() { super.onResume(); Brain.activity = WeakReference(this); renderAll(); maybeCheck() }
 
     override fun onDestroy() {
         if (Brain.activity?.get() === this) Brain.activity = null
@@ -288,6 +288,7 @@ class MainActivity : AppCompatActivity() {
             }
             else -> syncNew()
         }
+        maybeCheck()
     }
 
     private fun addMsgView(m: Msg) { val v = msgView(m); chat.addView(v); views += v }
@@ -603,16 +604,102 @@ class MainActivity : AppCompatActivity() {
         val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(Color.WHITE) }
         val web = android.webkit.WebView(this).apply {
             settings.javaScriptEnabled = true; settings.domStorageEnabled = true
-            settings.loadWithOverviewMode = true; settings.useWideViewPort = true
             webChromeClient = android.webkit.WebChromeClient()
         }
-        val reload = chip("⟳") { web.loadDataWithBaseURL("https://gupshup.local/", html, "text/html", "utf-8", null) }
+        val page = withViewport(html)
+        val reload = chip("⟳") { web.loadDataWithBaseURL("https://gupshup.local/", page, "text/html", "utf-8", null) }
         root.addView(pageHeader("👁 Nateeja", { d.dismiss() }, reload))
         root.addView(web, LinearLayout.LayoutParams(MATCH_PARENT, 0, 1f))
         d = fullDialog(root)
         d.setOnDismissListener { web.destroy() }
-        web.loadDataWithBaseURL("https://gupshup.local/", html, "text/html", "utf-8", null)
+        web.loadDataWithBaseURL("https://gupshup.local/", page, "text/html", "utf-8", null)
         d.show()
+    }
+
+    // ===================== automatic self-test of HTML answers =====================
+    private var checking = false
+
+    private fun withViewport(html: String): String =
+        if (html.contains("name=\"viewport\"", true) || html.contains("name='viewport'", true)) html
+        else if (Regex("<head[^>]*>", RegexOption.IGNORE_CASE).containsMatchIn(html))
+            html.replaceFirst(Regex("<head[^>]*>", RegexOption.IGNORE_CASE)) { it.value + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">" }
+        else "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">$html"
+
+    private fun maybeCheck() {
+        val i = Brain.pendingCheck
+        if (i < 0 || checking || Brain.busy) return
+        Brain.pendingCheck = -1
+        val m = snapshot().getOrNull(i) ?: return
+        val html = segments(m.text).lastOrNull { it.first && guessLang(it.second, it.third) in HTML }?.third ?: return
+        checking = true
+        val n = Brain.note("🔍 Khud test kar raha hoon (har button daba kar)…")
+        val round = Brain.lastRound
+        selfTest(html) { issues ->
+            checking = false
+            when {
+                issues.isEmpty() -> Brain.change(n, "✅ Test pass: koi error ya ghalti nahi mili. 👁 Dekho dabayein.")
+                round < 1 && Brain.ready.value -> {
+                    Brain.change(n, "🔧 Test me ${issues.size} masle mile, khud theek kar raha hoon:\n" + issues.joinToString("\n") { "• $it" })
+                    Brain.send("Tumhare HTML code ko test kiya to ye masle mile:\n" + issues.joinToString("\n") { "- $it" } +
+                        "\nIn sab ko theek karo. Poora final code ek ```html block me do, mobile par poori screen par bara dikhe, har button ek dafa aur kaam karta ho.", hidden = true, round = 1)
+                }
+                else -> Brain.change(n, "⚠️ Abhi bhi kuch masle hain:\n" + issues.joinToString("\n") { "• $it" } + "\n✨ Behtar dabayein.")
+            }
+        }
+    }
+
+    /** Load the HTML in a hidden WebView, click every button, collect JS errors and common mistakes. */
+    private fun selfTest(html: String, done: (List<String>) -> Unit) {
+        val issues = ArrayList<String>()
+        val src = html.lowercase()
+        if (!src.contains("</html>") && src.contains("<html")) issues += "Code adhoora hai (</html> nahi)"
+        if (!src.contains("viewport")) issues += "Mobile viewport meta tag nahi, phone par chhota dikhta hai"
+        val guard = "<script>window.__e=[];window.onerror=function(m,s,l){__e.push('JS error: '+m+' (line '+l+')');return true};" +
+            "window.alert=function(){};window.confirm=function(){return true};window.prompt=function(){return ''};" +
+            "var __ce=console.error;console.error=function(){__e.push('console error: '+[].join.call(arguments,' '))};</script>"
+        val probe = """(function(){var r=[];try{
+            var b=[].slice.call(document.querySelectorAll('button,input[type=button],input[type=submit]'));
+            var t={};b.forEach(function(x){var k=(x.innerText||x.value||'').trim();if(k){t[k]=(t[k]||0)+1}});
+            for(var k in t){if(t[k]>1&&k.length<4)r.push('Button "'+k+'" '+t[k]+' dafa bana hai');}
+            b.slice(0,60).forEach(function(x){try{x.click()}catch(e){r.push('Button "'+(x.innerText||x.value||'').trim()+'" dabane par error: '+e.message)}});
+            var tx=(document.body&&document.body.innerText)||'';
+            if(/placeholder|imagine|yahan .{0,20}(design|hoga|ayega)/i.test(tx))r.push('Asal cheez ki jagah placeholder text hai');
+            if(tx.trim().length<3&&!document.querySelector('canvas,svg,img'))r.push('Page khaali dikhta hai');
+            }catch(e){r.push('Test error: '+e.message)}
+            return JSON.stringify(r.concat(window.__e||[]).slice(0,10));})()"""
+        val web = android.webkit.WebView(this).apply { settings.javaScriptEnabled = true; settings.domStorageEnabled = true; alpha = 0f }
+        val host = window.decorView as android.view.ViewGroup
+        host.addView(web, android.view.ViewGroup.LayoutParams(pad(360), pad(640)))
+        var finished = false
+        fun finish(extra: List<String>) {
+            if (finished) return; finished = true
+            runCatching { host.removeView(web); web.destroy() }
+            done((issues + extra).distinct())
+        }
+        web.webViewClient = object : android.webkit.WebViewClient() {
+            override fun onPageFinished(view: android.webkit.WebView, url: String?) {
+                view.postDelayed({
+                    view.evaluateJavascript(probe) { res ->
+                        val list = runCatching {
+                            val a = org.json.JSONArray(org.json.JSONTokener(res).nextValue() as String)
+                            (0 until a.length()).map { a.getString(it) }
+                        }.getOrElse { emptyList() }
+                        view.postDelayed({
+                            view.evaluateJavascript("JSON.stringify(window.__e||[])") { r2 ->
+                                val late = runCatching {
+                                    val a = org.json.JSONArray(org.json.JSONTokener(r2).nextValue() as String)
+                                    (0 until a.length()).map { a.getString(it) }
+                                }.getOrElse { emptyList() }
+                                finish(list + late)
+                            }
+                        }, 600)
+                    }
+                }, 900)
+            }
+        }
+        val withGuard = Regex("<head[^>]*>", RegexOption.IGNORE_CASE).find(html)?.let { html.replaceRange(it.range.last + 1, it.range.last + 1, guard) } ?: (guard + html)
+        web.loadDataWithBaseURL("https://gupshup.local/", withViewport(withGuard), "text/html", "utf-8", null)
+        web.postDelayed({ finish(listOf()) }, 9000)
     }
 
     private fun runPythonCard(box: LinearLayout, code: String) {
@@ -719,7 +806,7 @@ class MainActivity : AppCompatActivity() {
         if (!needGitHub()) return
         val et = EditText(this).apply { hint = "App ka naam"; setText("Meri App") }
         AlertDialog.Builder(this).setTitle("📦 APK banao").setMessage("Aap ke GitHub par nayi repository banegi aur GitHub APK banayega (3–6 minute).")
-            .setView(et).setPositiveButton("Banao") { _, _ -> Brain.buildApk(et.text.toString().trim().ifBlank { "Meri App" }, html) }
+            .setView(et).setPositiveButton("Banao") { _, _ -> Brain.buildApk(et.text.toString().trim().ifBlank { "Meri App" }, withViewport(html)) }
             .setNegativeButton("Rehne do", null).show()
     }
 
@@ -741,9 +828,11 @@ class MainActivity : AppCompatActivity() {
             .setItems(arrayOf(
                 "🔄 Model badlo (E2B tez hai, E4B taqatwar)",
                 if (Brain.toolsOn) "⚡ Tez mode ON karo (tools band)" else "🛠 Tools ON karo (model khud Python/GitHub chalaye, thora slow)",
+                if (Brain.checkOn) "🔍 Khud-test OFF karo" else "🔍 Khud-test ON karo (HTML ko test kar ke khud theek kare)",
             )) { _, w ->
                 when (w) {
                     0 -> showModelChooser()
+                    2 -> { Brain.checkOn = !Brain.checkOn; Brain.note(if (Brain.checkOn) "🔍 Khud-test on." else "🔍 Khud-test off.") }
                     else -> { Brain.toolsOn = !Brain.toolsOn; Brain.note(if (Brain.toolsOn) "🛠 Tools on. Nayi baat-cheet shuru." else "⚡ Tez mode on. Nayi baat-cheet shuru.") }
                 }
             }.show()
