@@ -1,5 +1,5 @@
 {
- "version": 287,
+ "version": 288,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -302,7 +302,8 @@
   "konsi madad": "{\"calls\":[],\"reply\":\"Main kharcha likhne, udhaar ka hisaab rakhne aur totals dekhne mein madad karta hoon, jaise \\\"chai 50\\\".\",\"lang\":\"English\"}",
   "# nashta": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Nashta\",\"category\":\"Food\"}]",
   "# @ kondiye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
-  "acha": "{\"calls\":[],\"reply\":\"Theek hai, aap app ke hisaab-kitaab ke bare mein kuch bhi poochh sakte hain.\"}"
+  "acha": "{\"calls\":[],\"reply\":\"Theek hai, aap app ke hisaab-kitaab ke bare mein kuch bhi poochh sakte hain.\"}",
+  "sab acha hai": "{\"calls\":[],\"reply\":\"Glad everything looks good! Let me know if you need anything else.\",\"lang\":\"English\"}"
  },
  "ai": true
 }
