@@ -146,12 +146,14 @@ object Brain {
         return lang to code
     }
 
+    private val PATCH_PLAIN = Regex("(?im)^\\s*dhoon?do\\s*:?\\s*\\n([\\s\\S]*?)\\n\\s*badlo\\s*:?\\s*\\n([\\s\\S]*?)(?=\\n\\s*dhoon?do\\s*:?\\s*\\n|\\n\\s*\\n\\s*\\S[^<\\n]*$|\\z)")
     private val PATCH = Regex("<{5,}[^\\n]*\\n([\\s\\S]*?)\\n?={5,}[^\\n]*\\n([\\s\\S]*?)\\n?>{5,}[^\\n]*")
 
     /** Apply DHOONDO/BADLO blocks. Exact match first, then line match ignoring spaces. Returns (newCode, applied, failed). */
     private fun applyPatches(code: String, txt: String): Triple<String, Int, Int> {
         var cur = code; var ok = 0; var bad = 0
-        for (m in PATCH.findAll(txt)) {
+        val blocks = PATCH.findAll(txt).toList().ifEmpty { PATCH_PLAIN.findAll(txt).toList() }
+        for (m in blocks) {
             fun noFence(x: String) = x.lines().filterNot { it.trim().startsWith("```") }.joinToString("\n")
             val find = noFence(m.groupValues[1]).trimEnd('\n'); val repl = noFence(m.groupValues[2]).trimEnd('\n')
             if (find.isBlank()) { bad++; continue }
@@ -501,8 +503,10 @@ ${a.versions.last()}"""
             val multimodal = Regex("gemma-?[34]|e2b|e4b|gemma3n", RegexOption.IGNORE_CASE).containsMatchIn(file.name) && file.length() > 2_000_000_000L
             fun make(gpu: Boolean, vis: Boolean): Engine {
                 val be = if (gpu) Backend.GPU() else Backend.CPU()
-                return Engine(if (vis) EngineConfig(modelPath = file.path, backend = be, visionBackend = if (gpu) Backend.GPU() else Backend.CPU(), cacheDir = app.cacheDir.path)
-                    else EngineConfig(modelPath = file.path, backend = be, cacheDir = app.cacheDir.path)).also { it.initialize() }
+                val e = Engine(if (vis) EngineConfig(modelPath = file.path, backend = be, visionBackend = if (gpu) Backend.GPU() else Backend.CPU(), cacheDir = app.cacheDir.path)
+                    else EngineConfig(modelPath = file.path, backend = be, cacheDir = app.cacheDir.path))
+                try { e.initialize() } catch (t: Throwable) { runCatching { e.close() }; System.gc(); throw t }
+                return e
             }
             var eng: Engine? = null
             val tries = buildList {
@@ -511,7 +515,8 @@ ${a.versions.last()}"""
             }
             var lastErr: Throwable? = null
             for ((gpu, vis) in tries) {
-                eng = runCatching { make(gpu, vis) }.onFailure { lastErr = it }.getOrNull()
+                if (gpu || vis) status.value = "Model load ho raha hai… (${if (gpu) "GPU" else "CPU"}${if (vis) " + tasveer" else ""})"
+                eng = runCatching { make(gpu, vis) }.onFailure { lastErr = it; Thread.sleep(300) }.getOrNull()
                 if (eng != null) { used = if (gpu) "GPU" else "CPU"; vision = vis; break }
             }
             if (eng == null) { busy = false; status.value = "Model load nahi hua (${lastErr?.message}). 🧠 Model dabayein."; return@launch }
@@ -626,7 +631,9 @@ ${a.versions.last()}"""
             note("🖼 Ye model tasveer nahi samajh sakta. 🧠 → Model badlo → Gemma 4 E2B ya E4B chunein (GPU/Auto)."); return
         }
         // "is me dark mode daal do" → edit the current artifact instead of writing everything again
+        val lastBotArt = synchronized(messages) { messages.lastOrNull { it.role == "bot" }?.art }.orEmpty()
         if (!hidden && image == null && display == null && editArt < 0 && !small && currentArt >= 0 && art(currentArt) != null &&
+            lastBotArt.isNotBlank() && !Regex("\\b(jwb|jawab|reply|baat|bat)\\b", RegexOption.IGNORE_CASE).containsMatchIn(msg) &&
             EDIT_WORDS.containsMatchIn(msg) && !NEW_WORDS.containsMatchIn(msg)) { edit(currentArt, msg); return }
         if (!hidden) add("user", display ?: msg, img = image ?: "")
         if (editArt < 0 && image == null) localReply(msg)?.let { add("bot", it); return }
@@ -710,7 +717,7 @@ ${a.versions.last()}"""
                     val full = mainCode(txt)
                     when {
                         ok > 0 -> { val v = addVersion(ea, patched); tag = "${ea.id}:$v"; artLang = ea.lang
-                            shownTxt = PATCH.replace(txt, "").trim() + "\n\n✏️ $ok tabdeeli lagayi" + (if (bad > 0) ", $bad nahi lag saki" else "") + " → ${ea.title} v$v" }
+                            shownTxt = PATCH_PLAIN.replace(PATCH.replace(txt, ""), "").trim() + "\n\n✏️ $ok tabdeeli lagayi" + (if (bad > 0) ", $bad nahi lag saki" else "") + " → ${ea.title} v$v" }
                         full != null -> { val v = addVersion(ea, full.second); tag = "${ea.id}:$v"; artLang = ea.lang }
                         else -> shownTxt = PATCH.replace(txt, "").trim() + "\n\n⚠️ Tabdeeli file me nahi lag saki. ✨ Behtar dobara dabayein ya baat wazeh likhein."
                     }
@@ -833,7 +840,7 @@ IMAANDARI
 
 MADAD
 - Har jaiz sawal ka poora aur kaam ka jawab do. "Main nahi bata sakta" mat kaho.
-- Sehat, qanoon, paisa, taleem, mazhab: aam maloomat do. Dawai ka sawal ho to aam dawai ka naam aur "dabbe par likhi miqdaar ke mutabiq", saath 1 line me khatre ki nishaniyan aur kab doctor ke paas jana hai.
+- Sehat, qanoon, paisa, taleem, mazhab: aam maloomat do. Jinsi sehat aur miyan-biwi ke talluqaat ke sawal par bhi ilmi aur izzat-daar maloomat do, jaise doctor ki kitaab me hoti hai (fahash tafseel nahi). Dawai ka sawal ho to aam dawai ka naam aur "dabbe par likhi miqdaar ke mutabiq", saath 1 line me khatre ki nishaniyan aur kab doctor ke paas jana hai.
 - Sawal samajh na aaye to ek chhota sa sawal poocho.
 
 CODE (sirf jab maanga jaye)
