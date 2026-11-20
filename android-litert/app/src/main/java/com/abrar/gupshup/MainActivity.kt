@@ -843,11 +843,13 @@ class MainActivity : AppCompatActivity() {
             .setItems(arrayOf(
                 "🌟 Gemma 4 E4B — taqatwar, coding ke liye (3.7 GB, 8 GB+ RAM)",
                 "⚡ Gemma 4 E2B — tez (2.6 GB, 6 GB+ RAM)",
+                "🐣 Chhota Qwen3 0.6B — 350 MB, bohat tez lekin kamzor (Roman Urdu theek nahi)",
                 "📁 Phone se .litertlm file chuno"
             )) { _, w ->
                 when (w) {
                     0 -> Brain.download("gemma4-e4b-litert-v1", "gemma4-e4b.litertlm")
                     1 -> Brain.download("gemma4-litert-v1", "gemma4-e2b.litertlm")
+                    2 -> Brain.download("small-litert-v1", "qwen3-0.6b.litertlm")
                     else -> pickFile.launch(arrayOf("*/*"))
                 }
             }.show()
