@@ -43,7 +43,7 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicLong
 
-data class Msg(val role: String, var text: String)   // role: user | bot | note
+data class Msg(val role: String, var text: String, var info: String = "")   // role: user | bot | note
 
 /**
  * Everything that must survive the screen going away (WhatsApp, home button, rotation):
@@ -90,18 +90,18 @@ object Brain {
     private fun restoreChat() {
         runCatching {
             val a = JSONArray(chatFile.readText())
-            synchronized(messages) { for (i in 0 until a.length()) a.getJSONObject(i).let { messages += Msg(it.getString("r"), it.getString("t")) } }
+            synchronized(messages) { for (i in 0 until a.length()) a.getJSONObject(i).let { messages += Msg(it.getString("r"), it.getString("t"), it.optString("i", "")) } }
         }
     }
 
     private fun saveChat() {
         val a = JSONArray()
-        synchronized(messages) { messages.takeLast(200).forEach { a.put(JSONObject().put("r", it.role).put("t", it.text)) } }
+        synchronized(messages) { messages.takeLast(200).forEach { a.put(JSONObject().put("r", it.role).put("t", it.text).put("i", it.info)) } }
         runCatching { chatFile.writeText(a.toString()) }
     }
 
-    fun add(role: String, text: String): Int {
-        val i = synchronized(messages) { messages += Msg(role, text); messages.size - 1 }
+    fun add(role: String, text: String, info: String = ""): Int {
+        val i = synchronized(messages) { messages += Msg(role, text, info); messages.size - 1 }
         saveChat(); events.tryEmit(-1); return i
     }
 
@@ -399,7 +399,10 @@ object Brain {
                 if (cut) engine?.let { eng -> delay(300); runCatching { c.close() }; c = newConversation(eng); conversation = c }
                 val txt = cleanSmall(GARBAGE.replace(sb.toString(), "").trim()).replace(Regex("[ \\t]{2,}"), " ")
                     .ifEmpty { "Hmm 🤔 dobara poocho?" } + if (stopRequested) "\n\n(■ roka gaya)" else ""
-                streaming = null; val idx = add("bot", txt)
+                val secs = (System.currentTimeMillis() - t0) / 1000.0
+                val genSecs = (secs - first / 1000.0).coerceAtLeast(0.1)
+                val info = "%.1fs · %d harf · %.0f harf/s · pehla lafz %.1fs · %s".format(Locale.US, secs, txt.length, txt.length / genSecs, first / 1000.0, backendUsed)
+                streaming = null; val idx = add("bot", txt, info)
                 if (checkOn && Regex("```\\s*html|<!DOCTYPE|<html", RegexOption.IGNORE_CASE).containsMatchIn(txt)) { pendingCheck = idx; events.tryEmit(-1) }
             } catch (e: Throwable) {
                 streaming = null

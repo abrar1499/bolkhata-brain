@@ -321,7 +321,12 @@ class MainActivity : AppCompatActivity() {
             renderAnswer(inner, m.text, small = true); apkButton(inner, m.text)
             addView(inner)
         }
-        else -> assistantRow().also { (row, col) -> renderAnswer(col, m.text); apkButton(col, m.text) }.first
+        else -> assistantRow().also { (_, col) ->
+            renderAnswer(col, m.text); apkButton(col, m.text)
+            if (m.info.isNotBlank()) col.addView(TextView(this).apply {
+                text = m.info; textSize = 11f; setTextColor(0xFF6B727C.toInt()); setPadding(0, pad(4), 0, 0)
+            })
+        }.first
     }
 
     /** Assistant message layout: small avatar + full-width content (Claude style, no bubble). */
