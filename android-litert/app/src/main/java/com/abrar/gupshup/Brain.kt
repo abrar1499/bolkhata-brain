@@ -115,7 +115,7 @@ object Brain {
         if (busy) return
         synchronized(messages) { messages.clear() }; saveChat(); events.tryEmit(-2)
         val e = engine ?: return
-        scope.launch { runCatching { conversation?.close() }; conversation = newConversation(e); note("Nayi baat-cheet shuru 🙂") }
+        scope.launch { runCatching { conversation?.close() }; conversation = newConversation(e) }
     }
 
     private fun keepAlive(text: String) {
@@ -259,8 +259,6 @@ object Brain {
             showReady("")
             ready.value = true
             keepAlive("Model tayyar hai, baat-cheet mehfooz hai")
-            if (synchronized(messages) { messages.isEmpty() })
-                note("Assalam o Alaikum! Main Gup Shup hoon 🙂\nGup shup, Python code (▶ chala bhi sakta hoon), HTML apps (📦 APK bhi), aur 🐙 GitHub — sab poocho!")
         }
     }
 
