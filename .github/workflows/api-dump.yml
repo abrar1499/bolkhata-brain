@@ -1,0 +1,17 @@
+name: API dump (litertlm)
+on:
+  push:
+    branches: [phone-model]
+    paths: [.github/workflows/api-dump.yml]
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - run: |
+          curl -sSfLo l.aar https://dl.google.com/android/maven2/com/google/ai/edge/litertlm/litertlm-android/0.19.1/litertlm-android-0.19.1.aar
+          unzip -oq l.aar classes.jar && mkdir c && cd c && unzip -oq ../classes.jar
+          for f in $(find . -name '*.class' | grep -v '\$[0-9]' | sort); do n=${f#./}; n=${n%.class}; javap -cp . "${n//\//.}" 2>/dev/null; done | grep -v "^Compiled" > ../api.txt
+          cd ..; wc -l api.txt; grep -n "class\|interface" api.txt | head -80
+          grep -n -i "image\|vision\|audio\|maxNum\|Content\b\|Contents\|cancel" api.txt | head -80
