@@ -36,6 +36,8 @@ jobs:
               n = (c[1] + c[2]).lower()
               return (0 if "270m" in n and "it" in n else 1, 0 if "q8" in n or "int8" in n else 1, c[0])
           small.sort(key=score)
+          # gated Gemma 270M needs a login; NPU builds only run on one chip. Use ungated Qwen3 0.6B int4 (no-think).
+          small = [c for c in cands if c[2] == "qwen3_0.6b_nothink_q4_block32_ekv1280.litertlm"] + small
           print("CANDIDATES", small[:5])
           for size, repo, fn in small:
               try:
