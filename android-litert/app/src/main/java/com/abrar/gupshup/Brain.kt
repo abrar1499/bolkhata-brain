@@ -244,11 +244,12 @@ object Brain {
         scope.launch {
             shutdown()
             var used = "GPU"
-            val forceCpu = prefs.getBoolean("cpu_" + file.name, false)
+            val mode = backendMode(file.name)
             val eng = try {
-                if (forceCpu) error("cpu")
+                if (mode == "cpu") error("cpu")
                 Engine(EngineConfig(modelPath = file.path, backend = Backend.GPU(), cacheDir = app.cacheDir.path)).also { it.initialize() }
             } catch (e: Throwable) {
+                if (mode == "gpu") note("⚠️ GPU par ye model nahi chala (${e.message?.take(80)}). CPU par chala raha hoon.")
                 used = "CPU"
                 try { Engine(EngineConfig(modelPath = file.path, backend = Backend.CPU(), cacheDir = app.cacheDir.path)).also { it.initialize() } }
                 catch (e2: Throwable) {
@@ -302,6 +303,19 @@ object Brain {
         set(v) { prefs.edit().putBoolean("check_on", v).apply() }
 
     /** hidden = internal follow-up (auto-fix): not shown as a user bubble. round = auto-fix depth. */
+    /** Per-model processor choice: "auto" (GPU, fall back to CPU), "gpu" or "cpu". */
+    fun backendMode(name: String): String =
+        prefs.getString("be_$name", null) ?: if (prefs.getBoolean("cpu_$name", false)) "cpu" else "auto"
+
+    fun currentModelName(): String? = prefs.getString(KEY_MODEL, null)?.let { File(it).name }
+
+    fun setBackend(mode: String) {
+        val path = prefs.getString(KEY_MODEL, null) ?: return
+        if (busy) return
+        prefs.edit().putString("be_" + File(path).name, mode).apply()
+        load(File(path))
+    }
+
     private class StopGen : Exception()
     @Volatile private var pendingResend: String? = null
     private val GARBAGE = Regex("<unused\\d+>|\\[multimodal\\]")
@@ -374,7 +388,7 @@ object Brain {
                 if (GARBAGE.findAll(sb).count() >= 3 && backendUsed == "GPU") {
                     val path = prefs.getString(KEY_MODEL, null)
                     if (path != null) {
-                        prefs.edit().putBoolean("cpu_" + File(path).name, true).apply()
+                        prefs.edit().putString("be_" + File(path).name, "cpu").apply()
                         streaming = null
                         note("⚙️ Ye model GPU par ghalat chal raha tha. CPU par shift kar ke dobara jawab bana raha hoon…")
                         pendingResend = msg; reloading = true

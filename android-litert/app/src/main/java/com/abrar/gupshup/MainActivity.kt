@@ -838,12 +838,28 @@ class MainActivity : AppCompatActivity() {
                 "🔄 Model badlo (E2B tez hai, E4B taqatwar)",
                 if (Brain.toolsOn) "⚡ Tez mode ON karo (tools band)" else "🛠 Tools ON karo (model khud Python/GitHub chalaye, thora slow)",
                 if (Brain.checkOn) "🔍 Khud-test OFF karo" else "🔍 Khud-test ON karo (HTML ko test kar ke khud theek kare)",
+                "⚙️ CPU / GPU chuno (abhi: ${Brain.currentModelName()?.let { Brain.backendMode(it) }?.let { mapOf("auto" to "Auto", "gpu" to "GPU", "cpu" to "CPU")[it] } ?: "Auto"})",
             )) { _, w ->
                 when (w) {
                     0 -> showModelChooser()
+                    3 -> backendChooser()
                     2 -> { Brain.checkOn = !Brain.checkOn; Brain.note(if (Brain.checkOn) "🔍 Khud-test on." else "🔍 Khud-test off.") }
                     else -> { Brain.toolsOn = !Brain.toolsOn; Brain.note(if (Brain.toolsOn) "🛠 Tools on. Nayi baat-cheet shuru." else "⚡ Tez mode on. Nayi baat-cheet shuru.") }
                 }
+            }.show()
+    }
+
+    private fun backendChooser() {
+        val cur = Brain.currentModelName()?.let { Brain.backendMode(it) } ?: "auto"
+        val modes = arrayOf("auto", "gpu", "cpu")
+        AlertDialog.Builder(this).setTitle("⚙️ Is model ko kis par chalayein?")
+            .setSingleChoiceItems(arrayOf(
+                "Auto — pehle GPU, na chale to CPU (behtar)",
+                "GPU — tez (bare models ke liye)",
+                "CPU — har phone par chalta hai (chhote models ke liye achha)"
+            ), modes.indexOf(cur)) { d, w ->
+                d.dismiss()
+                if (modes[w] != cur) { Brain.setBackend(modes[w]); Brain.note("⚙️ Model ${modes[w].uppercase()} par dobara load ho raha hai…") }
             }.show()
     }
 
