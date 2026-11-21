@@ -1,5 +1,5 @@
 {
- "version": 293,
+ "version": 294,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -305,7 +305,8 @@
   "sab acha hai": "{\"calls\":[],\"reply\":\"Glad everything looks good! Let me know if you need anything else.\",\"lang\":\"English\"}",
   "ar sunao": "{\"calls\":[],\"reply\":\"Sab theek hai, aap sunayein! Koi hisaab ya kaam ho to batayein.\",\"lang\":\"English\"}",
   "kuch ni": "{\"calls\":[],\"reply\":\"Theek hai, jab zaroorat ho to batayein.\",\"lang\":\"English\"}",
-  "to expe": "{\"calls\":[],\"reply\":\"Do you want to see your expenses list, or open the Expense tab?\",\"lang\":\"English\"}"
+  "to expe": "{\"calls\":[],\"reply\":\"Do you want to see your expenses list, or open the Expense tab?\",\"lang\":\"English\"}",
+  "internet domain purchase #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Internet domain\",\"category\":\"Mobile & Internet\",\"note\":\"Domain purchase\"}]"
  },
  "ai": true
 }
