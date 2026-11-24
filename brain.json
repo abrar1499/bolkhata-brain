@@ -1,5 +1,5 @@
 {
- "version": 299,
+ "version": 300,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -308,7 +308,8 @@
   "internet domain purchase #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Internet domain\",\"category\":\"Mobile & Internet\",\"note\":\"Domain purchase\"}]",
   "nashta #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Nashta\",\"category\":\"Food\"}]",
   "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"amount\":\"#0\",\"category\":\"Transport\"}]",
-  "# nashta aj suba": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\",\"note\":\"Breakfast\"}]"
+  "# nashta aj suba": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\",\"note\":\"Breakfast\"}]",
+  "# car bettery": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Car battery\",\"category\":\"Transport\"}]"
  },
  "ai": true
 }
