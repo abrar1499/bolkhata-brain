@@ -1,5 +1,5 @@
 {
- "version": 298,
+ "version": 299,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -307,7 +307,8 @@
   "to expe": "{\"calls\":[],\"reply\":\"Do you want to see your expenses list, or open the Expense tab?\",\"lang\":\"English\"}",
   "internet domain purchase #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Internet domain\",\"category\":\"Mobile & Internet\",\"note\":\"Domain purchase\"}]",
   "nashta #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Nashta\",\"category\":\"Food\"}]",
-  "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"amount\":\"#0\",\"category\":\"Transport\"}]"
+  "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"amount\":\"#0\",\"category\":\"Transport\"}]",
+  "# nashta aj suba": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\",\"note\":\"Breakfast\"}]"
  },
  "ai": true
 }
