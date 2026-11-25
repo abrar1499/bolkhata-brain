@@ -1,5 +1,5 @@
 {
- "version": 300,
+ "version": 301,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -309,7 +309,8 @@
   "nashta #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Nashta\",\"category\":\"Food\"}]",
   "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"amount\":\"#0\",\"category\":\"Transport\"}]",
   "# nashta aj suba": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\",\"note\":\"Breakfast\"}]",
-  "# car bettery": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Car battery\",\"category\":\"Transport\"}]"
+  "# car bettery": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Car battery\",\"category\":\"Transport\"}]",
+  "aj suba nashta #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]"
  },
  "ai": true
 }
