@@ -1,5 +1,5 @@
 {
- "version": 301,
+ "version": 302,
  "lessons": {
   "# @ ko diye": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
   "# @ ko diy": "[{\"type\":\"lent\",\"amount\":\"#0\",\"person\":\"@0\"}]",
@@ -310,7 +310,8 @@
   "petrol #": "[{\"type\":\"expense\",\"item\":\"Petrol\",\"amount\":\"#0\",\"category\":\"Transport\"}]",
   "# nashta aj suba": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\",\"note\":\"Breakfast\"}]",
   "# car bettery": "[{\"type\":\"expense\",\"amount\":\"#0\",\"item\":\"Car battery\",\"category\":\"Transport\"}]",
-  "aj suba nashta #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]"
+  "aj suba nashta #": "[{\"type\":\"expense\",\"amount\":\"#0\",\"category\":\"Food\",\"item\":\"Nashta\"}]",
+  "family visa": "{\"calls\":[],\"reply\":\"How much did the family visa cost, and should it go under Fees & Govt?\",\"lang\":\"English\"}"
  },
  "ai": true
 }
